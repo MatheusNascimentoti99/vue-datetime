@@ -1,8 +1,21 @@
+# editors
 .DS_Store
+.idea
+
+# node modules
 node_modules/
+
+# package managers
+package-lock.json
+
+# logs
 npm-debug.log
-test/coverage
-dist
 yarn-error.log
-reports
+
+# build destinations
+dist
 demo/dist
+
+# testing utils
+test/coverage
+reports
