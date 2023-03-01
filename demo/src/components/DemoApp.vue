@@ -185,8 +185,8 @@ export default defineComponent({
       datetime12: '2018-05-12T17:19:06.151Z',
       datetime13: '2018-05-12T17:19:06.151Z',
       datetimeEmpty: '',
-      minDatetime: LuxonDateTime.local().minus({ month: 1, days: 3 }).toISO(),
-      maxDatetime: LuxonDateTime.local().plus({ days: 3 }).toISO(),
+      minDatetime: LuxonDateTime.local().toISO(),
+      maxDatetime: LuxonDateTime.local().plus({ days: 3 }).minus({ hours: 4 }).toISO(),
       datetimeTheming: LuxonDateTime.local().toISO(),
     };
   },

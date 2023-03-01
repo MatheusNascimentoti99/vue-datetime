@@ -76,12 +76,12 @@ export function months() {
   return Info.months().map((month) => capitalize(month));
 }
 
-export function hours(step) {
-  return Array.apply(null, Array(Math.ceil(24 / step))).map((item, index) => index * step);
+export function hoursGenerator(step: number): number[] {
+  return [...Array(Math.ceil(24 / step))].map((item, index) => index * step);
 }
 
-export function minutes(step) {
-  return Array.apply(null, Array(Math.ceil(60 / step))).map((item, index) => index * step);
+export function minutesGenerator(step: number) {
+  return [...Array(Math.ceil(60 / step))].map((item, index) => index * step);
 }
 
 export function years(current) {
