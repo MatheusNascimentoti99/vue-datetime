@@ -6,7 +6,9 @@ export default defineConfig({
   plugins: [vue()],
   resolve: {
     alias: {
+      // @ts-ignore
       '@': fileURLToPath(new URL('./demo/src', import.meta.url)),
+      // @ts-ignore
       '~': fileURLToPath(new URL('./node_modules', import.meta.url))
     },
     extensions: [
