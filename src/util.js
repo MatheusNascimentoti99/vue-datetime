@@ -59,7 +59,7 @@ export function timeComponentIsDisabled(min, max, component) {
          (max !== null && component > max);
 }
 
-export function weekdays(weekStart: number) {
+export function weekdays(weekStart) {
   if (--weekStart < 0) {
     weekStart = 6;
   }

@@ -23,7 +23,7 @@ const {
 
 function rollupBundle ({ env }) {
   return rollup({
-    entry: 'src/index.js',
+    entry: 'src/index.ts',
     external: ['luxon'],
     plugins: [
       node({

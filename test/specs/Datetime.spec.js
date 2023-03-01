@@ -1,8 +1,8 @@
 import { DateTime as LuxonDateTime, Settings as LuxonSettings } from 'luxon'
-import Datetime from 'src/Datetime.vue'
+import Datetime from 'src/DateTime.vue'
 import { createVM } from '../helpers/utils.js'
 
-describe('Datetime.vue', function () {
+describe('DateTime.vue', function () {
   describe('render', function () {
     it('should add class to wrapper', function () {
       const vm = createVM(this,

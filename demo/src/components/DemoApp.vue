@@ -6,7 +6,7 @@
 
     <div class="example">
       <div class="example-inputs">
-        <datetime v-model="date"></datetime>
+        <date-time v-model="date"/>
 
         <div class="values">
           <p>
@@ -23,7 +23,7 @@
 
     <div class="example">
       <div class="example-inputs">
-        <datetime type="datetime" v-model="datetime"></datetime>
+        <date-time v-model="datetime" type="datetime"/>
 
         <div class="values">
           <p>
@@ -40,7 +40,7 @@
 
     <div class="example">
       <div class="example-inputs">
-        <datetime type="datetime" v-model="datetime12" use12-hour></datetime>
+        <date-time v-model="datetime12" type="datetime" use12-hour/>
 
         <div class="values">
           <p>
@@ -56,7 +56,7 @@
     <h2>Time</h2>
     <div class="example">
       <div class="example-inputs">
-        <datetime type="time" v-model="time"></datetime>
+        <date-time v-model="time" type="time"/>
         <div class="values">
           <p>
             <strong>Value:</strong> {{ time }}
@@ -71,7 +71,7 @@
     <h2>Macro tokens</h2>
     <div class="example">
       <div class="example-inputs">
-        <datetime type="datetime" v-model="datetime13" format="yyyy-MM-dd HH:mm:ss"></datetime>
+        <date-time v-model="datetime13" type="datetime" format="yyyy-MM-dd HH:mm:ss"/>
 
         <div class="values">
           <p>
@@ -88,16 +88,18 @@
 
     <div class="example">
       <div class="example-inputs">
-        <datetime
-          type="datetime"
+        <date-time
           v-model="datetimeEmpty"
+          type="datetime"
           placeholder="Select date"
           class="my-wrapper-class"
           input-class="my-input-class"
           value-zone="America/New_York"
           zone="Asia/Shanghai"
-          :format="{ year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: '2-digit', timeZoneName: 'short' }"
-          :phrases="{ok: 'Continue', cancel: 'Exit'}"
+          :format="{
+            year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: '2-digit', timeZoneName: 'short',
+          }"
+          :phrases="{ ok: 'Continue', cancel: 'Exit' }"
           :hour-step="2"
           :minute-step="15"
           :min-datetime="minDatetime"
@@ -105,7 +107,7 @@
           :week-start="7"
           use12-hour
           auto
-        ></datetime>
+        />
 
         <div class="values">
           <p>
@@ -114,7 +116,7 @@
         </div>
       </div>
       <div class="example-code">
-      <pre><code>&#x3C;datetime
+        <pre><code>&#x3C;datetime
   type=&#x22;datetime&#x22;
   v-model=&#x22;datetimeEmpty&#x22;
   input-class=&#x22;my-class&#x22;
@@ -137,7 +139,7 @@
 
     <div class="example">
       <div class="example-inputs">
-        <datetime type="datetime" v-model="datetimeTheming" class="theme-orange"></datetime>
+        <date-time v-model="datetimeTheming" type="datetime" class="theme-orange"/>
 
         <div class="values">
           <p>
@@ -169,13 +171,13 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { DateTime as LuxonDateTime } from 'luxon';
 import { defineComponent } from 'vue';
-import { DateTime as LuxonDateTime } from 'luxon'
 
 export default defineComponent({
   name: 'DemoApp',
-  data () {
+  data() {
     return {
       time: '19:06',
       date: '2018-05-12T00:00:00.000Z',
@@ -185,9 +187,9 @@ export default defineComponent({
       datetimeEmpty: '',
       minDatetime: LuxonDateTime.local().minus({ month: 1, days: 3 }).toISO(),
       maxDatetime: LuxonDateTime.local().plus({ days: 3 }).toISO(),
-      datetimeTheming: LuxonDateTime.local().toISO()
-    }
-  }
+      datetimeTheming: LuxonDateTime.local().toISO(),
+    };
+  },
 });
 </script>
 

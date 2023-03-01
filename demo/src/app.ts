@@ -1,12 +1,13 @@
-import { createApp, defineComponent } from 'vue'
-// import Datetime from '../../dist/vue-datetime'
-import DemoApp from './components/DemoApp';
+import { createApp } from 'vue';
 
-import '../../dist/vue-datetime.css'
-import './app.css'
+import createDatetime from '../../src';
 
-const app = createApp(defineComponent(DemoApp));
+import DemoApp from './components/DemoApp.vue';
 
-// app.use(Datetime)
+import '../../dist/vue-datetime.css';
+import './app.css';
 
-app.mount('#app')
+const app = createApp(DemoApp);
+app.use(createDatetime());
+
+app.mount('#app');
