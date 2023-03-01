@@ -1,11 +1,11 @@
 const path = require('path')
 
 module.exports = {
-  entry: path.resolve(__dirname, '../demo/src/app.js'),
+  entry: path.resolve(__dirname, '../demo/src/app.ts'),
 
   output: {
     path: path.resolve(__dirname, '../demo/dist'),
-    filename: 'app.js',
+    filename: 'app.ts',
     publicPath: '/dist/'
   },
 
