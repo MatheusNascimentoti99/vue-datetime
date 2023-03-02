@@ -138,6 +138,7 @@ export function weekStart() {
 
 export interface TimeElement {
   number: number | string | null,
+  label?: string,
   selected: boolean,
   disabled: boolean
 }

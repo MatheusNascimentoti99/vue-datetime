@@ -1,70 +1,75 @@
 <template>
   <div class="vdatetime-month-picker">
-    <div class="vdatetime-month-picker__list vdatetime-month-picker__list" ref="monthList">
-      <div class="vdatetime-month-picker__item" v-for="month in months" @click="select(month)" :class="{'vdatetime-month-picker__item--selected': month.selected, 'vdatetime-month-picker__item--disabled': month.disabled}">{{ month.label }}
+    <div ref="monthList" class="vdatetime-month-picker__list vdatetime-month-picker__list">
+      <div
+        v-for="monthElement in months"
+        :key="monthElement"
+        class="vdatetime-month-picker__item"
+        :class="{
+          'vdatetime-month-picker__item--selected': monthElement.selected,
+          'vdatetime-month-picker__item--disabled': monthElement.disabled,
+        }"
+        @click="select(monthElement)"
+      >
+        {{ monthElement.label }}
       </div>
     </div>
   </div>
 </template>
 
-<script>
-import { DateTime } from 'luxon'
-import { monthIsDisabled, monthsGenerator } from './util'
+<script setup lang="ts">
+import { DateTime } from 'luxon';
+import { computed, onMounted, onUpdated, PropType, ref } from 'vue';
 
-export default {
-  props: {
-    year: {
-      type: Number,
-      required: true
-    },
-    month: {
-      type: Number,
-      required: true
-    },
-    minDate: {
-      type: DateTime,
-      default: null
-    },
-    maxDate: {
-      type: DateTime,
-      default: null
-    }
+import { ListElement, monthIsDisabled, monthsGenerator, TimeElement } from './util';
+
+const props = defineProps({
+  year: {
+    type: Number,
+    required: true,
   },
-
-  computed: {
-    months () {
-      return months(this.month).map((month, index) => ({
-        number: ++index,
-        label: month,
-        selected: index === this.month,
-        disabled: !index || monthIsDisabled(this.minDate, this.maxDate, this.year, index)
-      }))
-    }
+  month: {
+    type: Number,
+    required: true,
   },
-
-  methods: {
-    select (month) {
-      if (month.disabled) {
-        return
-      }
-
-      this.$emit('change', parseInt(month.number))
-    },
-
-    scrollToCurrent () {
-      const selectedMonth = this.$refs.monthList.querySelector('.vdatetime-month-picker__item--selected')
-      this.$refs.monthList.scrollTop = selectedMonth ? selectedMonth.offsetTop - 250 : 0
-    }
+  minDate: {
+    type: Object as PropType<DateTime>,
+    default: null,
   },
-
-  mounted () {
-    this.scrollToCurrent()
+  maxDate: {
+    type: Object as PropType<DateTime>,
+    default: null,
   },
+});
 
-  updated () {
-    this.scrollToCurrent()
+const months = computed<TimeElement[]>(() => (
+  monthsGenerator().map((month: string, index: number): TimeElement => ({
+    number: index + 1,
+    label: month,
+    selected: index === props.month.valueOf(),
+    disabled: !index || monthIsDisabled(props.minDate, props.maxDate, props.year.valueOf(), index),
+  }))
+));
+
+const monthList = ref<HTMLElement | null>(null);
+
+const scrollToCurrent = () => {
+  if (monthList.value) {
+    const selectedYear: ListElement | null = monthList.value.querySelector('.vdatetime-year-picker__item--selected');
+    monthList.value.scrollTop = selectedYear ? selectedYear.offsetTop - 250 : 0;
   }
-}
+};
+
+onMounted(() => { scrollToCurrent(); });
+onUpdated(() => { scrollToCurrent(); });
+
+const emits = defineEmits(['change']);
+
+const select = (month: TimeElement) => {
+  if (!month.disabled) {
+    emits('change', parseInt(month.number as string, 10));
+  }
+};
 </script>
 
 <style>
