@@ -1,274 +1,259 @@
 <template>
   <div class="vdatetime-popup">
     <div class="vdatetime-popup__header">
-      <div class="vdatetime-popup__title" v-if="title">{{ title }}</div>
-      <div class="vdatetime-popup__year" @click="showYear" v-if="type !== 'time'">{{ year }}</div>
-      <div class="vdatetime-popup__date" @click="showMonth" v-if="type !== 'time'">{{ dateFormatted }}</div>
+      <div v-if="title" class="vdatetime-popup__title">{{ title }}</div>
+      <div v-if="type !== 'time'" class="vdatetime-popup__year" @click="showYear">{{ year }}</div>
+      <div v-if="type !== 'time'" class="vdatetime-popup__date" @click="showMonth">{{ dateFormatted }}</div>
     </div>
     <div class="vdatetime-popup__body">
       <datetime-year-picker
-          v-if="step === 'year'"
-          @change="onChangeYear"
-          :min-date="minDatetime"
-          :max-date="maxDatetime"
-          :year="year"></datetime-year-picker>
+        v-if="step === 'year'"
+        :min-date="minDatetime"
+        :max-date="maxDatetime"
+        :year="year"
+        @change="onChangeYear"
+      />
       <datetime-month-picker
-          v-if="step === 'month'"
-          @change="onChangeMonth"
-          :min-date="minDatetime"
-          :max-date="maxDatetime"
-          :year="year"
-          :month="month"></datetime-month-picker>
+        v-if="step === 'month'"
+        :min-date="minDatetime"
+        :max-date="maxDatetime"
+        :year="year"
+        :month="month"
+        @change="onChangeMonth"
+      />
       <datetime-calendar
-          v-if="step === 'date'"
-          @change="onChangeDate"
-          :year="year"
-          :month="month"
-          :day="day"
-          :min-date="minDatetime"
-          :max-date="maxDatetime"
-          :week-start="weekStart"
-      ></datetime-calendar>
+        v-if="step === 'date'"
+        :year="year"
+        :month="month"
+        :day="day"
+        :min-date="minDatetime"
+        :max-date="maxDatetime"
+        :week-start="weekStart"
+        @change="onChangeDate"
+      />
       <datetime-time-picker
-          v-if="step === 'time'"
-          @change="onChangeTime"
-          :hour="hour"
-          :minute="minute"
-          :use12-hour="use12Hour"
-          :hour-step="hourStep"
-          :minute-step="minuteStep"
-          :min-time="minTime"
-          :max-time="maxTime"></datetime-time-picker>
+        v-if="step === 'time'"
+        :hour="hour"
+        :minute="minute"
+        :use12-hour="use12Hour"
+        :hour-step="hourStep"
+        :minute-step="minuteStep"
+        :min-time="minTime"
+        :max-time="maxTime"
+        @change="onChangeTime"
+      />
     </div>
     <div class="vdatetime-popup__actions">
       <div class="vdatetime-popup__actions__button vdatetime-popup__actions__button--cancel" @click="cancel">
-        <slot name="button-cancel__internal" v-bind:step="step">{{ phrases.cancel }}</slot>
+        <slot name="button-cancel__internal" :step="step">{{ phrases.cancel }}</slot>
       </div>
       <div class="vdatetime-popup__actions__button vdatetime-popup__actions__button--confirm" @click="confirm">
-        <slot name="button-confirm__internal" v-bind:step="step">{{ phrases.ok }}</slot>
+        <slot name="button-confirm__internal" :step="step">{{ phrases.ok }}</slot>
       </div>
     </div>
   </div>
 </template>
 
-<script>
-import { DateTime } from 'luxon'
-import { createFlowManager, createFlowManagerFromType } from './util'
-import DatetimeCalendar from './DatetimeCalendar'
-import DatetimeTimePicker from './DatetimeTimePicker'
-import DatetimeYearPicker from './DatetimeYearPicker'
-import DatetimeMonthPicker from './DatetimeMonthPicker'
+<script setup lang="ts">
+import { DateTime } from 'luxon';
+import { computed, PropType, ref } from 'vue';
 
-const KEY_TAB = 9
-const KEY_ENTER = 13
-const KEY_ESC = 27
+import useKeyPressListener from './composables/KeyPress';
+import DatetimeCalendar from './DatetimeCalendar.vue';
+import DatetimeMonthPicker from './DatetimeMonthPicker.vue';
+import DatetimeTimePicker from './DatetimeTimePicker.vue';
+import DatetimeYearPicker from './DatetimeYearPicker.vue';
+import { createFlowManager, createFlowManagerFromType } from './util';
 
-export default {
-  components: {
-    DatetimeCalendar,
-    DatetimeTimePicker,
-    DatetimeYearPicker,
-    DatetimeMonthPicker
+const props = defineProps({
+  datetime: {
+    type: Object as PropType<DateTime>,
+    required: true,
   },
-
-  props: {
-    datetime: {
-      type: DateTime,
-      required: true
+  phrases: {
+    type: Object,
+    default() {
+      return {
+        cancel: 'Cancel',
+        ok: 'Ok',
+      };
     },
-    phrases: {
-      type: Object,
-      default () {
-        return {
-          cancel: 'Cancel',
-          ok: 'Ok'
-        }
-      }
-    },
-    type: {
-      type: String,
-      default: 'date'
-    },
-    use12Hour: {
-      type: Boolean,
-      default: false
-    },
-    hourStep: {
-      type: Number,
-      default: 1
-    },
-    minuteStep: {
-      type: Number,
-      default: 1
-    },
-    minDatetime: {
-      type: DateTime,
-      default: null
-    },
-    maxDatetime: {
-      type: DateTime,
-      default: null
-    },
-    auto: {
-      type: Boolean,
-      default: false
-    },
-    weekStart: {
-      type: Number,
-      default: 1
-    },
-    flow: {
-      type: Array
-    },
-    title: {
-      type: String
-    }
   },
-
-  data () {
-    const flowManager = this.flow
-      ? createFlowManager(this.flow)
-      : createFlowManagerFromType(this.type)
-
-    return {
-      newDatetime: this.datetime,
-      flowManager,
-      step: flowManager.first(),
-      timePartsTouched: []
-    }
+  type: {
+    type: String,
+    default: 'date',
   },
-
-  created () {
-    document.addEventListener('keydown', this.onKeyDown)
+  use12Hour: {
+    type: Boolean,
+    default: false,
   },
-
-  beforeDestroy () {
-    document.removeEventListener('keydown', this.onKeyDown)
+  hourStep: {
+    type: Number,
+    default: 1,
   },
-
-  computed: {
-    year () {
-      return this.newDatetime.year
-    },
-    month () {
-      return this.newDatetime.month
-    },
-    day () {
-      return this.newDatetime.day
-    },
-    hour () {
-      return this.newDatetime.hour
-    },
-    minute () {
-      return this.newDatetime.minute
-    },
-    dateFormatted () {
-      return this.newDatetime.toLocaleString({
-        month: 'long',
-        day: 'numeric'
-      })
-    },
-    minTime () {
-      return (
-        this.minDatetime &&
-        this.minDatetime.year === this.year &&
-        this.minDatetime.month === this.month &&
-        this.minDatetime.day === this.day
-      ) ? this.minDatetime.toFormat('HH:mm') : null
-    },
-    maxTime () {
-      return (
-        this.maxDatetime &&
-        this.maxDatetime.year === this.year &&
-        this.maxDatetime.month === this.month &&
-        this.maxDatetime.day === this.day
-      ) ? this.maxDatetime.toFormat('HH:mm') : null
-    }
+  minuteStep: {
+    type: Number,
+    default: 1,
   },
+  minDatetime: {
+    type: Object as PropType<DateTime>,
+    default: null,
+  },
+  maxDatetime: {
+    type: Object as PropType<DateTime>,
+    default: null,
+  },
+  auto: {
+    type: Boolean,
+    default: false,
+  },
+  weekStart: {
+    type: Number,
+    default: 1,
+  },
+  flow: { type: Array, default: null },
+  title: { type: String, default: '' },
+});
 
-  methods: {
-    nextStep () {
-      this.step = this.flowManager.next(this.step)
-      this.timePartsTouched = []
+const emits = defineEmits(['cancel', 'confirm']);
 
-      if (this.step === 'end') {
-        this.$emit('confirm', this.newDatetime)
-      }
-    },
-    showYear () {
-      this.step = 'year'
-      this.flowManager.diversion('date')
-    },
-    showMonth () {
-      this.step = 'month'
-      this.flowManager.diversion('date')
-    },
-    confirm () {
-      this.nextStep()
-    },
-    cancel () {
-      this.$emit('cancel')
-    },
-    onChangeYear (year) {
-      this.newDatetime = this.newDatetime.set({ year })
-
-      if (this.auto) {
-        this.nextStep()
-      }
-    },
-    onChangeMonth (month) {
-      this.newDatetime = this.newDatetime.set({ month })
-
-      if (this.auto) {
-        this.nextStep()
-      }
-    },
-    onChangeDate (year, month, day) {
-      console.log(year, month, day);
-      this.newDatetime = this.newDatetime.set({ year, month, day })
-
-      if (this.auto) {
-        this.nextStep()
-      }
-    },
-    onChangeTime ({ hour, minute, suffixTouched }) {
-      if (suffixTouched) {
-        this.timePartsTouched['suffix'] = true
-      }
-
-      if (Number.isInteger(hour)) {
-        this.newDatetime = this.newDatetime.set({ hour })
-        this.timePartsTouched['hour'] = true
-      }
-
-      if (Number.isInteger(minute)) {
-        this.newDatetime = this.newDatetime.set({ minute })
-        this.timePartsTouched['minute'] = true
-      }
-
-      const goNext = this.auto && this.timePartsTouched['hour'] && this.timePartsTouched['minute'] && (
-        this.timePartsTouched['suffix'] ||
-        !this.use12Hour
-      )
-
-      if (goNext) {
-        this.nextStep()
-      }
-    },
-    onKeyDown (event) {
-      switch (event.keyCode) {
-        case KEY_ESC:
-        case KEY_TAB:
-          this.cancel()
-          break
-
-        case KEY_ENTER:
-          this.nextStep()
-          break
-      }
-    }
-  }
+interface TimeParts {
+  year?: boolean,
+  month?: boolean,
+  day?: boolean,
+  hour?: boolean,
+  minutes?: boolean,
 }
+
+const flowManager = props.flow ?
+  createFlowManager(props.flow) : createFlowManagerFromType(props.type.valueOf());
+const newDateTime = ref<DateTime>(props.datetime);
+const step = ref(flowManager.first());
+let timePartsTouched = {} as TimeParts;
+
+const nextStep = () => {
+  step.value = flowManager.next(step.value);
+  timePartsTouched = {};
+
+  if (step.value === 'end') {
+    emits('confirm', newDateTime.value);
+  }
+};
+
+const confirm = () => {
+  console.log('confirm');
+  nextStep();
+};
+
+const cancel = () => {
+  emits('cancel');
+};
+
+useKeyPressListener((event: KeyboardEvent) => {
+  switch (event.key) {
+  case 'Escape':
+  case 'Tab':
+    cancel();
+    break;
+
+  case 'Enter':
+    nextStep();
+    break;
+  default:
+    break;
+  }
+});
+
+const onChangeYear = (year: number) => {
+  newDateTime.value = newDateTime.value.set({ year });
+
+  if (props.auto.valueOf()) {
+    nextStep();
+  }
+};
+
+const year = computed<number>(() => newDateTime.value.year);
+const month = computed<number>(() => newDateTime.value.month);
+const day = computed<number>(() => newDateTime.value.day);
+const hour = computed<number>(() => newDateTime.value.hour);
+const minute = computed<number>(() => newDateTime.value.minute);
+const dateFormatted = computed<string>(() => newDateTime.value.toLocaleString({
+  month: 'long',
+  day: 'numeric',
+}));
+
+const minTime = computed<string | null>(() => ((
+  props.minDatetime &&
+  props.minDatetime.year === year.value &&
+  props.minDatetime.month === month.value &&
+  props.minDatetime.day === day.value
+) ? props.minDatetime.toFormat('HH:mm') : null));
+
+const maxTime = computed<string | null>(() => ((
+  props.maxDatetime &&
+  props.maxDatetime.year === year.value &&
+  props.maxDatetime.month === month.value &&
+  props.maxDatetime.day === day.value
+) ? props.maxDatetime.toFormat('HH:mm') : null));
+
+const showYear = () => {
+  step.value = 'year';
+  flowManager.diversion('date');
+};
+
+const showMonth = () => {
+  step.value = 'month';
+  flowManager.diversion('date');
+};
+
+const onChangeMonth = (newValue: number) => {
+  newDateTime.value = newDateTime.value.set({ month: newValue });
+
+  if (props.auto) {
+    nextStep();
+  }
+};
+
+const onChangeDate = (year: number, month: number, day: number) => {
+  newDateTime.value = newDateTime.value.set({ year, month, day });
+  console.log('Hello!');
+
+  if (props.auto.valueOf()) {
+    nextStep();
+  }
+};
+
+const onChangeTime = ({ hour, minute, suffixTouched }: { hour: number, minute: number, suffixTouched: boolean }) => {
+  if (suffixTouched) {
+    timePartsTouched.suffix = true;
+  }
+
+  if (Number.isInteger(hour)) {
+    newDateTime.value = newDateTime.value.set({ hour });
+    timePartsTouched.hour = true;
+  }
+
+  if (Number.isInteger(minute)) {
+    newDateTime.value = newDateTime.value.set({ minute });
+    timePartsTouched.minute = true;
+  }
+
+  const goNext = (
+    props.auto &&
+    timePartsTouched.hour &&
+    timePartsTouched.minute && (
+      timePartsTouched.suffix ||
+      !props.use12Hour
+    )
+  );
+
+  console.log(goNext);
+
+  if (goNext) {
+    nextStep();
+  }
+};
+
 </script>
 
 <style>
