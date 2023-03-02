@@ -50,7 +50,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue';
 
-import { hoursGenerator, minutesGenerator, pad, timeComponentIsDisabled, TimeElement } from './util';
+import { hoursGenerator, type ListElement, minutesGenerator, pad, timeComponentIsDisabled, type TimeElement } from './util';
 
 const props = defineProps({
   hour: {
@@ -111,10 +111,6 @@ const minutes = computed<TimeElement[]>(() => minutesGenerator(props.minuteStep)
   selected: minute === props.minute.valueOf(),
   disabled: timeComponentIsDisabled(minMinute.value, maxMinute.value, minute),
 })));
-
-interface ListElement extends Element {
-  offsetTop: number
-}
 
 const hourList = ref<HTMLInputElement | null>(null);
 const minuteList = ref<HTMLInputElement | null>(null);

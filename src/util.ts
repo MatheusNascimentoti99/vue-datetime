@@ -89,12 +89,12 @@ export function hoursGenerator(step: number): number[] {
   return [...Array(Math.ceil(24 / step))].map((item, index) => index * step);
 }
 
-export function minutesGenerator(step: number) {
+export function minutesGenerator(step: number): number[] {
   return [...Array(Math.ceil(60 / step))].map((item, index) => index * step);
 }
 
-export function years(current) {
-  return Array.apply(null, Array(201)).map((item, index) => current - 100 + index);
+export function yearsGenerator(current: number): number[] {
+  return [...Array(201)].map((item, index) => current - 100 + index);
 }
 
 export function pad(number: number): number | string {
@@ -140,4 +140,8 @@ export interface TimeElement {
   number: number | string | null,
   selected: boolean,
   disabled: boolean
+}
+
+export interface ListElement extends Element {
+  offsetTop: number
 }

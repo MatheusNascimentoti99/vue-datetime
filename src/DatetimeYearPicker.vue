@@ -1,67 +1,67 @@
 <template>
   <div class="vdatetime-year-picker">
-    <div class="vdatetime-year-picker__list vdatetime-year-picker__list" ref="yearList">
-      <div class="vdatetime-year-picker__item" v-for="year in years" @click="select(year)" :class="{'vdatetime-year-picker__item--selected': year.selected, 'vdatetime-year-picker__item--disabled': year.disabled}">{{ year.number }}
+    <div ref="yearList" class="vdatetime-year-picker__list vdatetime-year-picker__list">
+      <div
+        v-for="yearElement in years"
+        :key="yearElement"
+        class="vdatetime-year-picker__item"
+        :class="{
+          'vdatetime-year-picker__item--selected': yearElement.selected,
+          'vdatetime-year-picker__item--disabled': yearElement.disabled,
+        }"
+        @click="select(yearElement)"
+      >
+        {{ yearElement.number }}
       </div>
     </div>
   </div>
 </template>
 
-<script>
-import { DateTime } from 'luxon'
-import { yearIsDisabled, years } from './util'
+<script setup lang="ts">
+import { DateTime } from 'luxon';
+import { computed, onMounted, onUpdated, PropType, ref } from 'vue';
 
-export default {
-  props: {
-    year: {
-      type: Number,
-      required: true
-    },
-    minDate: {
-      type: DateTime,
-      default: null
-    },
-    maxDate: {
-      type: DateTime,
-      default: null
-    }
+import { yearsGenerator, yearIsDisabled, type TimeElement, type ListElement } from './util';
+
+const props = defineProps({
+  year: {
+    type: Number,
+    required: true,
   },
-
-  computed: {
-    years () {
-      return years(this.year).map(year => ({
-        number: year,
-        selected: year === this.year,
-        disabled: !year || yearIsDisabled(this.minDate, this.maxDate, year)
-      }))
-    }
+  minDate: {
+    type: Object as PropType<DateTime>,
+    default: null,
   },
-
-  methods: {
-    select (year) {
-      if (year.disabled) {
-        return
-      }
-
-      this.$emit('change', parseInt(year.number))
-    },
-
-    scrollToCurrent () {
-      if (this.$refs.yearList) {
-        const selectedYear = this.$refs.yearList.querySelector('.vdatetime-year-picker__item--selected')
-        this.$refs.yearList.scrollTop = selectedYear ? selectedYear.offsetTop - 250 : 0
-      }
-    }
+  maxDate: {
+    type: Object as PropType<DateTime>,
+    default: null,
   },
+});
 
-  mounted () {
-    this.scrollToCurrent()
-  },
+const years = computed<TimeElement[]>(() => (yearsGenerator(props.year.valueOf()).map((year: number) => ({
+  number: year,
+  selected: year === props.year.valueOf(),
+  disabled: !year || yearIsDisabled(props.minDate, props.maxDate, year),
+}))));
 
-  updated () {
-    this.scrollToCurrent()
+const yearList = ref<HTMLElement | null>(null);
+
+const scrollToCurrent = () => {
+  if (yearList.value) {
+    const selectedYear: ListElement | null = yearList.value.querySelector('.vdatetime-year-picker__item--selected');
+    yearList.value.scrollTop = selectedYear ? selectedYear.offsetTop - 250 : 0;
   }
-}
+};
+onMounted(() => { scrollToCurrent(); });
+onUpdated(() => { scrollToCurrent(); });
+
+const emits = defineEmits(['change']);
+
+const select = (year: TimeElement) => {
+  if (!year.disabled) {
+    emits('change', parseInt(year.number as string, 10));
+  }
+};
 </script>
 
 <style>
