@@ -50,7 +50,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue';
 
-import { hoursGenerator, minutesGenerator, pad, timeComponentIsDisabled } from './util';
+import { hoursGenerator, minutesGenerator, pad, timeComponentIsDisabled, TimeElement } from './util';
 
 const props = defineProps({
   hour: {
@@ -83,12 +83,6 @@ const props = defineProps({
   },
 });
 
-interface TimeElement {
-  number: number,
-  selected: boolean,
-  disabled: boolean
-}
-
 const minHour = computed<number | null>(() => (props.minTime ? parseInt(props.minTime.split(':')[0], 10) : null));
 const maxHour = computed<number | null>(() => (props.maxTime ? parseInt(props.maxTime.split(':')[0], 10) : null));
 
@@ -99,7 +93,7 @@ const hours = computed<TimeElement[]>(() => hoursGenerator(props.hourStep).filte
     return hour < 12;
   }
   return hour >= 12;
-}).map((hour: number) => ({
+}).map((hour: number): TimeElement => ({
   number: pad(hour),
   selected: hour === props.hour.valueOf(),
   disabled: timeComponentIsDisabled(minHour.value, maxHour.value, hour),
@@ -112,7 +106,7 @@ const maxMinute = computed<number | null>(
   () => (props.maxTime && maxHour.value === props.hour.valueOf() ? parseInt(props.maxTime.split(':')[1], 10) : null),
 );
 
-const minutes = computed<TimeElement[]>(() => minutesGenerator(props.minuteStep).map((minute: number) => ({
+const minutes = computed<TimeElement[]>(() => minutesGenerator(props.minuteStep).map((minute: number): TimeElement => ({
   number: pad(minute),
   selected: minute === props.minute.valueOf(),
   disabled: timeComponentIsDisabled(minMinute.value, maxMinute.value, minute),

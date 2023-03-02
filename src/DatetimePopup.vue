@@ -224,6 +224,7 @@ export default {
       }
     },
     onChangeDate (year, month, day) {
+      console.log(year, month, day);
       this.newDatetime = this.newDatetime.set({ year, month, day })
 
       if (this.auto) {

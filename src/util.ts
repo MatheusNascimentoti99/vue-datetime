@@ -2,17 +2,36 @@ import { DateTime, Info, Settings } from 'luxon';
 
 import FlowManager from './FlowManager';
 
-export function capitalize(string) {
+export function capitalize(string: string): string {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-export function datetimeFromISO(string) {
+export function datetimeFromISO(string: string): DateTime | null {
   const datetime = DateTime.fromISO(string).toUTC();
 
   return datetime.isValid ? datetime : null;
 }
 
-export function monthDays(year, month, weekStart) {
+export function startOfDay(datetime: DateTime): DateTime {
+  return datetime.startOf('day');
+}
+
+export function monthDayIsDisabled(
+  minDate: DateTime | null,
+  maxDate: DateTime | null,
+  year: number,
+  month: number,
+  day: number,
+): boolean {
+  const date = DateTime.fromObject({ year, month, day, zone: 'UTC' });
+
+  const newMinDate = minDate ? startOfDay(minDate.setZone('UTC', { keepLocalTime: true })) : null;
+  const newMaxDate = maxDate ? startOfDay(maxDate.setZone('UTC', { keepLocalTime: true })) : null;
+
+  return !!((newMinDate && date < newMinDate) || (newMaxDate && date > newMaxDate));
+}
+
+export function monthDays(year: number, month: number, weekStart: number): (null | number)[] {
   const monthDate = DateTime.local(year, month, 1);
   let firstDay = monthDate.weekday - weekStart;
 
@@ -24,21 +43,11 @@ export function monthDays(year, month, weekStart) {
     lastDay += 7;
   }
 
-  return Array.apply(null, Array(monthDate.daysInMonth + firstDay + lastDay))
+  return [...Array(monthDate.daysInMonth + firstDay + lastDay)]
     .map(
       (value, index) => ((index + 1 <= firstDay || index >= firstDay + monthDate.daysInMonth) ?
         null : (index + 1 - firstDay)),
-    );
-}
-
-export function monthDayIsDisabled(minDate, maxDate, year, month, day) {
-  const date = DateTime.fromObject({ year, month, day, zone: 'UTC' });
-
-  minDate = minDate ? startOfDay(minDate.setZone('UTC', { keepLocalTime: true })) : null;
-  maxDate = maxDate ? startOfDay(maxDate.setZone('UTC', { keepLocalTime: true })) : null;
-
-  return (minDate && date < minDate) ||
-         (maxDate && date > maxDate);
+    ) ?? [];
 }
 
 export function monthIsDisabled(minDate, maxDate, year, month) {
@@ -59,7 +68,7 @@ export function timeComponentIsDisabled(min, max, component) {
          (max !== null && component > max);
 }
 
-export function weekdays(weekStart) {
+export function weekdaysGenerator(weekStart) {
   if (--weekStart < 0) {
     weekStart = 6;
   }
@@ -72,8 +81,8 @@ export function weekdays(weekStart) {
   return weekDays;
 }
 
-export function months() {
-  return Info.months().map((month) => capitalize(month));
+export function monthsGenerator(): string[] {
+  return [...Info.months().map((month: string) => capitalize(month))];
 }
 
 export function hoursGenerator(step: number): number[] {
@@ -88,12 +97,8 @@ export function years(current) {
   return Array.apply(null, Array(201)).map((item, index) => current - 100 + index);
 }
 
-export function pad(number) {
+export function pad(number: number): number | string {
   return number < 10 ? `0${number}` : number;
-}
-
-export function startOfDay(datetime) {
-  return datetime.startOf('day');
 }
 
 export function createFlowManager(flow) {
@@ -129,4 +134,10 @@ export function weekStart() {
   const firstDay = weekstart ? weekstart.getWeekStartByLocale(Settings.defaultLocale) : 1;
 
   return firstDay === 0 ? 7 : firstDay;
+}
+
+export interface TimeElement {
+  number: number | string | null,
+  selected: boolean,
+  disabled: boolean
 }

@@ -9,7 +9,7 @@
 
 <script>
 import { DateTime } from 'luxon'
-import { monthIsDisabled, months } from './util'
+import { monthIsDisabled, monthsGenerator } from './util'
 
 export default {
   props: {

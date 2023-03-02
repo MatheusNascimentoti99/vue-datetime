@@ -14,92 +14,96 @@
       </div>
     </div>
     <div class="vdatetime-calendar__month">
-      <div class="vdatetime-calendar__month__weekday" v-for="weekday in weekdays">{{ weekday }}</div>
-      <div class="vdatetime-calendar__month__day" v-for="day in days" @click="selectDay(day)" :class="{'vdatetime-calendar__month__day--selected': day.selected, 'vdatetime-calendar__month__day--disabled': day.disabled}">
+      <div
+        v-for="weekday in weekdays"
+        :key="weekday"
+        class="vdatetime-calendar__month__weekday"
+      >
+        {{ weekday }}
+      </div>
+      <div
+        v-for="dayElement in days"
+        :key="dayElement"
+        class="vdatetime-calendar__month__day"
+        :class="{
+          'vdatetime-calendar__month__day--selected': dayElement.selected,
+          'vdatetime-calendar__month__day--disabled': dayElement.disabled,
+        }"
+        @click="selectDay(dayElement)"
+      >
         <span><span>{{ day.number }}</span></span>
       </div>
     </div>
   </div>
 </template>
 
-<script>
-import { DateTime } from 'luxon'
-import { monthDayIsDisabled, monthDays, months, weekdays } from './util'
+<script setup lang="ts">
+import { DateTime } from 'luxon';
+import { computed, PropType, ref } from 'vue';
 
-export default {
-  props: {
-    year: {
-      type: Number,
-      required: true
-    },
-    month: {
-      type: Number,
-      required: true
-    },
-    day: {
-      type: Number,
-      default: null
-    },
-    disabled: {
-      type: Array
-    },
-    minDate: {
-      type: DateTime,
-      default: null
-    },
-    maxDate: {
-      type: DateTime,
-      default: null
-    },
-    weekStart: {
-      type: Number,
-      default: 1
-    }
+import { monthDayIsDisabled, monthDays, monthsGenerator, type TimeElement, weekdaysGenerator } from './util';
+
+const props = defineProps({
+  year: {
+    type: Number,
+    required: true,
   },
-
-  data () {
-    return {
-      newDate: DateTime.fromObject({ year: this.year, month: this.month, zone: 'UTC' }),
-      weekdays: weekdays(this.weekStart),
-      months: months()
-    }
+  month: {
+    type: Number,
+    required: true,
   },
-
-  computed: {
-    newYear () {
-      return this.newDate.year
-    },
-    newMonth () {
-      return this.newDate.month
-    },
-    monthName () {
-      return this.months[this.newMonth - 1]
-    },
-    days () {
-      return monthDays(this.newYear, this.newMonth, this.weekStart).map(day => ({
-        number: day,
-        selected: day && this.year === this.newYear && this.month === this.newMonth && this.day === day,
-        disabled: !day || monthDayIsDisabled(this.minDate, this.maxDate, this.newYear, this.newMonth, day)
-      }))
-    }
+  day: {
+    type: Number,
+    default: null,
   },
+  disabled: { type: Array, default: () => [] },
+  minDate: {
+    type: Object as PropType<DateTime>,
+    default: null,
+  },
+  maxDate: {
+    type: Object as PropType<DateTime>,
+    default: null,
+  },
+  weekStart: {
+    type: Number,
+    default: 1,
+  },
+});
 
-  methods: {
-    selectDay (day) {
-      if (day.disabled) {
-        return
-      }
+const emits = defineEmits(['change']);
 
-      this.$emit('change', this.newYear, this.newMonth, day.number)
-    },
-    previousMonth () {
-      this.newDate = this.newDate.minus({ months: 1 })
-    },
-    nextMonth () {
-      this.newDate = this.newDate.plus({ months: 1 })
-    }
+const newDate = ref<DateTime>(
+  DateTime.fromObject({ year: props.year.valueOf(), month: props.month.valueOf() }, { zone: 'UTC' }),
+);
+const weekdays = weekdaysGenerator(props.weekStart.valueOf());
+const months = monthsGenerator();
+
+const newYear = computed<number>(() => newDate.value.year);
+const newMonth = computed<number>(() => newDate.value.month);
+const monthName = computed<string>(() => months[newMonth.value - 1]);
+const days = computed<TimeElement[]>(() => {
+  console.log(monthDays(newYear.value, newMonth.value, props.weekStart.valueOf()));
+  return monthDays(newYear.value, newMonth.value, props.weekStart.valueOf())
+    .map((day: number | null): TimeElement => ({
+      number: day,
+      selected: !!day && props.year.valueOf() === newYear.value &&
+        props.month.valueOf() === newMonth.value && props.day?.valueOf() === day,
+      disabled: !day || monthDayIsDisabled(props.minDate, props.maxDate, newYear.value, newMonth.value, day),
+    }));
+});
+
+const selectDay = (day: TimeElement) => {
+  if (!day.disabled) {
+    emits('change', newYear.value, newMonth.value, day.number);
   }
-}
+};
+const previousMonth = () => {
+  newDate.value = newDate.value.minus({ month: 1 });
+};
+const nextMonth = () => {
+  newDate.value = newDate.value.plus({ month: 1 });
+};
 </script>
 
 <style>
