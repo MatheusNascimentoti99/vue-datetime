@@ -31,7 +31,7 @@
         }"
         @click="selectDay(dayElement)"
       >
-        <span><span>{{ day.number }}</span></span>
+        <span><span>{{ dayElement.number }}</span></span>
       </div>
     </div>
   </div>

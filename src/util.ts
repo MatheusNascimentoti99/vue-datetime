@@ -23,12 +23,12 @@ export function monthDayIsDisabled(
   month: number,
   day: number,
 ): boolean {
-  const date = DateTime.fromObject({ year, month, day, zone: 'UTC' });
+  const date = DateTime.fromObject({ year, month, day }, { zone: 'UTC' });
 
   const newMinDate = minDate ? startOfDay(minDate.setZone('UTC', { keepLocalTime: true })) : null;
   const newMaxDate = maxDate ? startOfDay(maxDate.setZone('UTC', { keepLocalTime: true })) : null;
 
-  return !!((newMinDate && date < newMinDate) || (newMaxDate && date > newMaxDate));
+  return !!((newMinDate && date <= newMinDate) || (newMaxDate && date >= newMaxDate));
 }
 
 export function monthDays(year: number, month: number, weekStart: number): (null | number)[] {
