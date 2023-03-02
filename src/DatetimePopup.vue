@@ -141,7 +141,6 @@ const nextStep = () => {
 };
 
 const confirm = () => {
-  console.log('confirm');
   nextStep();
 };
 
@@ -216,7 +215,6 @@ const onChangeMonth = (newValue: number) => {
 
 const onChangeDate = (year: number, month: number, day: number) => {
   newDateTime.value = newDateTime.value.set({ year, month, day });
-  console.log('Hello!');
 
   if (props.auto.valueOf()) {
     nextStep();
@@ -246,8 +244,6 @@ const onChangeTime = ({ hour, minute, suffixTouched }: { hour: number, minute: n
       !props.use12Hour
     )
   );
-
-  console.log(goNext);
 
   if (goNext) {
     nextStep();

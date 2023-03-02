@@ -9,7 +9,6 @@
       type="text"
       :value="inputValue"
       v-bind="$attrs"
-      v-on="$listeners"
       @click="open"
       @focus="open"
     >
@@ -46,210 +45,211 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { DateTime } from 'luxon';
+import { computed, onMounted, ref, watch } from 'vue';
 
-import DatetimePopup from './DatetimePopup';
-import { datetimeFromISO, startOfDay, weekStart } from './util';
+import DatetimePopup from './DatetimePopup.vue';
+import { datetimeFromISO, startOfDay, calculateWeekStart } from './util';
 
-export default {
-  components: { DatetimePopup },
-
-  inheritAttrs: false,
-
-  props: {
-    value: { type: String },
-    valueZone: {
-      type: String,
-      default: 'UTC',
-    },
-    inputId: {
-      type: String,
-      default: null,
-    },
-    inputClass: {
-      type: [Object, Array, String],
-      default: '',
-    },
-    inputStyle: {
-      type: [Object, Array, String],
-      default: '',
-    },
-    hiddenName: { type: String },
-    zone: {
-      type: String,
-      default: 'local',
-    },
-    format: {
-      type: [Object, String],
-      default: null,
-    },
-    type: {
-      type: String,
-      default: 'date',
-    },
-    phrases: {
-      type: Object,
-      default() {
-        return {
-          cancel: 'Cancel',
-          ok: 'Ok',
-        };
-      },
-    },
-    use12Hour: {
-      type: Boolean,
-      default: false,
-    },
-    hourStep: {
-      type: Number,
-      default: 1,
-    },
-    minuteStep: {
-      type: Number,
-      default: 1,
-    },
-    minDatetime: {
-      type: String,
-      default: null,
-    },
-    maxDatetime: {
-      type: String,
-      default: null,
-    },
-    auto: {
-      type: Boolean,
-      default: false,
-    },
-    weekStart: {
-      type: Number,
-      default() {
-        return weekStart();
-      },
-    },
-    flow: { type: Array },
-    title: { type: String },
-    hideBackdrop: {
-      type: Boolean,
-      default: false,
-    },
-    backdropClick: {
-      type: Boolean,
-      default: true,
+const props = defineProps({
+  value: { type: String, default: '' },
+  valueZone: {
+    type: String,
+    default: 'UTC',
+  },
+  inputId: {
+    type: String,
+    default: null,
+  },
+  inputClass: {
+    type: [Object, Array, String],
+    default: '',
+  },
+  inputStyle: {
+    type: [Object, Array, String],
+    default: '',
+  },
+  hiddenName: { type: String, default: '' },
+  zone: {
+    type: String,
+    default: 'local',
+  },
+  format: {
+    type: [Object, String],
+    default: null,
+  },
+  type: {
+    type: String,
+    default: 'date',
+  },
+  phrases: {
+    type: Object,
+    default() {
+      return {
+        cancel: 'Cancel',
+        ok: 'Ok',
+      };
     },
   },
-
-  data() {
-    return {
-      isOpen: false,
-      datetime: datetimeFromISO(this.value),
-    };
+  use12Hour: {
+    type: Boolean,
+    default: false,
   },
-
-  computed: {
-    inputValue() {
-      let format = this.format;
-
-      if (!format) {
-        switch (this.type) {
-        case 'date':
-          format = DateTime.DATE_MED;
-          break;
-        case 'time':
-          format = DateTime.TIME_24_SIMPLE;
-          break;
-        case 'datetime':
-        case 'default':
-          format = DateTime.DATETIME_MED;
-          break;
-        }
-      }
-
-      if (typeof format === 'string') {
-        return this.datetime ? DateTime.fromISO(this.datetime).setZone(this.zone).toFormat(format) : '';
-      }
-      return this.datetime ? this.datetime.setZone(this.zone).toLocaleString(format) : '';
-    },
-    popupDate() {
-      return this.datetime ? this.datetime.setZone(this.zone) : this.newPopupDatetime();
-    },
-    popupMinDatetime() {
-      return this.minDatetime ? DateTime.fromISO(this.minDatetime).setZone(this.zone) : null;
-    },
-    popupMaxDatetime() {
-      return this.maxDatetime ? DateTime.fromISO(this.maxDatetime).setZone(this.zone) : null;
+  hourStep: {
+    type: Number,
+    default: 1,
+  },
+  minuteStep: {
+    type: Number,
+    default: 1,
+  },
+  minDatetime: {
+    type: String,
+    default: null,
+  },
+  maxDatetime: {
+    type: String,
+    default: null,
+  },
+  auto: {
+    type: Boolean,
+    default: false,
+  },
+  weekStart: {
+    type: Number,
+    default() {
+      return calculateWeekStart();
     },
   },
-
-  watch: {
-    value(newValue) {
-      this.datetime = datetimeFromISO(newValue);
-    },
+  flow: { type: Array, default: null },
+  title: { type: String, default: '' },
+  hideBackdrop: {
+    type: Boolean,
+    default: false,
   },
-
-  created() {
-    this.emitInput();
+  backdropClick: {
+    type: Boolean,
+    default: true,
   },
+});
 
-  methods: {
-    emitInput() {
-      let datetime = this.datetime ? this.datetime.setZone(this.valueZone) : null;
+const emits = defineEmits(['input', 'close']);
 
-      if (datetime && this.type === 'date') {
-        datetime = startOfDay(datetime);
-      }
+const isOpen = ref<boolean>(false);
+const datetime = ref<DateTime | null>(datetimeFromISO(props.value));
 
-      this.$emit('input', datetime ? datetime.toISO() : '');
-    },
-    open(event) {
-      event.target.blur();
+const inputValue = computed(() => {
+  let format = props.format;
 
-      this.isOpen = true;
-    },
-    close() {
-      this.isOpen = false;
-      this.$emit('close');
-    },
-    confirm(datetime) {
-      this.datetime = datetime.toUTC();
-      this.emitInput();
-      this.close();
-    },
-    cancel() {
-      this.close();
-    },
-    clickOutside() {
-      if (this.backdropClick === true) { this.cancel(); }
-    },
-    newPopupDatetime() {
-      let datetime = DateTime.utc().setZone(this.zone).set({ seconds: 0, milliseconds: 0 });
+  if (!format) {
+    switch (props.type) {
+    case 'date':
+      format = DateTime.DATE_MED;
+      break;
+    case 'time':
+      format = DateTime.TIME_24_SIMPLE;
+      break;
+    case 'datetime':
+    case 'default':
+      format = DateTime.DATETIME_MED;
+      break;
+    default:
+      break;
+    }
+  }
 
-      if (this.popupMinDatetime && datetime < this.popupMinDatetime) {
-        datetime = this.popupMinDatetime.set({ seconds: 0, milliseconds: 0 });
-      }
+  if (typeof format === 'string') {
+    return datetime.value ? DateTime.fromISO(props.value).setZone(props.zone).toFormat(format) : '';
+  }
+  return datetime.value ? datetime.value.setZone(props.zone).toLocaleString(format) : '';
+});
 
-      if (this.popupMaxDatetime && datetime > this.popupMaxDatetime) {
-        datetime = this.popupMaxDatetime.set({ seconds: 0, milliseconds: 0 });
-      }
+const popupMinDatetime = computed<DateTime | null>(() => (
+  props.minDatetime ? DateTime.fromISO(props.minDatetime).setZone(props.zone) : null
+));
 
-      if (this.minuteStep === 1) {
-        return datetime;
-      }
+const popupMaxDatetime = computed<DateTime | null>(() => (
+  props.maxDatetime ? DateTime.fromISO(props.maxDatetime).setZone(props.zone) : null
+));
 
-      const roundedMinute = Math.round(datetime.minute / this.minuteStep) * this.minuteStep;
+const newPopupDatetime = () => {
+  let datetime = DateTime.utc().setZone(props.zone).set({ second: 0, millisecond: 0 });
 
-      if (roundedMinute === 60) {
-        return datetime.plus({ hours: 1 }).set({ minute: 0 });
-      }
+  if (popupMinDatetime.value && datetime < popupMinDatetime.value) {
+    datetime = popupMinDatetime.value.set({ second: 0, millisecond: 0 });
+  }
 
-      return datetime.set({ minute: roundedMinute });
-    },
-    setValue(event) {
-      this.datetime = datetimeFromISO(event.target.value);
-      this.emitInput();
-    },
-  },
+  if (popupMaxDatetime.value && datetime > popupMaxDatetime.value) {
+    datetime = popupMaxDatetime.value.set({ second: 0, millisecond: 0 });
+  }
+
+  if (props.minuteStep === 1) {
+    return datetime;
+  }
+
+  const roundedMinute = Math.round(datetime.minute / props.minuteStep) * props.minuteStep;
+
+  if (roundedMinute === 60) {
+    return datetime.plus({ hours: 1 }).set({ minute: 0 });
+  }
+
+  return datetime.set({ minute: roundedMinute });
 };
+
+const popupDate = computed(() => (datetime.value ? datetime.value.setZone(props.zone) : newPopupDatetime()));
+
+const emitInput = () => {
+  let innerValue = datetime.value ? datetime.value.setZone(props.valueZone) : null;
+
+  if (innerValue && props.type === 'date') {
+    innerValue = startOfDay(innerValue);
+  }
+
+  emits('input', innerValue ? innerValue.toISO() : '');
+};
+
+onMounted(() => {
+  emitInput();
+});
+
+const open = (event: any) => {
+  event.target.blur();
+  isOpen.value = true;
+};
+
+const close = () => {
+  isOpen.value = false;
+  emits('close');
+};
+
+const confirm = (newValue: DateTime) => {
+  datetime.value = newValue.toUTC();
+  emitInput();
+  close();
+};
+
+const cancel = () => {
+  close();
+};
+
+const clickOutside = () => {
+  if (props.backdropClick === true) { cancel(); }
+};
+
+const setValue = (event: any) => {
+  datetime.value = datetimeFromISO(event.target.value);
+  emitInput();
+};
+
+watch(() => props.value, ((value, oldValue) => {
+  datetime.value = datetimeFromISO(value);
+}));
+
+</script>
+
+<script lang="ts">
+export default { inheritAttrs: false };
 </script>
 
 <style>

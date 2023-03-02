@@ -83,7 +83,6 @@ const newYear = computed<number>(() => newDate.value.year);
 const newMonth = computed<number>(() => newDate.value.month);
 const monthName = computed<string>(() => months[newMonth.value - 1]);
 const days = computed<TimeElement[]>(() => {
-  console.log(monthDays(newYear.value, newMonth.value, props.weekStart.valueOf()));
   return monthDays(newYear.value, newMonth.value, props.weekStart.valueOf())
     .map((day: number | null): TimeElement => ({
       number: day,

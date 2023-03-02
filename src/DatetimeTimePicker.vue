@@ -50,7 +50,8 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue';
 
-import { hoursGenerator, type ListElement, minutesGenerator, pad, timeComponentIsDisabled, type TimeElement } from './util';
+import { hoursGenerator, minutesGenerator, pad, timeComponentIsDisabled } from './util';
+import type { ListElement, TimeElement } from './util';
 
 const props = defineProps({
   hour: {
@@ -143,7 +144,6 @@ const selectMinute = (minute: TimeElement) => {
 };
 
 const selectSuffix = (suffix: 'am' | 'pm') => {
-  console.log('selectSuffix', suffix);
   if (suffix === 'am') {
     if (props.hour >= 12) {
       emits('change', { hour: props.hour - 12, suffixTouched: true });

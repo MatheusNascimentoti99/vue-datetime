@@ -122,7 +122,7 @@ export function createFlowManagerFromType(type) {
   return new FlowManager(flow, 'end');
 }
 
-export function weekStart() {
+export function calculateWeekStart() {
   let weekstart;
 
   try {
