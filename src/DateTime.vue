@@ -12,7 +12,7 @@
       @click="open"
       @focus="open"
     >
-    <input v-if="hiddenName" type="hidden" :name="hiddenName" :value="value" @input="setValue">
+    <input v-if="hiddenName" type="hidden" :name="hiddenName" :value="modelValue" @input="setValue">
     <slot name="after"/>
     <transition-group name="vdatetime-fade" tag="div">
       <div v-if="isOpen && !hideBackdrop" key="overlay" class="vdatetime-overlay" @click.self="clickOutside"/>
@@ -53,7 +53,7 @@ import DatetimePopup from './DatetimePopup.vue';
 import { datetimeFromISO, startOfDay, calculateWeekStart } from './util';
 
 const props = defineProps({
-  value: { type: String, default: '' },
+  modelValue: { type: String, default: '' },
   valueZone: {
     type: String,
     default: 'UTC',
@@ -134,13 +134,24 @@ const props = defineProps({
   },
 });
 
-const emits = defineEmits(['input', 'close']);
+const emits = defineEmits(['input', 'close', 'update:modelValue']);
+
 
 const isOpen = ref<boolean>(false);
-const datetime = ref<DateTime | null>(datetimeFromISO(props.value));
+const datetime = computed<DateTime | null>({
+  get() {
+    console.log('update', datetimeFromISO(props.modelValue));
+    return datetimeFromISO(props.modelValue);
+  },
+  set(newValue: DateTime | null) {
+    if (newValue) {
+      emits('update:modelValue', newValue.toISO());
+    }
+  },
+});
 
 const inputValue = computed(() => {
-  let format = props.format;
+  let format: string | Object = props.format;
 
   if (!format) {
     switch (props.type) {
@@ -160,7 +171,7 @@ const inputValue = computed(() => {
   }
 
   if (typeof format === 'string') {
-    return datetime.value ? DateTime.fromISO(props.value).setZone(props.zone).toFormat(format) : '';
+    return datetime.value ? DateTime.fromISO(props.modelValue).setZone(props.zone).toFormat(format) : '';
   }
   return datetime.value ? datetime.value.setZone(props.zone).toLocaleString(format) : '';
 });
@@ -242,7 +253,7 @@ const setValue = (event: any) => {
   emitInput();
 };
 
-watch(() => props.value, ((value: string) => {
+watch(() => props.modelValue, ((value: string) => {
   datetime.value = datetimeFromISO(value);
 }));
 

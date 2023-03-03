@@ -20,7 +20,7 @@ export default function createDatetime() {
 const version = '__VERSION__';
 createDatetime.version = version;
 
-// Export all components too
+// Export all views too
 export {
   Datetime,
   DatetimePopup,

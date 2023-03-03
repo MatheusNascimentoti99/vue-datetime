@@ -171,26 +171,23 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { DateTime as LuxonDateTime } from 'luxon';
-import { defineComponent } from 'vue';
+import { ref } from 'vue';
 
-export default defineComponent({
-  name: 'DemoApp',
-  data() {
-    return {
-      time: '19:06',
-      date: '2018-05-12T00:00:00.000Z',
-      datetime: '2018-05-12T17:19:06.151Z',
-      datetime12: '2018-05-12T17:19:06.151Z',
-      datetime13: '2018-05-12T17:19:06.151Z',
-      datetimeEmpty: '',
-      minDatetime: LuxonDateTime.local().toISO(),
-      maxDatetime: LuxonDateTime.local().plus({ days: 3 }).minus({ hours: 4 }).toISO(),
-      datetimeTheming: LuxonDateTime.local().toISO(),
-    };
-  },
-});
+const time = ref('19:06');
+const date = ref('2018-05-12T00:00:00.000Z');
+const datetime = ref('2018-05-12T17:19:06.151Z');
+const datetime12 = ref('2018-05-12T17:19:06.151Z');
+const datetime13 = ref('2018-05-12T17:19:06.151Z');
+const datetimeEmpty = ref('');
+const minDatetime = ref(LuxonDateTime.local().toISO());
+const maxDatetime = ref(LuxonDateTime.local().plus({ days: 3 }).minus({ hours: 4 }).toISO());
+const datetimeTheming = ref(LuxonDateTime.local().toISO());
+</script>
+
+<script lang="ts">
+export default { name: 'DemoApp' };
 </script>
 
 <style scoped>
