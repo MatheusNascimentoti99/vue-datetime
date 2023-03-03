@@ -242,7 +242,7 @@ const setValue = (event: any) => {
   emitInput();
 };
 
-watch(() => props.value, ((value, oldValue) => {
+watch(() => props.value, ((value: string) => {
   datetime.value = datetimeFromISO(value);
 }));
 

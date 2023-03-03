@@ -44,10 +44,11 @@ const props = defineProps({
 
 const months = computed<TimeElement[]>(() => (
   monthsGenerator().map((month: string, index: number): TimeElement => ({
-    number: index + 1,
+    // eslint-disable-next-line no-param-reassign
+    number: ++index,
     label: month,
     selected: index === props.month.valueOf(),
-    disabled: !index || monthIsDisabled(props.minDate, props.maxDate, props.year.valueOf(), index),
+    disabled: !(index + 1) || monthIsDisabled(props.minDate, props.maxDate, props.year.valueOf(), index),
   }))
 ));
 

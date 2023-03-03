@@ -50,12 +50,12 @@ export function monthDays(year: number, month: number, weekStart: number): (null
     ) ?? [];
 }
 
-export function monthIsDisabled(minDate, maxDate, year, month) {
+export function monthIsDisabled(minDate: DateTime, maxDate: DateTime, year: number, month: number) {
   return (minDate && minDate > DateTime.utc(year, month, DateTime.utc(year, month).daysInMonth)) ||
          (maxDate && maxDate < DateTime.utc(year, month, 1));
 }
 
-export function yearIsDisabled(minDate, maxDate, year) {
+export function yearIsDisabled(minDate: DateTime, maxDate: DateTime, year: number) {
   const minYear = minDate ? minDate.year : null;
   const maxYear = maxDate ? maxDate.year : null;
 
