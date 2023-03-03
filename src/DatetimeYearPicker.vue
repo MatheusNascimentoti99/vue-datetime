@@ -19,9 +19,10 @@
 
 <script setup lang="ts">
 import { DateTime } from 'luxon';
-import { computed, onMounted, onUpdated, PropType, ref } from 'vue';
+import { computed, PropType, ref } from 'vue';
 
-import { yearsGenerator, yearIsDisabled, type TimeElement, type ListElement } from './util';
+import useListScroller from './composables/ListScroller';
+import { yearsGenerator, yearIsDisabled, type TimeElement } from './util';
 
 const props = defineProps({
   year: {
@@ -38,7 +39,7 @@ const props = defineProps({
   },
 });
 
-const years = computed<TimeElement[]>(() => (yearsGenerator(props.year.valueOf()).map((year: number) => ({
+const years = computed<TimeElement[]>(() => (yearsGenerator(props.year.valueOf()).map((year: number): TimeElement => ({
   number: year,
   selected: year === props.year.valueOf(),
   disabled: !year || yearIsDisabled(props.minDate, props.maxDate, year),
@@ -46,14 +47,7 @@ const years = computed<TimeElement[]>(() => (yearsGenerator(props.year.valueOf()
 
 const yearList = ref<HTMLElement | null>(null);
 
-const scrollToCurrent = () => {
-  if (yearList.value) {
-    const selectedYear: ListElement | null = yearList.value.querySelector('.vdatetime-year-picker__item--selected');
-    yearList.value.scrollTop = selectedYear ? selectedYear.offsetTop - 250 : 0;
-  }
-};
-onMounted(() => { scrollToCurrent(); });
-onUpdated(() => { scrollToCurrent(); });
+useListScroller(yearList, '.vdatetime-year-picker__item--selected');
 
 const emits = defineEmits(['change']);
 

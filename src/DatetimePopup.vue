@@ -123,6 +123,7 @@ interface TimeParts {
   day?: boolean,
   hour?: boolean,
   minutes?: boolean,
+  suffix?: boolean,
 }
 
 const flowManager = props.flow ?

@@ -48,10 +48,11 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue';
+import { computed, ref } from 'vue';
 
+import useListScroller from './composables/ListScroller';
 import { hoursGenerator, minutesGenerator, pad, timeComponentIsDisabled } from './util';
-import type { ListElement, TimeElement } from './util';
+import type { TimeElement } from './util';
 
 const props = defineProps({
   hour: {
@@ -95,7 +96,8 @@ const hours = computed<TimeElement[]>(() => hoursGenerator(props.hourStep).filte
   }
   return hour >= 12;
 }).map((hour: number): TimeElement => ({
-  number: pad(hour),
+  number: hour,
+  label: pad(hour),
   selected: hour === props.hour.valueOf(),
   disabled: timeComponentIsDisabled(minHour.value, maxHour.value, hour),
 })));
@@ -108,7 +110,8 @@ const maxMinute = computed<number | null>(
 );
 
 const minutes = computed<TimeElement[]>(() => minutesGenerator(props.minuteStep).map((minute: number): TimeElement => ({
-  number: pad(minute),
+  number: minute,
+  label: pad(minute),
   selected: minute === props.minute.valueOf(),
   disabled: timeComponentIsDisabled(minMinute.value, maxMinute.value, minute),
 })));
@@ -116,18 +119,8 @@ const minutes = computed<TimeElement[]>(() => minutesGenerator(props.minuteStep)
 const hourList = ref<HTMLInputElement | null>(null);
 const minuteList = ref<HTMLInputElement | null>(null);
 
-onMounted(() => {
-  if (hourList.value) {
-    const selectedHour: ListElement | null = hourList.value?.querySelector('.vdatetime-time-picker__item--selected');
-    hourList.value.scrollTop = selectedHour ? selectedHour.offsetTop - 250 : 0;
-  }
-  if (minuteList.value) {
-    const selectedMinute: ListElement | null = minuteList.value?.querySelector(
-      '.vdatetime-time-picker__item--selected',
-    );
-    minuteList.value.scrollTop = selectedMinute ? selectedMinute.offsetTop - 250 : 0;
-  }
-});
+useListScroller(hourList, '.vdatetime-time-picker__item--selected');
+useListScroller(minuteList, '.vdatetime-time-picker__item--selected');
 
 const emits = defineEmits(['change']);
 

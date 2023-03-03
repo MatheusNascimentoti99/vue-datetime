@@ -19,9 +19,10 @@
 
 <script setup lang="ts">
 import { DateTime } from 'luxon';
-import { computed, onMounted, onUpdated, PropType, ref } from 'vue';
+import { computed, PropType, ref } from 'vue';
 
-import { ListElement, monthIsDisabled, monthsGenerator, TimeElement } from './util';
+import useListScroller from './composables/ListScroller';
+import { monthIsDisabled, monthsGenerator, TimeElement } from './util';
 
 const props = defineProps({
   year: {
@@ -54,15 +55,7 @@ const months = computed<TimeElement[]>(() => (
 
 const monthList = ref<HTMLElement | null>(null);
 
-const scrollToCurrent = () => {
-  if (monthList.value) {
-    const selectedYear: ListElement | null = monthList.value.querySelector('.vdatetime-year-picker__item--selected');
-    monthList.value.scrollTop = selectedYear ? selectedYear.offsetTop - 250 : 0;
-  }
-};
-
-onMounted(() => { scrollToCurrent(); });
-onUpdated(() => { scrollToCurrent(); });
+useListScroller(monthList, '.vdatetime-month-picker__item--selected');
 
 const emits = defineEmits(['change']);
 

@@ -59,8 +59,8 @@ export function yearIsDisabled(minDate: DateTime, maxDate: DateTime, year: numbe
   const minYear = minDate ? minDate.year : null;
   const maxYear = maxDate ? maxDate.year : null;
 
-  return (minYear && year < minYear) ||
-         (maxYear && year > maxYear);
+  return (!!minYear && year < minYear) ||
+         (!!maxYear && year > maxYear);
 }
 
 export function timeComponentIsDisabled(min, max, component) {
@@ -97,8 +97,8 @@ export function yearsGenerator(current: number): number[] {
   return [...Array(201)].map((item, index) => current - 100 + index);
 }
 
-export function pad(number: number): number | string {
-  return number < 10 ? `0${number}` : number;
+export function pad(number: number): string {
+  return String(number).padStart(2, '0');
 }
 
 export function createFlowManager(flow) {
