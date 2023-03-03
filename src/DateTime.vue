@@ -1,5 +1,5 @@
 <template>
-  <div class="vdatetime">
+  <div class="vdatetime" :class="$attrs.class">
     <slot name="before"/>
     <input
       :id="inputId"
@@ -135,7 +135,6 @@ const props = defineProps({
 });
 
 const emits = defineEmits(['input', 'close', 'update:modelValue']);
-
 
 const isOpen = ref<boolean>(false);
 const datetime = computed<DateTime | null>({

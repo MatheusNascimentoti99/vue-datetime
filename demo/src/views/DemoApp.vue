@@ -15,7 +15,7 @@
         </div>
       </div>
       <div class="example-code">
-        <pre><code>&#x3C;datetime v-model=&#x22;date&#x22;&#x3E;&#x3C;/datetime&#x3E;</code></pre>
+        <pre><code>&#x3C;datetime v-model=&#x22;date&#x22;/&#x3E;</code></pre>
       </div>
     </div>
 
@@ -32,7 +32,7 @@
         </div>
       </div>
       <div class="example-code">
-        <pre><code>&#x3C;datetime type=&#x22;datetime&#x22; v-model=&#x22;datetime&#x22;&#x3E;&#x3C;/datetime&#x3E;</code></pre>
+        <pre><code>&#x3C;datetime type=&#x22;datetime&#x22; v-model=&#x22;datetime&#x22;/&#x3E;</code></pre>
       </div>
     </div>
 
@@ -49,7 +49,7 @@
         </div>
       </div>
       <div class="example-code">
-        <pre><code>&#x3C;datetime type=&#x22;datetime&#x22; v-model=&#x22;datetime12&#x22; use12-hour&#x3E;&#x3C;/datetime&#x3E;</code></pre>
+        <pre><code>&#x3C;datetime type=&#x22;datetime&#x22; v-model=&#x22;datetime12&#x22; use12-hour/&#x3E;</code></pre>
       </div>
     </div>
 
@@ -64,7 +64,7 @@
         </div>
       </div>
       <div class="example-code">
-        <pre><code>&#x3C;datetime type=&#x22;time&#x22; v-model=&#x22;time&#x22;&#x3E;&#x3C;/datetime&#x3E;</code></pre>
+        <pre><code>&#x3C;datetime type=&#x22;time&#x22; v-model=&#x22;time&#x22;/&#x3E;</code></pre>
       </div>
     </div>
 
@@ -80,7 +80,7 @@
         </div>
       </div>
       <div class="example-code">
-        <pre><code>&#x3C;datetime type=&#x22;datetime&#x22; v-model=&#x22;datetime13&#x22; format=&#x22;yyyy-MM-dd HH:mm:ss&#x22;&#x3E;&#x3C;/datetime&#x3E;</code></pre>
+        <pre><code>&#x3C;datetime type=&#x22;datetime&#x22; v-model=&#x22;datetime13&#x22; format=&#x22;yyyy-MM-dd HH:mm:ss&#x22;/&#x3E;</code></pre>
       </div>
     </div>
 
@@ -131,7 +131,7 @@
   :week-start=&#x22;7&#x22;
   use12-hour
   auto
-  &#x3E;&#x3C;/datetime&#x3E;</code></pre>
+  /&#x3E;</code></pre>
       </div>
     </div>
 
@@ -148,7 +148,7 @@
         </div>
       </div>
       <div class="example-code">
-        <pre><code>&#x3C;datetime type=&#x22;datetime&#x22; v-model=&#x22;datetimeTheming&#x22; class=&#x22;theme-orange&#x22;&#x3E;&#x3C;/datetime&#x3E;</code></pre>
+        <pre><code>&#x3C;datetime type=&#x22;datetime&#x22; v-model=&#x22;datetimeTheming&#x22; class=&#x22;theme-orange&#x22;/&#x3E;</code></pre>
 
         <pre><code>.theme-orange .vdatetime-popup__header,
 .theme-orange .vdatetime-calendar__month__day--selected > span > span,
