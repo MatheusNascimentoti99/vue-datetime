@@ -2,6 +2,8 @@ import { fileURLToPath, URL } from 'node:url';
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 
+import { resolve } from 'path';
+
 export default defineConfig({
   plugins: [vue()],
   resolve: {
@@ -27,5 +29,23 @@ export default defineConfig({
     },
     open: 'demo/index.html',
     base: 'demo'
+  },
+  build: {
+    target: 'es2015',
+    lib: {
+      entry: resolve(__dirname, './src/index.ts'),
+      fileName: 'vue-datetime',
+      name: 'vue-datetime.[name]'
+    },
+    rollupOptions: {
+      external: ['luxon', 'vue', 'weekstart'],
+      output: {
+        globals: {
+          vue: 'vue',
+          luxon: 'luxon',
+          weekstart: 'weekstart'
+        }
+      }
+    }
   }
 });
