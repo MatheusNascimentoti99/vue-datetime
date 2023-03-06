@@ -61,16 +61,16 @@ const select = (year: TimeElement) => {
 <style>
 .vdatetime-year-picker {
   box-sizing: border-box;
+}
 
-  &::after {
-    content: '';
-    display: table;
-    clear: both;
-  }
+.vdatetime-year-picker::after {
+  content: '';
+  display: table;
+  clear: both;
+}
 
-  & * {
-    box-sizing: border-box;
-  }
+.vdatetime-year-picker * {
+  box-sizing: border-box;
 }
 
 .vdatetime-year-picker__list {
@@ -79,18 +79,18 @@ const select = (year: TimeElement) => {
   height: 305px;
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
+}
 
-  &::-webkit-scrollbar {
-    width: 3px;
-  }
+.vdatetime-year-picker__list::-webkit-scrollbar {
+  width: 3px;
+}
 
-  &::-webkit-scrollbar-track {
-    background: #efefef;
-  }
+.vdatetime-year-picker__list::-webkit-scrollbar-track {
+  background: #efefef;
+}
 
-  &::-webkit-scrollbar-thumb {
-    background: #ccc;
-  }
+.vdatetime-year-picker__list::-webkit-scrollbar-thumb {
+  background: #ccc;
 }
 
 .vdatetime-year-picker__item {
@@ -113,10 +113,10 @@ const select = (year: TimeElement) => {
 .vdatetime-year-picker__item--disabled {
   opacity: 0.4;
   cursor: default;
+}
 
-  &:hover {
-    color: inherit;
-    background: transparent;
-  }
+.vdatetime-year-picker__item--disabled:hover {
+  color: inherit;
+  background: transparent;
 }
 </style>

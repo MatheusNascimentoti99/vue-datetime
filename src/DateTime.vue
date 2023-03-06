@@ -138,10 +138,7 @@ const emits = defineEmits(['input', 'close', 'update:modelValue']);
 
 const isOpen = ref<boolean>(false);
 const datetime = computed<DateTime | null>({
-  get() {
-    console.log('update', datetimeFromISO(props.modelValue));
-    return datetimeFromISO(props.modelValue);
-  },
+  get() { return datetimeFromISO(props.modelValue); },
   set(newValue: DateTime | null) {
     if (newValue) {
       emits('update:modelValue', newValue.toISO());

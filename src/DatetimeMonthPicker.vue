@@ -69,16 +69,16 @@ const select = (month: TimeElement) => {
 <style>
 .vdatetime-month-picker {
   box-sizing: border-box;
+}
 
-  &::after {
-    content: '';
-    display: table;
-    clear: both;
-  }
+.vdatetime-month-picker::after {
+  content: '';
+  display: table;
+  clear: both;
+}
 
-  & * {
-    box-sizing: border-box;
-  }
+.vdatetime-month-picker * {
+  box-sizing: border-box;
 }
 
 .vdatetime-month-picker__list {
@@ -87,18 +87,18 @@ const select = (month: TimeElement) => {
   height: 305px;
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
+}
 
-  &::-webkit-scrollbar {
-    width: 3px;
-  }
+.vdatetime-month-picker__list::-webkit-scrollbar {
+  width: 3px;
+}
 
-  &::-webkit-scrollbar-track {
-    background: #efefef;
-  }
+.vdatetime-month-picker__list::-webkit-scrollbar-track {
+  background: #efefef;
+}
 
-  &::-webkit-scrollbar-thumb {
-    background: #ccc;
-  }
+.vdatetime-month-picker__list::-webkit-scrollbar-thumb {
+  background: #ccc;
 }
 
 .vdatetime-month-picker__item {
@@ -121,10 +121,10 @@ const select = (month: TimeElement) => {
 .vdatetime-month-picker__item--disabled {
   opacity: 0.4;
   cursor: default;
+}
 
-  &:hover {
-    color: inherit;
-    background: transparent;
-  }
+.vdatetime-month-picker__item--disabled:hover {
+  color: inherit;
+  background: transparent;
 }
 </style>

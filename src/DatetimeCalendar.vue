@@ -31,7 +31,11 @@
         }"
         @click="selectDay(dayElement)"
       >
-        <span><span>{{ dayElement.number }}</span></span>
+        <span>
+          <span>
+            {{ dayElement.number }}
+          </span>
+        </span>
       </div>
     </div>
   </div>
@@ -82,15 +86,13 @@ const months = monthsGenerator();
 const newYear = computed<number>(() => newDate.value.year);
 const newMonth = computed<number>(() => newDate.value.month);
 const monthName = computed<string>(() => months[newMonth.value - 1]);
-const days = computed<TimeElement[]>(() => {
-  return monthDays(newYear.value, newMonth.value, props.weekStart.valueOf())
-    .map((day: number | null): TimeElement => ({
-      number: day,
-      selected: !!day && props.year.valueOf() === newYear.value &&
-        props.month.valueOf() === newMonth.value && props.day?.valueOf() === day,
-      disabled: !day || monthDayIsDisabled(props.minDate, props.maxDate, newYear.value, newMonth.value, day),
-    }));
-});
+const days = computed<TimeElement[]>(() => monthDays(newYear.value, newMonth.value, props.weekStart.valueOf())
+  .map((day: number | null): TimeElement => ({
+    number: day,
+    selected: !!day && props.year.valueOf() === newYear.value &&
+      props.month.valueOf() === newMonth.value && props.day?.valueOf() === day,
+    disabled: !day || monthDayIsDisabled(props.minDate, props.maxDate, newYear.value, newMonth.value, day),
+  })));
 
 const selectDay = (day: TimeElement) => {
   if (!day.disabled) {
@@ -125,19 +127,22 @@ const nextMonth = () => {
   padding: 0 5px;
   width: 18px;
   cursor: pointer;
+}
 
-  & svg {
-    width: 8px;
-    height: 13px;
+.vdatetime-calendar__navigation--previous svg,
+.vdatetime-calendar__navigation--next svg {
+  width: 8px;
+  height: 13px;
+}
 
-    & path {
-      transition: stroke .3s;
-    }
-  }
+.vdatetime-calendar__navigation--previous svg path,
+.vdatetime-calendar__navigation--next svg path {
+  transition: stroke .3s;
+}
 
-  &:hover svg path {
-    stroke: #888;
-  }
+.vdatetime-calendar__navigation--previous:hover svg path,
+.vdatetime-calendar__navigation--next:hover svg path {
+  stroke: #888;
 }
 
 .vdatetime-calendar__navigation--previous {
@@ -168,29 +173,31 @@ const nextMonth = () => {
   font-size: 15px;
   font-weight: 300;
   cursor: pointer;
+}
 
-  & > span {
-    display: block;
-    width: 100%;
-    position: relative;
-    height: 0;
-    padding: 0 0 100%;
-    overflow: hidden;
+.vdatetime-calendar__month__weekday > span,
+.vdatetime-calendar__month__day > span {
+  display: block;
+  width: 100%;
+  position: relative;
+  height: 0;
+  padding: 0 0 100%;
+  overflow: hidden;
+}
 
-    & > span {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      position: absolute;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
-      border: 0;
-      border-radius: 50%;
-      transition: background-color .3s, color .3s;
-    }
-  }
+.vdatetime-calendar__month__weekday > span > span,
+.vdatetime-calendar__month__day > span > span {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  border: 0;
+  border-radius: 50%;
+  transition: background-color .3s, color .3s;
 }
 
 .vdatetime-calendar__month__weekday {
@@ -201,21 +208,19 @@ const nextMonth = () => {
   background: #eee;
 }
 
-.vdatetime-calendar__month__day--selected {
-  & > span > span,
-  &:hover > span > span {
-    color: #fff;
-    background: #3f51b5;
-  }
+.vdatetime-calendar__month__day--selected span > span,
+.vdatetime-calendar__month__day--selected:hover > span > span {
+  color: #fff;
+  background: #3f51b5;
 }
 
 .vdatetime-calendar__month__day--disabled {
   opacity: 0.4;
   cursor: default;
+}
 
-  &:hover > span > span {
-    color: inherit;
-    background: transparent;
-  }
+.vdatetime-calendar__month__day--disabled:hover > span > span {
+  color: inherit;
+  background: transparent;
 }
 </style>
