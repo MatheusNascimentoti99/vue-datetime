@@ -164,14 +164,6 @@ useKeyPressListener((event: KeyboardEvent) => {
   }
 });
 
-const onChangeYear = (year: number) => {
-  newDateTime.value = newDateTime.value.set({ year });
-
-  if (props.auto.valueOf()) {
-    nextStep();
-  }
-};
-
 const year = computed<number>(() => newDateTime.value.year);
 const month = computed<number>(() => newDateTime.value.month);
 const day = computed<number>(() => newDateTime.value.day);
@@ -206,6 +198,14 @@ const showMonth = () => {
   flowManager.diversion('date');
 };
 
+const onChangeYear = (year: number) => {
+  newDateTime.value = newDateTime.value.set({ year });
+
+  if (props.auto.valueOf()) {
+    nextStep();
+  }
+};
+
 const onChangeMonth = (newValue: number) => {
   newDateTime.value = newDateTime.value.set({ month: newValue });
 
@@ -235,19 +235,6 @@ const onChangeTime = ({ hour, minute, suffixTouched }: { hour: number, minute: n
   if (Number.isInteger(minute)) {
     newDateTime.value = newDateTime.value.set({ minute });
     timePartsTouched.minute = true;
-  }
-
-  const goNext = (
-    props.auto &&
-    timePartsTouched.hour &&
-    timePartsTouched.minute && (
-      timePartsTouched.suffix ||
-      !props.use12Hour
-    )
-  );
-
-  if (goNext) {
-    nextStep();
   }
 };
 
