@@ -30,13 +30,13 @@ to support Vue 3 and typescript. For older versions of Vue refer to aforemention
 ### Bundler
 
 ```bash
-yarn add luxon vue-datetime weekstart
+yarn add luxon vue-datetime3 weekstart
 ```
 
 Or
 
 ```bash
-npm install --save luxon vue-datetime weekstart
+npm install --save luxon vue-datetime3 weekstart
 ```
 
 **weekstart** is optional, is used to get the first day of the week.
@@ -153,13 +153,15 @@ Theming is supported by overwriting CSS classes.
 ### Launch lint and tests
 
 ```bash
-yarn test
+npm run test
 ```
+
+Note: Currently not working. Tests need to be rewritten to ViTest.
 
 ### Launch visual tests
 
 ```bash
-yarn dev
+npm run demo
 ```
 
 ### Build
@@ -167,7 +169,7 @@ yarn dev
 Bundle the js and css to the `dist` folder:
 
 ```bash
-yarn build
+npm run build
 ```
 
 ## License
