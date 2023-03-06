@@ -1,7 +1,6 @@
 {
   "extends": "./tsconfig.json",
   "exclude": [
-    "build",
     "demo/**/*",
     "node_modules",
     "test/**/*",

@@ -44,7 +44,8 @@ export default defineConfig({
           vue: 'vue',
           luxon: 'luxon',
           weekstart: 'weekstart'
-        }
+        },
+        exports: 'named'
       }
     }
   }
