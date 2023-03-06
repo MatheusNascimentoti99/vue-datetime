@@ -1,6 +1,6 @@
 import { createApp } from 'vue';
 
-import createDatetime from '../../src';
+import createDatetime from '../../src/vue-datetime';
 
 import DemoApp from './views/DemoApp.vue';
 

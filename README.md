@@ -1,15 +1,23 @@
-**🚨 THIS PROJECT IS NO LONGER MAINTAINED 🚨** [read more](https://github.com/mariomka/vue-datetime/issues/276)
+# Vue3-datetime
 
-# vue-datetime
-
-[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE)
-[![Latest Version on NPM](https://img.shields.io/npm/v/vue-datetime.svg?style=flat-square)](https://npmjs.com/package/vue-datetime)
-[![npm](https://img.shields.io/npm/dt/vue-datetime.svg?style=flat-square)](https://www.npmjs.com/package/vue-datetime)
-[![Vue 3](https://img.shields.io/badge/vue-3-brightgreen.svg?style=flat-square)](https://vuejs.org)
-[![Build](https://img.shields.io/travis/mariomka/vue-datetime/v1.x.svg?style=flat-square)](https://travis-ci.org/mariomka/vue-datetime)
-[![Coverage](https://img.shields.io/codecov/c/github/mariomka/vue-datetime/v1.x.svg?style=flat-square)](https://codecov.io/gh/mariomka/vue-datetime)
+---
 
 > Mobile friendly datetime picker for Vue. Supports date, datetime and time modes, i18n and more.
+
+This is a fork and port of Vue 2 [vue-datetime](https://github.com/mariomka/vue-datetime) by [mariomka](https://github.com/mariomka)
+to support Vue 3 and typescript. For older versions of Vue refer to aforementioned project.
+
+[//]: # ([![Software License]&#40;https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square&#41;]&#40;LICENSE&#41;)
+
+[//]: # ([![Latest Version on NPM]&#40;https://img.shields.io/npm/v/vue-datetime.svg?style=flat-square&#41;]&#40;https://npmjs.com/package/vue-datetime&#41;)
+
+[//]: # ([![npm]&#40;https://img.shields.io/npm/dt/vue-datetime.svg?style=flat-square&#41;]&#40;https://www.npmjs.com/package/vue-datetime&#41;)
+
+[//]: # ([![Vue 3]&#40;https://img.shields.io/badge/vue-3-brightgreen.svg?style=flat-square&#41;]&#40;https://vuejs.org&#41;)
+
+[//]: # ([![Build]&#40;https://img.shields.io/travis/mariomka/vue-datetime/v1.x.svg?style=flat-square&#41;]&#40;https://travis-ci.org/mariomka/vue-datetime&#41;)
+
+[//]: # ([![Coverage]&#40;https://img.shields.io/codecov/c/github/mariomka/vue-datetime/v1.x.svg?style=flat-square&#41;]&#40;https://codecov.io/gh/mariomka/vue-datetime&#41;)
 
 ## Demo
 
@@ -19,7 +27,7 @@
 
 ## Installation
 
-### Bundler (Webpack, Rollup...)
+### Bundler
 
 ```bash
 yarn add luxon vue-datetime weekstart
@@ -36,57 +44,15 @@ npm install --save luxon vue-datetime weekstart
 #### Register
 
 ```js
-import Vue from 'vue'
-import { Datetime } from 'vue-datetime'
+import createApp from 'vue'
+import createDatetime from 'vue-datetime'
 // You need a specific loader for CSS files
-import 'vue-datetime/dist/vue-datetime.css'
+import 'vue-datetime/dist/style.css'
 
-Vue.use(Datetime)
+const app = createApp();
+
+app.use(createDatetime());
 ```
-
-#### Register manually
-
-##### Global
-
-```js
-import { Datetime } from 'vue-datetime';
-
-Vue.component('datetime', Datetime);
-```
-
-##### Local
-
-```js
-import { Datetime } from 'vue-datetime';
-
-Vue.extend({
-  template: '...',
-  components: {
-    datetime: Datetime
-  }
-});
-```
-
-### Browser
-
-Download vue, luxon, weekstart and vue-datetime or use a CDN like unpkg.
-
-```html
-<link rel="stylesheet" href="vue-datetime.css"></link>
-<script src="vue.js"></script>
-<script src="luxon.js"></script>
-<script src="weekstart.js"></script>
-<script src="vue-datetime.js"></script>
-```
-
-The component registers itself automatically as `<datetime>`. If you want to use a different name then register it explicitly:
-
-```js
-Vue.component('vue-datetime', window.VueDatetime.Datetime);
-```
-
-
-**weekstart** is optional, is used to get the first day of the week.
 
 ## Usage
 

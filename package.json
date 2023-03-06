@@ -1,6 +1,6 @@
 {
-  "name": "vue-datetime",
-  "version": "1.0.0-beta.13",
+  "name": "vue3-datetime",
+  "version": "1.0.0",
   "description": "Mobile friendly datetime picker for Vue. Supports date, datetime and time modes, i18n and disabling dates.",
   "keywords": [
     "datetime",
@@ -11,9 +11,9 @@
   ],
   "author": "Mario Juárez <mario@mjp.one>",
   "main": "dist/vue-datetime.umd.js",
-  "types": "dist/index.d.ts",
+  "types": "dist/vue-datetime.d.ts",
   "module": "dist/vue-datetime.mjs",
-  "style": "dist/vue-datetime.css",
+  "style": "dist/style.css",
   "files": [
     "dist"
   ],

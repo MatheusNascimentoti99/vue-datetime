@@ -33,7 +33,7 @@ export default defineConfig({
   build: {
     target: 'es2015',
     lib: {
-      entry: resolve(__dirname, './src/index.ts'),
+      entry: resolve(__dirname, './src/vue-datetime.ts'),
       fileName: 'vue-datetime',
       name: 'vue-datetime.[name]'
     },
