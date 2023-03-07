@@ -18,7 +18,7 @@
   "module": "dist/vue-datetime.mjs",
   "style": "dist/style.css",
   "files": [
-    "dist"
+    "dist/*"
   ],
   "scripts": {
     "demo": "vite",
