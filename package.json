@@ -28,6 +28,9 @@
     "version": "auto-changelog -p --starting-commit 975d478b80b8e1ed3663f55b34c3a35521a43bdb --commit-limit false && git add CHANGELOG.md",
     "test": "echo \"Error: tests not working yet\""
   },
+  "np": {
+    "branch": "v1.x"
+  },
   "pre-commit": "--no-verify",
   "devDependencies": {
     "@types/luxon": "^3.2.0",
