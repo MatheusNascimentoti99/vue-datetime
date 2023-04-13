@@ -15,8 +15,8 @@ yarn-error.log
 
 # build destinations
 dist
-demo/dist
+# packages/demo/dist
 
 # testing utils
-test/coverage
+packages/lib/test/coverage
 reports

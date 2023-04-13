@@ -15,7 +15,7 @@ const srcContext = require.context('../src', true, /^\.\/(?!index(\.js)?$)/)
 srcContext.keys().forEach(srcContext)
 
 // Set up
-require('./setup')
+require('packages/lib/test/setup')
 
 // Use a div to insert elements
 before(function () {

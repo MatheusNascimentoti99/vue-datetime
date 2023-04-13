@@ -53,7 +53,7 @@ afterEach(function () {
 })
 
 // Set up
-require('./setup')
+require('packages/lib/test/setup')
 
 // Hide all tests at the end to prevent some weird bugs
 before(function () {

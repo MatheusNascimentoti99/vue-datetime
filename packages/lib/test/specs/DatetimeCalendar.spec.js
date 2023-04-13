@@ -1,6 +1,6 @@
 import { DateTime as LuxonDatetime, Settings as LuxonSettings } from 'luxon'
-import { createVM } from '../helpers/utils.js'
-import DatetimeCalendar from 'src/DatetimeCalendar.vue'
+import { createVM } from 'packages/lib/test/helpers/utils.js'
+import DatetimeCalendar from 'packages/lib/src/DatetimeCalendar.vue'
 
 describe('DatetimeCalendar.vue', function () {
   describe('render', function () {
