@@ -128,7 +128,7 @@ interface TimeParts {
 
 const flowManager = props.flow ?
   createFlowManager(props.flow) : createFlowManagerFromType(props.type.valueOf());
-const newDateTime = ref<DateTime>(props.datetime);
+const newDateTime = ref<DateTime>(props.datetime || new DateTime.now());
 const step = ref(flowManager.first());
 let timePartsTouched = {} as TimeParts;
 

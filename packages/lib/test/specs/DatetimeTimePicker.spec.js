@@ -1,5 +1,5 @@
-import { createVM } from '../helpers/utils.js'
-import DatetimeTimePicker from 'src/DatetimeTimePicker.vue'
+import { createVM } from 'packages/lib/test/helpers/utils.js'
+import DatetimeTimePicker from 'packages/lib/src/DatetimeTimePicker.vue'
 
 describe('DatetimeTimePicker.vue', function () {
   describe('render', function () {

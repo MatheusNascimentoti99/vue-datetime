@@ -1,6 +1,6 @@
 import { DateTime as LuxonDateTime, Settings as LuxonSettings } from 'luxon'
-import Datetime from 'src/DateTime.vue'
-import { createVM } from '../helpers/utils.js'
+import Datetime from 'packages/lib/src/DateTime.vue'
+import { createVM } from 'packages/lib/test/helpers/utils.js'
 
 describe('DateTime.vue', function () {
   describe('render', function () {
