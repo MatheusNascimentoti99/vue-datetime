@@ -1,7 +1,7 @@
 {
   "name": "demo",
   "version": "1.0.0",
-  "description": "",
+  "description": "Demo app for vue datetime",
   "author": "Mario Juárez <mario@mjp.one>",
   "main": "src/app.ts",
   "scripts": {
