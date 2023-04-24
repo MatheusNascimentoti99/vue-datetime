@@ -108,7 +108,7 @@ export function createFlowManager(flow: any[]): FlowManager {
   return new FlowManager(flow, 'end');
 }
 
-export function createFlowManagerFromType(type: 'datetime' | 'time'): FlowManager {
+export function createFlowManagerFromType(type: 'datetime' | 'time' | string): FlowManager {
   let flow: string[];
 
   switch (type) {

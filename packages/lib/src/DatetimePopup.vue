@@ -71,7 +71,7 @@ const props = defineProps({
     required: true,
   },
   phrases: {
-    type: Object,
+    type: Object as PropType<PopupActions>,
     default() {
       return {
         cancel: 'Cancel',
@@ -126,10 +126,14 @@ interface TimeParts {
   suffix?: boolean,
 }
 
-const flowManager = props.flow ?
-  createFlowManager(props.flow) : createFlowManagerFromType(props.type.valueOf());
-const newDateTime = ref<DateTime>(props.datetime || new DateTime.now());
-const step = ref(flowManager.first());
+interface PopupActions {
+  cancel?: string,
+  ok?: string,
+}
+
+const flowManager = props.flow ? createFlowManager(props.flow) : createFlowManagerFromType(props.type.valueOf());
+const newDateTime = ref<DateTime>(props.datetime ?? DateTime.now());
+const step = ref<string>(flowManager.first());
 let timePartsTouched = {} as TimeParts;
 
 const nextStep = () => {
@@ -174,19 +178,19 @@ const dateFormatted = computed<string>(() => newDateTime.value.toLocaleString({
   day: 'numeric',
 }));
 
-const minTime = computed<string | null>(() => ((
+const minTime = computed<string | undefined>(() => ((
   props.minDatetime &&
   props.minDatetime.year === year.value &&
   props.minDatetime.month === month.value &&
   props.minDatetime.day === day.value
-) ? props.minDatetime.toFormat('HH:mm') : null));
+) ? props.minDatetime.toFormat('HH:mm') : undefined));
 
-const maxTime = computed<string | null>(() => ((
+const maxTime = computed<string | undefined>(() => ((
   props.maxDatetime &&
   props.maxDatetime.year === year.value &&
   props.maxDatetime.month === month.value &&
   props.maxDatetime.day === day.value
-) ? props.maxDatetime.toFormat('HH:mm') : null));
+) ? props.maxDatetime.toFormat('HH:mm') : undefined));
 
 const showYear = () => {
   step.value = 'year';
@@ -234,7 +238,7 @@ const onChangeTime = ({ hour, minute, suffixTouched }: { hour: number, minute: n
 
   if (Number.isInteger(minute)) {
     newDateTime.value = newDateTime.value.set({ minute });
-    timePartsTouched.minute = true;
+    timePartsTouched.minutes = true;
   }
 };
 
