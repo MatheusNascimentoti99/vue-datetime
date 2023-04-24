@@ -5,9 +5,11 @@
   ],
   "scripts": {
     "demo": "concurrently \"npm run demo --workspace=demo\" \"npm run watch --workspace=vue-datetime3\"",
-    "build": "npm run build --workspaces --if-present"
+    "build": "npm run build --workspaces --if-present",
+    "tsc": "vue-tsc --noEmit -p tsconfig.tsc.json"
   },
   "devDependencies": {
+    "@babel/types": "^7.21.4",
     "concurrently": "^8.0.1",
     "pre-commit": "^1.2.0",
     "typescript": "^4.9.5"
