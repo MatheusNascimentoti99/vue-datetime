@@ -1,4 +1,5 @@
 import { DateTime, Info, Settings } from 'luxon';
+import { getWeekStartByLocale } from 'weekstart';
 
 import FlowManager from './FlowManager';
 
@@ -51,12 +52,12 @@ export function monthDays(year: number, month: number, weekStart: number): (null
     ) ?? [];
 }
 
-export function monthIsDisabled(minDate: DateTime, maxDate: DateTime, year: number, month: number) {
+export function monthIsDisabled(minDate: DateTime, maxDate: DateTime, year: number, month: number): boolean {
   return (minDate && minDate > DateTime.utc(year, month, DateTime.utc(year, month).daysInMonth ?? 0)) ||
          (maxDate && maxDate < DateTime.utc(year, month, 1));
 }
 
-export function yearIsDisabled(minDate: DateTime, maxDate: DateTime, year: number) {
+export function yearIsDisabled(minDate: DateTime, maxDate: DateTime, year: number): boolean {
   const minYear = minDate ? minDate.year : null;
   const maxYear = maxDate ? maxDate.year : null;
 
@@ -64,12 +65,12 @@ export function yearIsDisabled(minDate: DateTime, maxDate: DateTime, year: numbe
          (!!maxYear && year > maxYear);
 }
 
-export function timeComponentIsDisabled(min: number | null, max: number | null, component: number) {
+export function timeComponentIsDisabled(min: number | null, max: number | null, component: number): boolean {
   return (min !== null && component < min) ||
          (max !== null && component > max);
 }
 
-export function weekdaysGenerator(weekStart: number) {
+export function weekdaysGenerator(weekStart: number): string[] {
   let localWeekStart = weekStart;
   if (--localWeekStart < 0) {
     localWeekStart = 6;
@@ -103,12 +104,12 @@ export function pad(number: number): string {
   return String(number).padStart(2, '0');
 }
 
-export function createFlowManager(flow: any[]) {
+export function createFlowManager(flow: any[]): FlowManager {
   return new FlowManager(flow, 'end');
 }
 
-export function createFlowManagerFromType(type: 'datetime' | 'time') {
-  let flow = [];
+export function createFlowManagerFromType(type: 'datetime' | 'time'): FlowManager {
+  let flow: string[];
 
   switch (type) {
   case 'datetime':
@@ -125,15 +126,7 @@ export function createFlowManagerFromType(type: 'datetime' | 'time') {
 }
 
 export function calculateWeekStart() {
-  let weekStart;
-
-  try {
-    weekStart = require('weekstart/package.json').version ? require('weekstart') : null;
-  } catch (e) {
-    weekStart = window.weekstart;
-  }
-
-  const firstDay = weekStart ? weekStart.getWeekStartByLocale(Settings.defaultLocale) : 1;
+  const firstDay = getWeekStartByLocale(Settings.defaultLocale);
 
   return firstDay === 0 ? 7 : firstDay;
 }
