@@ -33,24 +33,18 @@
         :title="title"
         @confirm="confirm"
         @cancel="cancel"
-      >
-        <template slot="button-cancel__internal" slot-scope="scope">
-          <slot name="button-cancel" :step="scope.step">{{ phrases.cancel }}</slot>
-        </template>
-        <template slot="button-confirm__internal" slot-scope="scope">
-          <slot name="button-confirm" :step="scope.step">{{ phrases.ok }}</slot>
-        </template>
-      </datetime-popup>
+      />
     </transition-group>
   </div>
 </template>
 
 <script setup lang="ts">
 import { DateTime } from 'luxon';
-import { computed, onMounted, ref, watch } from 'vue';
+import { computed, onMounted, PropType, ref, watch } from 'vue';
 
 import DatetimePopup from './DatetimePopup.vue';
 import { datetimeFromISO, startOfDay, calculateWeekStart } from './util';
+import type { Actions } from './util';
 
 const props = defineProps({
   modelValue: { type: String, default: '' },
@@ -84,7 +78,7 @@ const props = defineProps({
     default: 'date',
   },
   phrases: {
-    type: Object,
+    type: Object as PropType<Actions>,
     default() {
       return {
         cancel: 'Cancel',
@@ -172,12 +166,12 @@ const inputValue = computed(() => {
   return datetime.value ? datetime.value.setZone(props.zone).toLocaleString(format) : '';
 });
 
-const popupMinDatetime = computed<DateTime | null>(() => (
-  props.minDatetime ? DateTime.fromISO(props.minDatetime).setZone(props.zone) : null
+const popupMinDatetime = computed<DateTime | undefined>(() => (
+  props.minDatetime ? DateTime.fromISO(props.minDatetime).setZone(props.zone) : undefined
 ));
 
-const popupMaxDatetime = computed<DateTime | null>(() => (
-  props.maxDatetime ? DateTime.fromISO(props.maxDatetime).setZone(props.zone) : null
+const popupMaxDatetime = computed<DateTime | undefined>(() => (
+  props.maxDatetime ? DateTime.fromISO(props.maxDatetime).setZone(props.zone) : undefined
 ));
 
 const newPopupDatetime = () => {
