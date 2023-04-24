@@ -23,7 +23,7 @@
       </div>
       <div
         v-for="dayElement in days"
-        :key="dayElement"
+        :key="dayElement.number"
         class="vdatetime-calendar__month__day"
         :class="{
           'vdatetime-calendar__month__day--selected': dayElement.selected,
@@ -88,7 +88,7 @@ const newMonth = computed<number>(() => newDate.value.month);
 const monthName = computed<string>(() => months[newMonth.value - 1]);
 const days = computed<TimeElement[]>(() => monthDays(newYear.value, newMonth.value, props.weekStart.valueOf())
   .map((day: number | null): TimeElement => ({
-    number: day,
+    number: day ?? undefined,
     selected: !!day && props.year.valueOf() === newYear.value &&
       props.month.valueOf() === newMonth.value && props.day?.valueOf() === day,
     disabled: !day || monthDayIsDisabled(props.minDate, props.maxDate, newYear.value, newMonth.value, day),
