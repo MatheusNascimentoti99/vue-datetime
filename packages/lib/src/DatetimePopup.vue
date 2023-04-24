@@ -64,6 +64,7 @@ import DatetimeMonthPicker from './DatetimeMonthPicker.vue';
 import DatetimeTimePicker from './DatetimeTimePicker.vue';
 import DatetimeYearPicker from './DatetimeYearPicker.vue';
 import { createFlowManager, createFlowManagerFromType } from './util';
+import type { Actions } from './util';
 
 const props = defineProps({
   datetime: {
@@ -71,7 +72,7 @@ const props = defineProps({
     required: true,
   },
   phrases: {
-    type: Object as PropType<PopupActions>,
+    type: Object as PropType<Actions>,
     default() {
       return {
         cancel: 'Cancel',
@@ -124,11 +125,6 @@ interface TimeParts {
   hour?: boolean,
   minutes?: boolean,
   suffix?: boolean,
-}
-
-interface PopupActions {
-  cancel?: string,
-  ok?: string,
 }
 
 const flowManager = props.flow ? createFlowManager(props.flow) : createFlowManagerFromType(props.type.valueOf());
