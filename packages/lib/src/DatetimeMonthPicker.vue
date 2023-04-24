@@ -3,7 +3,7 @@
     <div ref="monthList" class="vdatetime-month-picker__list vdatetime-month-picker__list">
       <div
         v-for="monthElement in months"
-        :key="monthElement"
+        :key="monthElement.number"
         class="vdatetime-month-picker__item"
         :class="{
           'vdatetime-month-picker__item--selected': monthElement.selected,
@@ -61,7 +61,7 @@ const emits = defineEmits(['change']);
 
 const select = (month: TimeElement) => {
   if (!month.disabled) {
-    emits('change', parseInt(month.number as string, 10));
+    emits('change', month.number, 10);
   }
 };
 </script>

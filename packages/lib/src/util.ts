@@ -132,7 +132,7 @@ export function calculateWeekStart() {
 }
 
 export interface TimeElement {
-  number: number | string | undefined,
+  number: number | undefined,
   label?: string,
   selected: boolean,
   disabled: boolean
