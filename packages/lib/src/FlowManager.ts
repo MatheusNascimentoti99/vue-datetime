@@ -1,11 +1,11 @@
 class FlowManager {
-  private readonly flow: any[];
+  private readonly flow: string[];
 
-  private readonly endStatus: any;
+  private readonly endStatus: string;
 
   private diversionNext: any | null;
 
-  constructor(flow = [], endStatus = null) {
+  constructor(flow: any[] = [], endStatus: string = '') {
     this.flow = flow;
     this.endStatus = endStatus;
     this.diversionNext = null;
@@ -19,7 +19,7 @@ class FlowManager {
     return this.step(0);
   }
 
-  next(current) {
+  next(current: string): string {
     if (this.diversionNext) {
       const next = this.diversionNext;
       this.diversionNext = null;
@@ -30,7 +30,7 @@ class FlowManager {
     return this.step(this.flow.indexOf(current) + 1);
   }
 
-  diversion(next) {
+  diversion(next: string): void {
     this.diversionNext = next;
   }
 }

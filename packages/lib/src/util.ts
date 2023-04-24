@@ -34,24 +34,25 @@ export function monthDayIsDisabled(
 export function monthDays(year: number, month: number, weekStart: number): (null | number)[] {
   const monthDate = DateTime.local(year, month, 1);
   let firstDay = monthDate.weekday - weekStart;
+  const daysInMonth = monthDate.daysInMonth ?? 0;
 
   if (firstDay < 0) {
     firstDay += 7;
   }
-  let lastDay = (weekStart - monthDate.weekday - monthDate.daysInMonth) % 7;
+  let lastDay = (weekStart - monthDate.weekday - daysInMonth) % 7;
   if (lastDay < 0) {
     lastDay += 7;
   }
 
-  return [...Array(monthDate.daysInMonth + firstDay + lastDay)]
+  return [...Array(daysInMonth + firstDay + lastDay)]
     .map(
-      (value, index) => ((index + 1 <= firstDay || index >= firstDay + monthDate.daysInMonth) ?
+      (value, index) => ((index + 1 <= firstDay || index >= firstDay + daysInMonth) ?
         null : (index + 1 - firstDay)),
     ) ?? [];
 }
 
 export function monthIsDisabled(minDate: DateTime, maxDate: DateTime, year: number, month: number) {
-  return (minDate && minDate > DateTime.utc(year, month, DateTime.utc(year, month).daysInMonth)) ||
+  return (minDate && minDate > DateTime.utc(year, month, DateTime.utc(year, month).daysInMonth ?? 0)) ||
          (maxDate && maxDate < DateTime.utc(year, month, 1));
 }
 
@@ -63,20 +64,21 @@ export function yearIsDisabled(minDate: DateTime, maxDate: DateTime, year: numbe
          (!!maxYear && year > maxYear);
 }
 
-export function timeComponentIsDisabled(min, max, component) {
+export function timeComponentIsDisabled(min: number | null, max: number | null, component: number) {
   return (min !== null && component < min) ||
          (max !== null && component > max);
 }
 
-export function weekdaysGenerator(weekStart) {
-  if (--weekStart < 0) {
-    weekStart = 6;
+export function weekdaysGenerator(weekStart: number) {
+  let localWeekStart = weekStart;
+  if (--localWeekStart < 0) {
+    localWeekStart = 6;
   }
   // weekStart = (weekStart - 1) % 7;
 
   let weekDays = Info.weekdays('short').map((weekday) => capitalize(weekday));
 
-  weekDays = weekDays.concat(weekDays.splice(0, weekStart));
+  weekDays = weekDays.concat(weekDays.splice(0, localWeekStart));
 
   return weekDays;
 }
@@ -101,11 +103,11 @@ export function pad(number: number): string {
   return String(number).padStart(2, '0');
 }
 
-export function createFlowManager(flow) {
+export function createFlowManager(flow: any[]) {
   return new FlowManager(flow, 'end');
 }
 
-export function createFlowManagerFromType(type) {
+export function createFlowManagerFromType(type: 'datetime' | 'time') {
   let flow = [];
 
   switch (type) {
@@ -123,15 +125,15 @@ export function createFlowManagerFromType(type) {
 }
 
 export function calculateWeekStart() {
-  let weekstart;
+  let weekStart;
 
   try {
-    weekstart = require('weekstart/package.json').version ? require('weekstart') : null;
+    weekStart = require('weekstart/package.json').version ? require('weekstart') : null;
   } catch (e) {
-    weekstart = window.weekstart;
+    weekStart = window.weekstart;
   }
 
-  const firstDay = weekstart ? weekstart.getWeekStartByLocale(Settings.defaultLocale) : 1;
+  const firstDay = weekStart ? weekStart.getWeekStartByLocale(Settings.defaultLocale) : 1;
 
   return firstDay === 0 ? 7 : firstDay;
 }
