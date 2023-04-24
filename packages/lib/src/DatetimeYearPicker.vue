@@ -3,7 +3,7 @@
     <div ref="yearList" class="vdatetime-year-picker__list vdatetime-year-picker__list">
       <div
         v-for="yearElement in years"
-        :key="yearElement"
+        :key="yearElement.number"
         class="vdatetime-year-picker__item"
         :class="{
           'vdatetime-year-picker__item--selected': yearElement.selected,
@@ -53,7 +53,7 @@ const emits = defineEmits(['change']);
 
 const select = (year: TimeElement) => {
   if (!year.disabled) {
-    emits('change', parseInt(year.number as string, 10));
+    emits('change', year.number, 10);
   }
 };
 </script>

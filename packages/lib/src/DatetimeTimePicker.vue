@@ -3,7 +3,7 @@
     <div ref="hourList" class="vdatetime-time-picker__list vdatetime-time-picker__list--hours">
       <div
         v-for="hourElement in hours"
-        :key="hourElement"
+        :key="hourElement.number"
         class="vdatetime-time-picker__item"
         :class="{
           'vdatetime-time-picker__item--selected': hourElement.selected,
@@ -11,13 +11,13 @@
         }"
         @click="selectHour(hourElement)"
       >
-        {{ formatHour(hourElement.number) }}
+        {{ formatHour(hourElement.number ?? 0) }}
       </div>
     </div>
     <div ref="minuteList" class="vdatetime-time-picker__list vdatetime-time-picker__list--minutes">
       <div
         v-for="minuteElement in minutes"
-        :key="minuteElement"
+        :key="minuteElement.number"
         class="vdatetime-time-picker__item"
         :class="{
           'vdatetime-time-picker__item--selected': minuteElement.selected,
