@@ -17,6 +17,6 @@
   "pre-commit": "--no-verify",
   "engines": {
     "node": "^18.13.0",
-    "npm": "^8.19.0"
+    "npm": "^9.2.0"
   }
 }
