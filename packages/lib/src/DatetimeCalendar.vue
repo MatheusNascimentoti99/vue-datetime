@@ -107,7 +107,7 @@ const nextMonth = () => {
 };
 </script>
 
-<style>
+<style lang="scss">
 .vdatetime-calendar__navigation,
 .vdatetime-calendar__navigation * {
   box-sizing: border-box;
@@ -127,22 +127,19 @@ const nextMonth = () => {
   padding: 0 5px;
   width: 18px;
   cursor: pointer;
-}
 
-.vdatetime-calendar__navigation--previous svg,
-.vdatetime-calendar__navigation--next svg {
-  width: 8px;
-  height: 13px;
-}
+  & svg {
+    width: 8px;
+    height: 13px;
 
-.vdatetime-calendar__navigation--previous svg path,
-.vdatetime-calendar__navigation--next svg path {
-  transition: stroke .3s;
-}
+    & path {
+      transition: stroke .3s;
+    }
+  }
 
-.vdatetime-calendar__navigation--previous:hover svg path,
-.vdatetime-calendar__navigation--next:hover svg path {
-  stroke: #888;
+  &:hover svg path {
+    stroke: #888;
+  }
 }
 
 .vdatetime-calendar__navigation--previous {
@@ -173,31 +170,29 @@ const nextMonth = () => {
   font-size: 15px;
   font-weight: 300;
   cursor: pointer;
-}
 
-.vdatetime-calendar__month__weekday > span,
-.vdatetime-calendar__month__day > span {
-  display: block;
-  width: 100%;
-  position: relative;
-  height: 0;
-  padding: 0 0 100%;
-  overflow: hidden;
-}
+  & > span {
+    display: block;
+    width: 100%;
+    position: relative;
+    height: 0;
+    padding: 0 0 100%;
+    overflow: hidden;
 
-.vdatetime-calendar__month__weekday > span > span,
-.vdatetime-calendar__month__day > span > span {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  border: 0;
-  border-radius: 50%;
-  transition: background-color .3s, color .3s;
+    & > span {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      border: 0;
+      border-radius: 50%;
+      transition: background-color .3s, color .3s;
+    }
+  }
 }
 
 .vdatetime-calendar__month__weekday {
@@ -208,19 +203,21 @@ const nextMonth = () => {
   background: #eee;
 }
 
-.vdatetime-calendar__month__day--selected span > span,
-.vdatetime-calendar__month__day--selected:hover > span > span {
-  color: #fff;
-  background: #3f51b5;
+.vdatetime-calendar__month__day--selected {
+  & > span > span,
+  &:hover > span > span {
+    color: #fff;
+    background: var(--primary-color);
+  }
 }
 
 .vdatetime-calendar__month__day--disabled {
   opacity: 0.4;
   cursor: default;
-}
 
-.vdatetime-calendar__month__day--disabled:hover > span > span {
-  color: inherit;
-  background: transparent;
+  &:hover > span > span {
+    color: inherit;
+    background: transparent;
+  }
 }
 </style>

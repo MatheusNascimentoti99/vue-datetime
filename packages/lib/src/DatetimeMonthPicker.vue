@@ -66,19 +66,19 @@ const select = (month: TimeElement) => {
 };
 </script>
 
-<style>
+<style lang="scss">
 .vdatetime-month-picker {
   box-sizing: border-box;
-}
 
-.vdatetime-month-picker::after {
-  content: '';
-  display: table;
-  clear: both;
-}
+  &::after {
+    content: '';
+    display: table;
+    clear: both;
+  }
 
-.vdatetime-month-picker * {
-  box-sizing: border-box;
+  & * {
+    box-sizing: border-box;
+  }
 }
 
 .vdatetime-month-picker__list {
@@ -87,18 +87,18 @@ const select = (month: TimeElement) => {
   height: 305px;
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
-}
 
-.vdatetime-month-picker__list::-webkit-scrollbar {
-  width: 3px;
-}
+  &::-webkit-scrollbar {
+    width: 3px;
+  }
 
-.vdatetime-month-picker__list::-webkit-scrollbar-track {
-  background: #efefef;
-}
+  &::-webkit-scrollbar-track {
+    background: #efefef;
+  }
 
-.vdatetime-month-picker__list::-webkit-scrollbar-thumb {
-  background: #ccc;
+  &::-webkit-scrollbar-thumb {
+    background: #ccc;
+  }
 }
 
 .vdatetime-month-picker__item {
@@ -114,17 +114,17 @@ const select = (month: TimeElement) => {
 }
 
 .vdatetime-month-picker__item--selected {
-  color: #3f51b5;
+  color: var(--primary-color);
   font-size: 32px;
 }
 
 .vdatetime-month-picker__item--disabled {
   opacity: 0.4;
   cursor: default;
-}
 
-.vdatetime-month-picker__item--disabled:hover {
-  color: inherit;
-  background: transparent;
+  &:hover {
+    color: inherit;
+    background: transparent;
+  }
 }
 </style>

@@ -157,19 +157,19 @@ const formatHour = (hour: number) => {
 };
 </script>
 
-<style type="text/css">
+<style lang="scss">
 .vdatetime-time-picker {
   box-sizing: border-box;
-}
 
-.vdatetime-time-picker::after {
-  content: '';
-  display: table;
-  clear: both;
-}
+  &::after {
+    content: '';
+    display: table;
+    clear: both;
+  }
 
-.vdatetime-time-picker * {
-  box-sizing: border-box;
+  & * {
+    box-sizing: border-box;
+  }
 }
 
 .vdatetime-time-picker__list {
@@ -178,19 +178,20 @@ const formatHour = (hour: number) => {
   height: 305px;
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
+
+  &::-webkit-scrollbar {
+    width: 3px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #efefef;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #ccc;
+  }
 }
 
-.vdatetime-time-picker__list::-webkit-scrollbar {
-  width: 3px;
-}
-
-.vdatetime-time-picker__list::-webkit-scrollbar-track {
-  background: #efefef;
-}
-
-.vdatetime-time-picker__list::-webkit-scrollbar-thumb {
-  background: #ccc;
-}
 .vdatetime-time-picker__with-suffix .vdatetime-time-picker__list {
   width: 33.3%;
 }
@@ -208,7 +209,7 @@ const formatHour = (hour: number) => {
 }
 
 .vdatetime-time-picker__item--selected {
-  color: #3f51b5;
+  color: var(--primary-color);
   font-size: 32px;
 }
 

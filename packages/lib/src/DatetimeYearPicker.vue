@@ -58,19 +58,19 @@ const select = (year: TimeElement) => {
 };
 </script>
 
-<style>
+<style lang="scss">
 .vdatetime-year-picker {
   box-sizing: border-box;
-}
 
-.vdatetime-year-picker::after {
-  content: '';
-  display: table;
-  clear: both;
-}
+  &::after {
+    content: '';
+    display: table;
+    clear: both;
+  }
 
-.vdatetime-year-picker * {
-  box-sizing: border-box;
+  & * {
+    box-sizing: border-box;
+  }
 }
 
 .vdatetime-year-picker__list {
@@ -79,18 +79,18 @@ const select = (year: TimeElement) => {
   height: 305px;
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
-}
 
-.vdatetime-year-picker__list::-webkit-scrollbar {
-  width: 3px;
-}
+  &::-webkit-scrollbar {
+    width: 3px;
+  }
 
-.vdatetime-year-picker__list::-webkit-scrollbar-track {
-  background: #efefef;
-}
+  &::-webkit-scrollbar-track {
+    background: #efefef;
+  }
 
-.vdatetime-year-picker__list::-webkit-scrollbar-thumb {
-  background: #ccc;
+  &::-webkit-scrollbar-thumb {
+    background: #ccc;
+  }
 }
 
 .vdatetime-year-picker__item {
@@ -106,17 +106,17 @@ const select = (year: TimeElement) => {
 }
 
 .vdatetime-year-picker__item--selected {
-  color: #3f51b5;
+  color: var(--primary-color);
   font-size: 32px;
 }
 
 .vdatetime-year-picker__item--disabled {
   opacity: 0.4;
   cursor: default;
-}
 
-.vdatetime-year-picker__item--disabled:hover {
-  color: inherit;
-  background: transparent;
+  &:hover {
+    color: inherit;
+    background: transparent;
+  }
 }
 </style>

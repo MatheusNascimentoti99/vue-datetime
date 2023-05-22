@@ -1,5 +1,5 @@
 <template>
-  <div class="vdatetime" :class="$attrs.class">
+  <div class="vdatetime" :class="$attrs.class" :style="theme">
     <slot name="before"/>
     <input
       :id="inputId"
@@ -77,6 +77,10 @@ const props = defineProps({
     type: String,
     default: 'date',
   },
+  color: {
+    type: String,
+    default: '#3f51b5',
+  },
   phrases: {
     type: Object as PropType<Actions>,
     default() {
@@ -127,6 +131,8 @@ const props = defineProps({
     default: true,
   },
 });
+
+const theme = computed(() => ({ '--primary-color': props.color }));
 
 const emits = defineEmits(['input', 'close', 'update:modelValue']);
 
@@ -253,7 +259,7 @@ watch(() => props.modelValue, ((value: string) => {
 export default { inheritAttrs: false };
 </script>
 
-<style>
+<style lang="scss">
 .vdatetime-fade-enter-active,
 .vdatetime-fade-leave-active {
   transition: opacity .4s;

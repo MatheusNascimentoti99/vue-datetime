@@ -240,7 +240,7 @@ const onChangeTime = ({ hour, minute, suffixTouched }: { hour: number, minute: n
 
 </script>
 
-<style>
+<style lang="scss">
 .vdatetime-popup {
   box-sizing: border-box;
   z-index: 1000;
@@ -256,15 +256,15 @@ const onChangeTime = ({ hour, minute, suffixTouched }: { hour: number, minute: n
   line-height: 1.18;
   background: #fff;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-}
 
-.vdatetime-popup * {
-  box-sizing: border-box;
+  & * {
+    box-sizing: border-box;
+  }
 }
 
 .vdatetime-popup__header {
   padding: 18px 30px;
-  background: #3f51b5;
+  background: var(--primary-color);
   color: #fff;
   font-size: 32px;
 }
@@ -281,10 +281,10 @@ const onChangeTime = ({ hour, minute, suffixTouched }: { hour: number, minute: n
   opacity: 0.7;
   cursor: pointer;
   transition: opacity .3s;
-}
 
-.vdatetime-popup__year:hover {
-  opacity: 1;
+  &:hover {
+    opacity: 1;
+  }
 }
 
 .vdatetime-popup__date {
@@ -303,12 +303,12 @@ const onChangeTime = ({ hour, minute, suffixTouched }: { hour: number, minute: n
   padding: 10px 20px;
   background: transparent;
   font-size: 16px;
-  color: #3f51b5;
+  color: var(--primary-color);
   cursor: pointer;
   transition: color .3s;
-}
 
-.vdatetime-popup__actions__button:hover {
-  color: #444;
+  &:hover {
+    color: #444;
+  }
 }
 </style>

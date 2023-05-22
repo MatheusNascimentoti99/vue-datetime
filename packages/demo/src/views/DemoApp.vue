@@ -139,7 +139,7 @@
 
     <div class="example">
       <div class="example-inputs">
-        <date-time v-model="datetimeTheming" type="datetime" class="theme-orange"/>
+        <date-time v-model="datetimeTheming" type="datetime" color="orange"/>
 
         <div class="values">
           <p>
@@ -148,19 +148,11 @@
         </div>
       </div>
       <div class="example-code">
-        <pre><code>&#x3C;datetime type=&#x22;datetime&#x22; v-model=&#x22;datetimeTheming&#x22; class=&#x22;theme-orange&#x22;/&#x3E;</code></pre>
-
-        <pre><code>.theme-orange .vdatetime-popup__header,
-.theme-orange .vdatetime-calendar__month__day--selected > span > span,
-.theme-orange .vdatetime-calendar__month__day--selected:hover > span > span {
-  background: #FF9800;
-}
-
-.theme-orange .vdatetime-year-picker__item--selected,
-.theme-orange .vdatetime-time-picker__item--selected,
-.theme-orange .vdatetime-popup__actions__button {
-  color: #ff9800;
-}</code></pre>
+        <pre><code>&#x3C;datetime
+  type=&#x22;datetime&#x22;
+  v-model=&#x22;datetimeTheming&#x22;
+  color=&#x22;orange&#x22;
+  /&#x3E;</code></pre>
       </div>
     </div>
 
