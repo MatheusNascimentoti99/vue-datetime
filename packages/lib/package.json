@@ -39,6 +39,7 @@
     "clean-css": "^4.0.0",
     "eslint-config-velis": "^1.1.14",
     "gh-pages": "^1.1.0",
+    "sass": "^1.62.1",
     "typescript": "^4.9.5",
     "vite": "^4.1.4",
     "vite-plugin-dts": "^2.2.0",

@@ -5,10 +5,11 @@
   "author": "Mario Juárez <mario@mjp.one>",
   "main": "src/app.ts",
   "scripts": {
-    "demo": "vite --host"
+    "dev": "vite",
+    "demo": "vite --mode demo"
   },
   "dependencies": {
-    "vue-datetime3": "^1.0.0"
+    "vue-datetime3": "*"
   },
   "license": "MIT"
 }
