@@ -45,91 +45,55 @@ import { computed, onMounted, PropType, ref, watch } from 'vue';
 import DatetimePopup from './DatetimePopup.vue';
 import { datetimeFromISO, startOfDay, calculateWeekStart } from './util';
 import type { Actions } from './util';
+import { FlowType } from './flow/namespace';
 
-const props = defineProps({
-  modelValue: { type: String, default: '' },
-  valueZone: {
-    type: String,
-    default: 'UTC',
-  },
-  inputId: {
-    type: String,
-    default: null,
-  },
-  inputClass: {
-    type: [Object, Array, String],
-    default: '',
-  },
-  inputStyle: {
-    type: [Object, Array, String],
-    default: '',
-  },
-  hiddenName: { type: String, default: '' },
-  zone: {
-    type: String,
-    default: 'local',
-  },
-  format: {
-    type: [Object, String],
-    default: null,
-  },
-  type: {
-    type: String,
-    default: 'date',
-  },
-  color: {
-    type: String,
-    default: '#3f51b5',
-  },
-  phrases: {
-    type: Object as PropType<Actions>,
-    default() {
-      return {
-        cancel: 'Cancel',
-        ok: 'Ok',
-      };
-    },
-  },
-  use12Hour: {
-    type: Boolean,
-    default: false,
-  },
-  hourStep: {
-    type: Number,
-    default: 1,
-  },
-  minuteStep: {
-    type: Number,
-    default: 1,
-  },
-  minDatetime: {
-    type: String,
-    default: null,
-  },
-  maxDatetime: {
-    type: String,
-    default: null,
-  },
-  auto: {
-    type: Boolean,
-    default: false,
-  },
-  weekStart: {
-    type: Number,
-    default() {
-      return calculateWeekStart();
-    },
-  },
-  flow: { type: Array, default: null },
-  title: { type: String, default: '' },
-  hideBackdrop: {
-    type: Boolean,
-    default: false,
-  },
-  backdropClick: {
-    type: Boolean,
-    default: true,
-  },
+interface Props {
+  modelValue?: string
+  valueZone?: string
+  inputId?: string
+  inputClass?: object | any[] | string
+  inputStyle?: object | any[] | string
+  hiddenName?: string
+  zone?: string
+  format?: object | string
+  type?: FlowType
+  color?: string
+  phrases? : Actions
+  use12Hour?: boolean
+  hourStep?: number
+  minuteStep?: number
+  minDatetime?: string
+  maxDatetime?: string
+  auto?: boolean
+  weekStart?: number
+  flow?: FlowType[]
+  title?: string
+  hideBackdrop?: boolean
+  backdropClick?: boolean
+}
+const props = withDefaults(defineProps<Props>(), {
+  modelValue: '',
+  valueZone: 'UTC',
+  inputId: undefined,
+  inputClass: '',
+  inputStyle: '',
+  hiddenName: '',
+  zone: 'local',
+  format: undefined,
+  type: 'date',
+  color: '#3f51b5',
+  phrases: () => ({ cancel: 'Cancel', ok: 'Ok' }),
+  use12Hour: false,
+  hourStep: 1,
+  minuteStep: 1,
+  minDatetime: undefined,
+  maxDatetime: undefined,
+  auto: false,
+  weekStart: calculateWeekStart,
+  flow: undefined,
+  title: '',
+  hideBackdrop: false,
+  backdropClick: true,
 });
 
 const theme = computed(() => ({ '--primary-color': props.color }));
