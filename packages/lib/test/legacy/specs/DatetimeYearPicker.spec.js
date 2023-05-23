@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import { createVM } from 'packages/lib/test/helpers/utils.js'
+import { createVM } from 'packages/lib/test/legacy/helpers/utils.js'
 import DatetimeYearPicker from 'packages/lib/src/DatetimeYearPicker.vue'
 
 describe('DatetimeYearPicker.vue', function () {

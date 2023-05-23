@@ -12,14 +12,13 @@ class FlowManager implements IFlowManager {
   private diversionNext: any | null;
 
   constructor(flow: FlowStep[] = [], endStatus: EndStatus = '') {
-    console.log(endStatus);
     this.flow = flow;
     this.endStatus = endStatus;
     this.diversionNext = null;
   }
 
   step(index: number): StepType {
-    return this.flow.length > index ? this.flow[index] : this.endStatus;
+    return (index >= 0 && this.flow.length > index) ? this.flow[index] : this.endStatus;
   }
 
   first(): StepType {

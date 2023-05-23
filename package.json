@@ -7,6 +7,7 @@
     "dev": "npm run dev -ws --if-present",
     "demo": "concurrently \"npm run demo --w demo\" \"npm run watch -w vue-datetime3\"",
     "build": "npm run build -ws --if-present",
+    "test": "npm run test -ws --if-present",
     "tsc": "vue-tsc --noEmit -p tsconfig.tsc.json"
   },
   "devDependencies": {
@@ -19,5 +20,20 @@
   "engines": {
     "node": "^18.10.0",
     "npm": "^9.2.0"
+  },
+  "eslintConfig": {
+    "extends": [
+      "velis"
+    ],
+    "rules": {
+      "vuejs-accessibility/click-events-have-key-events": "off",
+      "vuejs-accessibility/form-control-has-label": "off",
+      "vuejs-accessibility/label-has-for": "off"
+    },
+    "ignorePatterns": [
+      "coverage/*",
+      "node_modules/*",
+      "build/*"
+    ]
   }
 }

@@ -1,5 +1,5 @@
 import { DateTime as LuxonDatetime, Settings as LuxonSettings } from 'luxon'
-import { createVM } from 'packages/lib/test/helpers/utils.js'
+import { createVM } from 'packages/lib/test/legacy/helpers/utils.js'
 import DatetimePopup from 'packages/lib/src/DatetimePopup.vue'
 
 describe('DatetimePopup.vue', function () {

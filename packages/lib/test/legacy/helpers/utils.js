@@ -1,5 +1,5 @@
 import Vue from 'vue/dist/vue.js'
-import Test from 'packages/lib/test/helpers/Test.vue'
+import Test from 'packages/lib/test/legacy/helpers/Test.vue'
 
 Vue.config.productionTip = false
 const isKarma = !!window.__karma__

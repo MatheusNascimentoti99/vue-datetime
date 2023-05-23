@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import { createVM } from 'packages/lib/test/helpers/utils.js'
+import { createVM } from 'packages/lib/test/legacy/helpers/utils.js'
 import DatetimeMonthPicker from 'packages/lib/src/DatetimeMonthPicker.vue'
 import { months as utilsMonths } from 'packages/lib/src/util.ts'
 

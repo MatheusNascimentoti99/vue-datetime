@@ -1,7 +1,15 @@
 {
-  "extends": "../../node_modules/eslint-config-velis/tsconfig.json",
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "paths": {
+      "@": ["./src/*"],
+      "~": ["../../node_modules/*"],
+    }
+  },
   "include": [
-    "src/*"
+    "src/",
+    "test/",
+    "vite.config.ts"
   ],
   "exclude": [
     "node_modules",
