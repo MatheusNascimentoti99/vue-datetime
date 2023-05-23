@@ -56,64 +56,44 @@
 
 <script setup lang="ts">
 import { DateTime } from 'luxon';
-import { computed, PropType, ref } from 'vue';
+import { computed, ref } from 'vue';
 
 import useKeyPressListener from './composables/KeyPress';
 import DatetimeCalendar from './DatetimeCalendar.vue';
 import DatetimeMonthPicker from './DatetimeMonthPicker.vue';
 import DatetimeTimePicker from './DatetimeTimePicker.vue';
 import DatetimeYearPicker from './DatetimeYearPicker.vue';
-import { createFlowManager, createFlowManagerFromType } from './util';
+import { createFlowManager, createFlowManagerFromType } from './flow';
+import { FlowStep, FlowType } from './flow/namespace';
 import type { Actions } from './util';
 
-const props = defineProps({
-  datetime: {
-    type: Object as PropType<DateTime>,
-    required: true,
-  },
-  phrases: {
-    type: Object as PropType<Actions>,
-    default() {
-      return {
-        cancel: 'Cancel',
-        ok: 'Ok',
-      };
-    },
-  },
-  type: {
-    type: String,
-    default: 'date',
-  },
-  use12Hour: {
-    type: Boolean,
-    default: false,
-  },
-  hourStep: {
-    type: Number,
-    default: 1,
-  },
-  minuteStep: {
-    type: Number,
-    default: 1,
-  },
-  minDatetime: {
-    type: Object as PropType<DateTime>,
-    default: null,
-  },
-  maxDatetime: {
-    type: Object as PropType<DateTime>,
-    default: null,
-  },
-  auto: {
-    type: Boolean,
-    default: false,
-  },
-  weekStart: {
-    type: Number,
-    default: 1,
-  },
-  flow: { type: Array, default: null },
-  title: { type: String, default: '' },
+interface Props {
+  datetime: DateTime
+  phrases?: Actions
+  type?: FlowType
+  use12Hour?: boolean
+  hourStep?: number
+  minuteStep?: number
+  minDatetime?: DateTime
+  maxDatetime?: DateTime
+  auto?: boolean
+  weekStart?: number
+  flow?: FlowStep[]
+  title?: string
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  phrases: () => ({ cancel: 'Cancel', ok: 'Ok' }),
+  type: 'date',
+  use12Hour: false,
+  hourStep: 1,
+  minuteStep: 1,
+  minDatetime: undefined,
+  maxDatetime: undefined,
+  boolean: false,
+  weekStart: 1,
+  flow: undefined,
+  title: '',
 });
 
 const emits = defineEmits(['cancel', 'confirm']);
@@ -127,7 +107,7 @@ interface TimeParts {
   suffix?: boolean,
 }
 
-const flowManager = props.flow ? createFlowManager(props.flow) : createFlowManagerFromType(props.type.valueOf());
+const flowManager = props.flow ? createFlowManager(props.flow) : createFlowManagerFromType(props.type);
 const newDateTime = ref<DateTime>(props.datetime ?? DateTime.now());
 const step = ref<string>(flowManager.first());
 let timePartsTouched = {} as TimeParts;

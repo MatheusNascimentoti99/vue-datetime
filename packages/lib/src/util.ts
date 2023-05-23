@@ -105,27 +105,6 @@ export function pad(number: number): string {
   return String(number).padStart(2, '0');
 }
 
-export function createFlowManager(flow: any[]): FlowManager {
-  return new FlowManager(flow, 'end');
-}
-
-export function createFlowManagerFromType(type: 'datetime' | 'time' | string): FlowManager {
-  let flow: FlowStep[];
-
-  switch (type) {
-  case 'datetime':
-    flow = ['date', 'time'];
-    break;
-  case 'time':
-    flow = ['time'];
-    break;
-  default:
-    flow = ['date'];
-  }
-
-  return new FlowManager(flow, 'end');
-}
-
 export function calculateWeekStart() {
   const firstDay = getWeekStartByLocale(Settings.defaultLocale);
 
