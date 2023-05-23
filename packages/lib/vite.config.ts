@@ -1,8 +1,10 @@
 /// <reference types="vitest" />
-import getBaseViteConfig from '../../viteBaseConfig'
-import { defineConfig } from 'vite';
+import { fileURLToPath } from 'node:url';
 import { resolve } from 'path';
-import { fileURLToPath, URL } from 'node:url';
+
+import { defineConfig } from 'vite';
+
+import getBaseViteConfig from '../../viteBaseConfig';
 
 export default defineConfig(getBaseViteConfig({
   build: {
@@ -10,7 +12,7 @@ export default defineConfig(getBaseViteConfig({
     lib: {
       entry: resolve(__dirname, 'src/vue-datetime.ts'),
       fileName: 'vue-datetime',
-      name: 'vue-datetime.[name]'
+      name: 'vue-datetime.[name]',
     },
     rollupOptions: {
       external: ['luxon', 'vue', 'weekstart'],
@@ -18,10 +20,10 @@ export default defineConfig(getBaseViteConfig({
         globals: {
           vue: 'vue',
           luxon: 'luxon',
-          weekstart: 'weekstart'
+          weekstart: 'weekstart',
         },
-        exports: 'named'
-      }
+        exports: 'named',
+      },
     },
   },
   resolve: {
@@ -35,13 +37,13 @@ export default defineConfig(getBaseViteConfig({
       '.ts',
       '.vue',
       '.json',
-      '.css'
-    ]
+      '.css',
+    ],
   },
   test: {
-    include :['./test/unit/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
+    include: ['./test/unit/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
     globals: true,
     environment: 'jsdom',
     useAtomics: true, // eliminate tests hang at the end (https://github.com/vitest-dev/vitest/issues/2008)
-  }
+  },
 }));
