@@ -1,7 +1,8 @@
 import { DateTime, Info, Settings } from 'luxon';
 import { getWeekStartByLocale } from 'weekstart';
 
-import FlowManager from './FlowManager';
+import FlowManager from './flow/FlowManager';
+import { FlowStep } from './flow/namespace';
 
 export function capitalize(string: string): string {
   return string.charAt(0).toUpperCase() + string.slice(1);
@@ -109,7 +110,7 @@ export function createFlowManager(flow: any[]): FlowManager {
 }
 
 export function createFlowManagerFromType(type: 'datetime' | 'time' | string): FlowManager {
-  let flow: string[];
+  let flow: FlowStep[];
 
   switch (type) {
   case 'datetime':
