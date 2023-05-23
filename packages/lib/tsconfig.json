@@ -7,8 +7,8 @@
     }
   },
   "include": [
-    "src/",
-    "test/",
+    "src",
+    "test",
     "vite.config.ts"
   ],
   "exclude": [

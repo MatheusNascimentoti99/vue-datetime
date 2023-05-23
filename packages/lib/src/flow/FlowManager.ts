@@ -4,16 +4,17 @@ export const timeFlow: FlowStep[] = ['time'];
 export const dateFlow: FlowStep[] = ['date'];
 export const dateTimeFlow: FlowStep[] = ['date', 'time'];
 
+export const flowEndStatus: EndStatus = 'end';
+
 class FlowManager implements IFlowManager {
   private readonly flow: FlowStep[];
 
-  private readonly endStatus: EndStatus;
+  private readonly endStatus: EndStatus = flowEndStatus;
 
-  private diversionNext: any | null;
+  private diversionNext: StepType | null;
 
-  constructor(flow: FlowStep[] = [], endStatus: EndStatus = '') {
+  constructor(flow: FlowStep[] = []) {
     this.flow = flow;
-    this.endStatus = endStatus;
     this.diversionNext = null;
   }
 

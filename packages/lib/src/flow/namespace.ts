@@ -1,8 +1,8 @@
 export type FlowType = 'datetime' | 'date' | 'time';
 
-export type FlowStep = 'date' | 'time';
+export type FlowStep = 'date' | 'time' | 'year' | 'month';
 
-export type EndStatus = 'end' | string;
+export type EndStatus = 'end';
 
 export type StepType = FlowStep | EndStatus;
 

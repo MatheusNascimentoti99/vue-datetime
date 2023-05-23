@@ -1,11 +1,11 @@
-import FlowManager, { createFlowManager, createFlowManagerFromType } from '@/flow';
+import FlowManager, { createFlowManager, createFlowManagerFromType, flowEndStatus } from '@/flow';
 import { IFlowManager } from '@/flow/namespace';
 import { expectTypeOf } from 'vitest';
 
 describe('Flow Manager', () => {
-  const flowManager = new FlowManager(['date', 'time'], 'end');
+  const flowManager = new FlowManager(['date', 'time']);
   const addDiversion = (name: string) => { flowManager.diversion(name); };
-  const emptyManager = () => (new FlowManager([], 'end'));
+  const emptyManager = () => (new FlowManager([]));
 
   it('Create Flow Manager', () => {
     expectTypeOf(flowManager).toEqualTypeOf(FlowManager);
@@ -15,25 +15,25 @@ describe('Flow Manager', () => {
 
   it('Flow Manager First', () => {
     expect(flowManager.first()).toBe('date');
-    expect(emptyManager().first()).toBe('end');
-    expect(emptyManager().first()).toBe('end');
+    expect(emptyManager().first()).toBe(flowEndStatus);
+    expect(emptyManager().first()).toBe(flowEndStatus);
   });
 
   it('Flow Manager Step', () => {
-    expect(flowManager.step(-1)).toBe('end');
+    expect(flowManager.step(-1)).toBe(flowEndStatus);
     expect(flowManager.step(0)).toBe('date');
     expect(flowManager.step(1)).toBe('time');
-    expect(flowManager.step(2)).toBe('end');
+    expect(flowManager.step(2)).toBe(flowEndStatus);
   });
 
   it('Flow Manager Next', () => {
     expect(flowManager.next('date')).toBe('time');
-    expect(flowManager.next('time')).toBe('end');
-    expect(flowManager.next('end')).toBe('date');
+    expect(flowManager.next('time')).toBe(flowEndStatus);
+    expect(flowManager.next(flowEndStatus)).toBe('date');
     expect(flowManager.next('somethingcomepletlybogus')).toBe('date');
 
-    expect(emptyManager().next('date')).toBe('end');
-    expect(emptyManager().next('somethingcomepletlybogus')).toBe('end');
+    expect(emptyManager().next('date')).toBe(flowEndStatus);
+    expect(emptyManager().next('somethingcomepletlybogus')).toBe(flowEndStatus);
   });
 
   it('Flow Manager Diversion', () => {
@@ -44,7 +44,7 @@ describe('Flow Manager', () => {
     const manager = emptyManager();
     manager.diversion('test');
     expect(manager.next('date')).toBe('test');
-    expect(manager.next('date')).toBe('end');
+    expect(manager.next('date')).toBe(flowEndStatus);
   });
 });
 
@@ -53,22 +53,22 @@ describe('Flow Manager Factory Functions', () => {
     const manager = createFlowManager(['date', 'time']);
     expect(manager.step(0)).toBe('date');
     expect(manager.step(1)).toBe('time');
-    expect(manager.step(2)).toBe('end');
+    expect(manager.step(2)).toBe(flowEndStatus);
   });
 
   it('Create Flow Manager From Flow Type', () => {
     let manager = createFlowManagerFromType('datetime');
     expect(manager.step(0)).toBe('date');
     expect(manager.step(1)).toBe('time');
-    expect(manager.step(2)).toBe('end');
+    expect(manager.step(2)).toBe(flowEndStatus);
 
     manager = createFlowManagerFromType('date');
     expect(manager.step(0)).toBe('date');
-    expect(manager.step(2)).toBe('end');
+    expect(manager.step(2)).toBe(flowEndStatus);
 
     manager = createFlowManagerFromType('time');
     expect(manager.step(0)).toBe('time');
-    expect(manager.step(2)).toBe('end');
+    expect(manager.step(2)).toBe(flowEndStatus);
 
     expect(() => createFlowManagerFromType('sometotallybogustype')).toThrow(TypeError);
   });

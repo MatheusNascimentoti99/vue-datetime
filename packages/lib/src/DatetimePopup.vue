@@ -44,10 +44,10 @@
       />
     </div>
     <div class="vdatetime-popup__actions">
-      <div class="vdatetime-popup__actions__button vdatetime-popup__actions__button--cancel" @click="cancel">
+      <div class="vdatetime-popup__actions__button vdatetime-popup__actions__button--cancel" @click="emits('cancel')">
         <slot name="button-cancel__internal" :step="step">{{ phrases.cancel }}</slot>
       </div>
-      <div class="vdatetime-popup__actions__button vdatetime-popup__actions__button--confirm" @click="confirm">
+      <div class="vdatetime-popup__actions__button vdatetime-popup__actions__button--confirm" @click="nextStep()">
         <slot name="button-confirm__internal" :step="step">{{ phrases.ok }}</slot>
       </div>
     </div>
@@ -63,8 +63,8 @@ import DatetimeCalendar from './DatetimeCalendar.vue';
 import DatetimeMonthPicker from './DatetimeMonthPicker.vue';
 import DatetimeTimePicker from './DatetimeTimePicker.vue';
 import DatetimeYearPicker from './DatetimeYearPicker.vue';
-import { createFlowManager, createFlowManagerFromType } from './flow';
-import { FlowStep, FlowType } from './flow/namespace';
+import { createFlowManager, createFlowManagerFromType, flowEndStatus } from './flow';
+import { FlowStep, FlowType, StepType } from './flow/namespace';
 import type { Actions } from './util';
 
 interface Props {
@@ -109,31 +109,23 @@ interface TimeParts {
 
 const flowManager = props.flow ? createFlowManager(props.flow) : createFlowManagerFromType(props.type);
 const newDateTime = ref<DateTime>(props.datetime ?? DateTime.now());
-const step = ref<string>(flowManager.first());
-let timePartsTouched = {} as TimeParts;
+const step = ref<StepType>(flowManager.first());
+let timePartsTouched: TimeParts = {};
 
 const nextStep = () => {
   step.value = flowManager.next(step.value);
   timePartsTouched = {};
 
-  if (step.value === 'end') {
+  if (step.value === flowEndStatus) {
     emits('confirm', newDateTime.value);
   }
-};
-
-const confirm = () => {
-  nextStep();
-};
-
-const cancel = () => {
-  emits('cancel');
 };
 
 useKeyPressListener((event: KeyboardEvent) => {
   switch (event.key) {
   case 'Escape':
   case 'Tab':
-    cancel();
+    emits('cancel');
     break;
 
   case 'Enter':
@@ -178,8 +170,8 @@ const showMonth = () => {
   flowManager.diversion('date');
 };
 
-const onChangeYear = (year: number) => {
-  newDateTime.value = newDateTime.value.set({ year });
+const onChangeYear = (_year: number) => {
+  newDateTime.value = newDateTime.value.set({ year: _year });
 
   if (props.auto.valueOf()) {
     nextStep();
