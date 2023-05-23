@@ -37,7 +37,7 @@ class FlowManager implements IFlowManager {
     return this.step(this.flow.indexOf(current) + 1);
   }
 
-  diversion(next: string): void {
+  diversion(next: StepType): void {
     this.diversionNext = next;
   }
 }

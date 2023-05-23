@@ -32,7 +32,7 @@
         :flow="flow"
         :title="title"
         @confirm="confirm"
-        @cancel="cancel"
+        @cancel="close"
       />
     </transition-group>
   </div>
@@ -40,12 +40,12 @@
 
 <script setup lang="ts">
 import { DateTime } from 'luxon';
-import { computed, onMounted, PropType, ref, watch } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 
 import DatetimePopup from './DatetimePopup.vue';
+import { FlowStep, FlowType } from './flow/namespace';
 import { datetimeFromISO, startOfDay, calculateWeekStart } from './util';
 import type { Actions } from './util';
-import { FlowType } from './flow/namespace';
 
 interface Props {
   modelValue?: string
@@ -55,7 +55,7 @@ interface Props {
   inputStyle?: object | any[] | string
   hiddenName?: string
   zone?: string
-  format?: object | string
+  format?: Object | string
   type?: FlowType
   color?: string
   phrases? : Actions
@@ -66,7 +66,7 @@ interface Props {
   maxDatetime?: string
   auto?: boolean
   weekStart?: number
-  flow?: FlowType[]
+  flow?: FlowStep[]
   title?: string
   hideBackdrop?: boolean
   backdropClick?: boolean
@@ -111,7 +111,7 @@ const datetime = computed<DateTime | null>({
 });
 
 const inputValue = computed(() => {
-  let format: string | Object = props.format;
+  let format = props.format;
 
   if (!format) {
     switch (props.type) {
@@ -122,7 +122,6 @@ const inputValue = computed(() => {
       format = DateTime.TIME_24_SIMPLE;
       break;
     case 'datetime':
-    case 'default':
       format = DateTime.DATETIME_MED;
       break;
     default:
@@ -200,12 +199,8 @@ const confirm = (newValue: DateTime) => {
   close();
 };
 
-const cancel = () => {
-  close();
-};
-
 const clickOutside = () => {
-  if (props.backdropClick === true) { cancel(); }
+  if (props.backdropClick) { close(); }
 };
 
 const setValue = (event: any) => {
