@@ -36,6 +36,40 @@
       </div>
     </div>
 
+    <h2>Datetime - Fixed Date</h2>
+
+    <div class="example">
+      <div class="example-inputs">
+        <date-time v-model="datetimeFixedDate" type="datetime" fixed-date/>
+
+        <div class="values">
+          <p>
+            <strong>Value:</strong> {{ datetimeFixedDate }}
+          </p>
+        </div>
+      </div>
+      <div class="example-code">
+        <pre><code>&#x3C;datetime type=&#x22;datetime&#x22; v-model=&#x22;datetime&#x22; fixed-date/&#x3E;</code></pre>
+      </div>
+    </div>
+
+    <h2>Datetime - Fixed Time</h2>
+
+    <div class="example">
+      <div class="example-inputs">
+        <date-time v-model="datetimeFixedTime" type="datetime" fixed-time/>
+
+        <div class="values">
+          <p>
+            <strong>Value:</strong> {{ datetimeFixedTime }}
+          </p>
+        </div>
+      </div>
+      <div class="example-code">
+        <pre><code>&#x3C;datetime type=&#x22;datetime&#x22; v-model=&#x22;datetime&#x22; fixed-time/&#x3E;</code></pre>
+      </div>
+    </div>
+
     <h2>12h datetime</h2>
 
     <div class="example">
@@ -170,6 +204,8 @@ import { ref } from 'vue';
 const time = ref('19:06');
 const date = ref('2018-05-12T00:00:00.000Z');
 const datetime = ref('2018-05-12T17:19:06.151Z');
+const datetimeFixedDate = ref('2018-05-12T17:19:06.151Z');
+const datetimeFixedTime = ref('2018-05-12T17:19:06.151Z');
 const datetime12 = ref('2018-05-12T17:19:06.151Z');
 const datetime13 = ref('2018-05-12T17:19:06.151Z');
 const datetimeEmpty = ref('');

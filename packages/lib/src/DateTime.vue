@@ -19,7 +19,7 @@
       <datetime-popup
         v-if="isOpen"
         key="popup"
-        :type="type"
+        :type="flowType"
         :datetime="popupDate"
         :phrases="phrases"
         :use12-hour="use12Hour"
@@ -70,6 +70,8 @@ interface Props {
   title?: string
   hideBackdrop?: boolean
   backdropClick?: boolean
+  fixedDate?: boolean
+  fixedTime?: boolean
 }
 const props = withDefaults(defineProps<Props>(), {
   modelValue: '',
@@ -94,11 +96,21 @@ const props = withDefaults(defineProps<Props>(), {
   title: '',
   hideBackdrop: false,
   backdropClick: true,
+  fixedDate: false,
+  fixedTime: false,
 });
 
 const theme = computed(() => ({ '--primary-color': props.color }));
 
 const emits = defineEmits(['input', 'close', 'update:modelValue']);
+
+const flowType = computed<FlowType>(() => {
+  if (props.type === 'datetime') {
+    if (props.fixedDate) return 'time';
+    if (props.fixedTime) return 'date';
+  }
+  return props.type;
+});
 
 const isOpen = ref<boolean>(false);
 const datetime = computed<DateTime | null>({
