@@ -45,7 +45,9 @@
 import { DateTime } from 'luxon';
 import { computed, PropType, ref } from 'vue';
 
-import { monthDayIsDisabled, monthDays, monthsGenerator, type TimeElement, weekdaysGenerator } from './util';
+import type { TimeElement } from './namespace';
+import { monthDayIsDisabled, monthDays } from './utils/datetime';
+import { monthsGenerator, weekdaysGenerator } from './utils/generators';
 
 const props = defineProps({
   year: {

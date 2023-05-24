@@ -51,8 +51,10 @@
 import { computed, ref } from 'vue';
 
 import useListScroller from './composables/ListScroller';
-import { hoursGenerator, minutesGenerator, pad, timeComponentIsDisabled } from './util';
-import type { TimeElement } from './util';
+import type { TimeElement } from './namespace';
+import { pad } from './utils';
+import { timeComponentIsDisabled } from './utils/datetime';
+import { hoursGenerator, minutesGenerator } from './utils/generators';
 
 const props = defineProps({
   hour: {

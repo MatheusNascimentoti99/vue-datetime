@@ -1,6 +1,6 @@
 import { onMounted, onUpdated, Ref } from 'vue';
 
-import { ListElement } from '../util';
+import type { ListElement } from '../namespace';
 
 export default function useListScroller(list: Ref<HTMLElement | null>, pickedClass: string) {
   const scrollFunc = () => {

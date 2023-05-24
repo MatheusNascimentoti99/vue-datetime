@@ -22,7 +22,9 @@ import { DateTime } from 'luxon';
 import { computed, PropType, ref } from 'vue';
 
 import useListScroller from './composables/ListScroller';
-import { yearsGenerator, yearIsDisabled, type TimeElement } from './util';
+import type { TimeElement } from './namespace';
+import { yearIsDisabled } from './utils/datetime';
+import { yearsGenerator } from './utils/generators';
 
 const props = defineProps({
   year: {

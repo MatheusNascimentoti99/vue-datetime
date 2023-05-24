@@ -65,7 +65,7 @@ import DatetimeTimePicker from './DatetimeTimePicker.vue';
 import DatetimeYearPicker from './DatetimeYearPicker.vue';
 import { createFlowManager, createFlowManagerFromType, flowEndStatus } from './flow';
 import { FlowStep, FlowType, StepType } from './flow/namespace';
-import type { Actions } from './util';
+import type { Actions } from './namespace';
 
 interface Props {
   datetime: DateTime
