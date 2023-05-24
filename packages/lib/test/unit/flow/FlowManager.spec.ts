@@ -1,6 +1,7 @@
+import { expectTypeOf } from 'vitest';
+
 import FlowManager, { createFlowManager, createFlowManagerFromType, flowEndStatus } from '@/flow';
 import { IFlowManager } from '@/flow/namespace';
-import { expectTypeOf } from 'vitest';
 
 describe('Flow Manager', () => {
   const flowManager = new FlowManager(['date', 'time']);

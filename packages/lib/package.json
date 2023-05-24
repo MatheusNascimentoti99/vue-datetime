@@ -33,6 +33,7 @@
     "version": "auto-changelog -p --starting-commit 975d478b80b8e1ed3663f55b34c3a35521a43bdb --commit-limit false && git add CHANGELOG.md"
   },
   "devDependencies": {
+    "@types/jest": "^29.2.5",
     "@types/luxon": "^3.2.0",
     "@types/node": "^18.15.11",
     "@vitejs/plugin-vue": "^4.0.0",
