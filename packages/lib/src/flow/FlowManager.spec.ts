@@ -1,17 +1,18 @@
 import { expectTypeOf } from 'vitest';
 
-import FlowManager, { createFlowManager, createFlowManagerFromType, flowEndStatus } from '@/flow';
-import { IFlowManager } from '@/flow/namespace';
+import type { FlowStep, IFlowManager } from './namespace';
+
+import FlowManager, { createFlowManager, createFlowManagerFromType, flowEndStatus } from './index';
 
 describe('Flow Manager', () => {
   const flowManager = new FlowManager(['date', 'time']);
-  const addDiversion = (name: string) => { flowManager.diversion(name); };
+  const addDiversion = (name: FlowStep) => { flowManager.diversion(name); };
   const emptyManager = () => (new FlowManager([]));
 
   it('Create Flow Manager', () => {
-    expectTypeOf(flowManager).toEqualTypeOf(FlowManager);
+    expectTypeOf(flowManager).toEqualTypeOf<FlowManager>();
     expectTypeOf(flowManager).toMatchTypeOf<IFlowManager>();
-    expectTypeOf(new FlowManager([], '')).toEqualTypeOf(FlowManager);
+    expectTypeOf(new FlowManager([])).toEqualTypeOf<FlowManager>();
   });
 
   it('Flow Manager First', () => {
@@ -30,19 +31,24 @@ describe('Flow Manager', () => {
   it('Flow Manager Next', () => {
     expect(flowManager.next('date')).toBe('time');
     expect(flowManager.next('time')).toBe(flowEndStatus);
+    // @ts-ignore
     expect(flowManager.next(flowEndStatus)).toBe('date');
+    // @ts-ignore
     expect(flowManager.next('somethingcomepletlybogus')).toBe('date');
 
     expect(emptyManager().next('date')).toBe(flowEndStatus);
+    // @ts-ignore
     expect(emptyManager().next('somethingcomepletlybogus')).toBe(flowEndStatus);
   });
 
   it('Flow Manager Diversion', () => {
+    // @ts-ignore
     addDiversion('test');
     expect(flowManager.next('date')).toBe('test');
     expect(flowManager.next('date')).toBe('time');
 
     const manager = emptyManager();
+    // @ts-ignore
     manager.diversion('test');
     expect(manager.next('date')).toBe('test');
     expect(manager.next('date')).toBe(flowEndStatus);
@@ -71,6 +77,7 @@ describe('Flow Manager Factory Functions', () => {
     expect(manager.step(0)).toBe('time');
     expect(manager.step(2)).toBe(flowEndStatus);
 
+    // @ts-ignore
     expect(() => createFlowManagerFromType('sometotallybogustype')).toThrow(TypeError);
   });
 });

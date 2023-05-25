@@ -1,4 +1,4 @@
-import { DateTime, Settings } from 'luxon';
+import { DateTime, Settings, WeekdayNumbers } from 'luxon';
 import { getWeekStartByLocale } from 'weekstart';
 
 export function datetimeFromISO(string: string): DateTime | null {
@@ -7,63 +7,71 @@ export function datetimeFromISO(string: string): DateTime | null {
   return datetime.isValid ? datetime : null;
 }
 
-export const startOfDay = (datetime: DateTime): DateTime => (datetime.startOf('day'));
+export const startOfDay = (datetime: DateTime | undefined): DateTime | undefined => (datetime?.startOf('day'));
 
-export function monthDayIsDisabled(
+export function validDatetimeRange(minDate: DateTime | null, maxDate: DateTime | null): boolean {
+  // Valid range is whatever either date is null or when minDate is lesser then maxDate
+  return !minDate || !maxDate || minDate <= maxDate;
+}
+
+export function yearIsDisabled(minDate: DateTime | null, maxDate: DateTime | null, year: number): boolean {
+  const minYear = minDate?.year;
+  const maxYear = maxDate?.year;
+
+  return !validDatetimeRange(minDate, maxDate) || (!!minYear && year < minYear) || (!!maxYear && year > maxYear);
+}
+
+export function monthIsDisabled(
+  minDate: DateTime | null,
+  maxDate: DateTime | null,
+  year: number,
+  month: number,
+): boolean {
+  const minMonth = minDate?.month;
+  const maxMonth = maxDate?.month;
+
+  return yearIsDisabled(minDate, maxDate, year) || (!!minMonth && month < minMonth) || (!!maxMonth && month > maxMonth);
+}
+
+export function dateIsDisabled(
   minDate: DateTime | null,
   maxDate: DateTime | null,
   year: number,
   month: number,
   day: number,
 ): boolean {
-  const date = DateTime.fromObject({ year, month, day }, { zone: 'UTC' });
+  const minDay = minDate?.day;
+  const maxDay = maxDate?.day;
 
-  const newMinDate = minDate ? startOfDay(minDate.setZone('UTC', { keepLocalTime: true })) : null;
-  const newMaxDate = maxDate ? startOfDay(maxDate.setZone('UTC', { keepLocalTime: true })) : null;
-
-  return !!((newMinDate && date <= newMinDate) || (newMaxDate && date >= newMaxDate));
-}
-
-export function monthDays(year: number, month: number, weekStart: number): (null | number)[] {
-  const monthDate = DateTime.local(year, month, 1);
-  let firstDay = monthDate.weekday - weekStart;
-  const daysInMonth = monthDate.daysInMonth ?? 0;
-
-  if (firstDay < 0) {
-    firstDay += 7;
-  }
-  let lastDay = (weekStart - monthDate.weekday - daysInMonth) % 7;
-  if (lastDay < 0) {
-    lastDay += 7;
-  }
-
-  return [...Array(daysInMonth + firstDay + lastDay)]
-    .map(
-      (value, index) => ((index + 1 <= firstDay || index >= firstDay + daysInMonth) ?
-        null : (index + 1 - firstDay)),
-    ) ?? [];
-}
-
-export function monthIsDisabled(minDate: DateTime, maxDate: DateTime, year: number, month: number): boolean {
-  return (minDate && minDate > DateTime.utc(year, month, DateTime.utc(year, month).daysInMonth ?? 0)) ||
-    (maxDate && maxDate < DateTime.utc(year, month, 1));
-}
-
-export function yearIsDisabled(minDate: DateTime, maxDate: DateTime, year: number): boolean {
-  const minYear = minDate ? minDate.year : null;
-  const maxYear = maxDate ? maxDate.year : null;
-
-  return (!!minYear && year < minYear) ||
-    (!!maxYear && year > maxYear);
+  return monthIsDisabled(minDate, maxDate, year, month) || (!!minDay && day < minDay) || (!!maxDay && day > maxDay);
 }
 
 export function timeComponentIsDisabled(min: number | null, max: number | null, component: number): boolean {
-  return (min !== null && component < min) ||
-    (max !== null && component > max);
+  return (!!min && component < min) || (!!max && component > max);
 }
 
-export function calculateWeekStart() {
+export function monthDays(year: number, month: number, weekStart: WeekdayNumbers): (null | number)[] {
+  const monthDate = DateTime.local(year, month, 1);
+  if (!monthDate.isValid) {
+    return [null];
+  }
+  const calendarRows = 6;
+  const calendarSize = 7 * (calendarRows - 1);
+
+  const daysInFirstRow = (7 - monthDate.weekday + weekStart) % 7;
+  const paddingFront = (7 - daysInFirstRow) % 7;
+  const daysInMonth = monthDate.daysInMonth ?? 31;
+  const paddingBack = calendarSize - (daysInMonth - daysInFirstRow - (daysInFirstRow ? 0 : 7));
+
+  return [...Array(daysInMonth + paddingFront + paddingBack)]
+    .map(
+      (value, index) => ((index + 1 <= paddingFront || index >= paddingFront + daysInMonth) ?
+        null : (index + 1 - paddingFront)),
+    );
+}
+
+export function calculateWeekStart(): WeekdayNumbers {
   const firstDay = getWeekStartByLocale(Settings.defaultLocale);
 
-  return firstDay === 0 ? 7 : firstDay;
+  return firstDay || 7;
 }

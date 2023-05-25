@@ -6,7 +6,7 @@
 
     <div class="example">
       <div class="example-inputs">
-        <date-time v-model="date"/>
+        <date-time v-model="date" :week-start="1"/>
 
         <div class="values">
           <p>
@@ -202,7 +202,7 @@ import { DateTime as LuxonDateTime } from 'luxon';
 import { ref } from 'vue';
 
 const time = ref('19:06');
-const date = ref('2018-05-12T00:00:00.000Z');
+const date = ref('2018-10-12T00:00:00.000Z');
 const datetime = ref('2018-05-12T17:19:06.151Z');
 const datetimeFixedDate = ref('2018-05-12T17:19:06.151Z');
 const datetimeFixedTime = ref('2018-05-12T17:19:06.151Z');

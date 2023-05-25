@@ -46,7 +46,7 @@ import { DateTime } from 'luxon';
 import { computed, PropType, ref } from 'vue';
 
 import type { TimeElement } from './namespace';
-import { monthDayIsDisabled, monthDays } from './utils/datetime';
+import { dateIsDisabled, monthDays } from './utils/datetime';
 import { monthsGenerator, weekdaysGenerator } from './utils/generators';
 
 const props = defineProps({
@@ -82,18 +82,18 @@ const emits = defineEmits(['change']);
 const newDate = ref<DateTime>(
   DateTime.fromObject({ year: props.year.valueOf(), month: props.month.valueOf() }, { zone: 'UTC' }),
 );
-const weekdays = weekdaysGenerator(props.weekStart.valueOf());
+const weekdays = weekdaysGenerator(props.weekStart);
 const months = monthsGenerator();
 
 const newYear = computed<number>(() => newDate.value.year);
 const newMonth = computed<number>(() => newDate.value.month);
 const monthName = computed<string>(() => months[newMonth.value - 1]);
-const days = computed<TimeElement[]>(() => monthDays(newYear.value, newMonth.value, props.weekStart.valueOf())
+const days = computed<TimeElement[]>(() => monthDays(newYear.value, newMonth.value, props.weekStart)
   .map((day: number | null): TimeElement => ({
     number: day ?? undefined,
     selected: !!day && props.year.valueOf() === newYear.value &&
       props.month.valueOf() === newMonth.value && props.day?.valueOf() === day,
-    disabled: !day || monthDayIsDisabled(props.minDate, props.maxDate, newYear.value, newMonth.value, day),
+    disabled: !day || dateIsDisabled(props.minDate, props.maxDate, newYear.value, newMonth.value, day),
   })));
 
 const selectDay = (day: TimeElement) => {

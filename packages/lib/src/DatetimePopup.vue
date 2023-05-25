@@ -90,7 +90,7 @@ const props = withDefaults(defineProps<Props>(), {
   minuteStep: 1,
   minDatetime: undefined,
   maxDatetime: undefined,
-  boolean: false,
+  auto: false,
   weekStart: 1,
   flow: undefined,
   title: '',
@@ -173,7 +173,7 @@ const showMonth = () => {
 const onChangeYear = (_year: number) => {
   newDateTime.value = newDateTime.value.set({ year: _year });
 
-  if (props.auto.valueOf()) {
+  if (props.auto) {
     nextStep();
   }
 };
@@ -189,7 +189,7 @@ const onChangeMonth = (newValue: number) => {
 const onChangeDate = (year: number, month: number, day: number) => {
   newDateTime.value = newDateTime.value.set({ year, month, day });
 
-  if (props.auto.valueOf()) {
+  if (props.auto) {
     nextStep();
   }
 };
