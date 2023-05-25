@@ -39,7 +39,7 @@
 </template>
 
 <script setup lang="ts">
-import { DateTime } from 'luxon';
+import { DateTime, WeekdayNumbers } from 'luxon';
 import { computed, onMounted, ref, watch } from 'vue';
 
 import DatetimePopup from './DatetimePopup.vue';
@@ -65,7 +65,7 @@ interface Props {
   minDatetime?: string
   maxDatetime?: string
   auto?: boolean
-  weekStart?: number
+  weekStart?: WeekdayNumbers
   flow?: FlowStep[]
   title?: string
   hideBackdrop?: boolean
@@ -182,7 +182,7 @@ const newPopupDatetime = () => {
 const popupDate = computed(() => (datetime.value ? datetime.value.setZone(props.zone) : newPopupDatetime()));
 
 const emitInput = () => {
-  let innerValue = datetime.value ? datetime.value.setZone(props.valueZone) : null;
+  let innerValue = datetime.value ? datetime.value.setZone(props.valueZone) : undefined;
 
   if (innerValue && props.type === 'date') {
     innerValue = startOfDay(innerValue);

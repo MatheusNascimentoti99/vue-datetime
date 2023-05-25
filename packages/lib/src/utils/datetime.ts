@@ -9,12 +9,12 @@ export function datetimeFromISO(string: string): DateTime | null {
 
 export const startOfDay = (datetime: DateTime | undefined): DateTime | undefined => (datetime?.startOf('day'));
 
-export function validDatetimeRange(minDate: DateTime | null, maxDate: DateTime | null): boolean {
+export function validDatetimeRange(minDate: DateTime | undefined, maxDate: DateTime | undefined): boolean {
   // Valid range is whatever either date is null or when minDate is lesser then maxDate
   return !minDate || !maxDate || minDate <= maxDate;
 }
 
-export function yearIsDisabled(minDate: DateTime | null, maxDate: DateTime | null, year: number): boolean {
+export function yearIsDisabled(minDate: DateTime | undefined, maxDate: DateTime | undefined, year: number): boolean {
   const minYear = minDate?.year;
   const maxYear = maxDate?.year;
 
@@ -22,8 +22,8 @@ export function yearIsDisabled(minDate: DateTime | null, maxDate: DateTime | nul
 }
 
 export function monthIsDisabled(
-  minDate: DateTime | null,
-  maxDate: DateTime | null,
+  minDate: DateTime | undefined,
+  maxDate: DateTime | undefined,
   year: number,
   month: number,
 ): boolean {
@@ -34,8 +34,8 @@ export function monthIsDisabled(
 }
 
 export function dateIsDisabled(
-  minDate: DateTime | null,
-  maxDate: DateTime | null,
+  minDate: DateTime | undefined,
+  maxDate: DateTime | undefined,
   year: number,
   month: number,
   day: number,

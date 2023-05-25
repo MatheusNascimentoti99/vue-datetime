@@ -42,39 +42,29 @@
 </template>
 
 <script setup lang="ts">
-import { DateTime } from 'luxon';
-import { computed, PropType, ref } from 'vue';
+import { DateTime, WeekdayNumbers } from 'luxon';
+import { computed, ref } from 'vue';
 
 import type { TimeElement } from './namespace';
 import { dateIsDisabled, monthDays } from './utils/datetime';
 import { monthsGenerator, weekdaysGenerator } from './utils/generators';
 
-const props = defineProps({
-  year: {
-    type: Number,
-    required: true,
-  },
-  month: {
-    type: Number,
-    required: true,
-  },
-  day: {
-    type: Number,
-    default: null,
-  },
-  disabled: { type: Array, default: () => [] },
-  minDate: {
-    type: Object as PropType<DateTime>,
-    default: null,
-  },
-  maxDate: {
-    type: Object as PropType<DateTime>,
-    default: null,
-  },
-  weekStart: {
-    type: Number,
-    default: 1,
-  },
+interface Props {
+  year: number
+  month: number
+  day?: number
+  disabled?: number[]
+  minDate?: DateTime
+  maxDate?: DateTime
+  weekStart?: WeekdayNumbers
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  day: undefined,
+  disabled: () => [],
+  minDate: undefined,
+  maxDate: undefined,
+  weekStart: 1,
 });
 
 const emits = defineEmits(['change']);

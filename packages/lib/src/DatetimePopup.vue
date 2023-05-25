@@ -55,7 +55,7 @@
 </template>
 
 <script setup lang="ts">
-import { DateTime } from 'luxon';
+import { DateTime, WeekdayNumbers } from 'luxon';
 import { computed, ref } from 'vue';
 
 import useKeyPressListener from './composables/KeyPress';
@@ -77,7 +77,7 @@ interface Props {
   minDatetime?: DateTime
   maxDatetime?: DateTime
   auto?: boolean
-  weekStart?: number
+  weekStart?: WeekdayNumbers
   flow?: FlowStep[]
   title?: string
 }
