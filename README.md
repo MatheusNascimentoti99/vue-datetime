@@ -89,6 +89,9 @@ flow | `Array` | Depends of *type* | Customize steps flow, steps available: time
 title | `String` | `''` | Popup title.
 hide-backdrop | `Boolean` | `false` | Show/Hide backdrop.
 backdrop-click | `Boolean` | `true` | Enable/Disable backdrop click to cancel (outside click).
+color | `String` | `#3f51b5` | Color theme of the component
+fixed-date | `Boolean` | `false` | Enables 'datetime' to have fixed date, input acts like a time picker, returns datetime value
+fixed-time | `Boolean` | `false` | Enables 'datetime' to have fixed time, input acts like a date picker, returns datetime value
 
 Input inherits all props not defined above but `style` and `class` will be inherited by root element. [See inheritAttrs option](https://vuejs.org/v2/api/#inheritAttrs)
 
