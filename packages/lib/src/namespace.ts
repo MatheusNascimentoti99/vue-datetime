@@ -1,7 +1,8 @@
 export interface TimeElement {
-  number: number | undefined,
-  label?: string,
-  selected: boolean,
+  key: number
+  number: number | undefined
+  label?: string
+  selected: boolean
   disabled: boolean
 }
 
@@ -10,6 +11,12 @@ export interface ListElement extends Element {
 }
 
 export interface Actions {
-  cancel?: string,
+  cancel?: string
   ok?: string,
+}
+
+export interface DateElement {
+  year: number
+  month: number
+  day: number
 }

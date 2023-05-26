@@ -3,7 +3,7 @@
     <div ref="hourList" class="vdatetime-time-picker__list vdatetime-time-picker__list--hours">
       <div
         v-for="hourElement in hours"
-        :key="hourElement.number"
+        :key="hourElement.key"
         class="vdatetime-time-picker__item"
         :class="{
           'vdatetime-time-picker__item--selected': hourElement.selected,
@@ -17,7 +17,7 @@
     <div ref="minuteList" class="vdatetime-time-picker__list vdatetime-time-picker__list--minutes">
       <div
         v-for="minuteElement in minutes"
-        :key="minuteElement.number"
+        :key="minuteElement.key"
         class="vdatetime-time-picker__item"
         :class="{
           'vdatetime-time-picker__item--selected': minuteElement.selected,
@@ -56,35 +56,22 @@ import { pad } from './utils';
 import { timeComponentIsDisabled } from './utils/datetime';
 import { hoursGenerator, minutesGenerator } from './utils/generators';
 
-const props = defineProps({
-  hour: {
-    type: Number,
-    required: true,
-  },
-  minute: {
-    type: Number,
-    required: true,
-  },
-  use12Hour: {
-    type: Boolean,
-    default: false,
-  },
-  hourStep: {
-    type: Number,
-    default: 1,
-  },
-  minuteStep: {
-    type: Number,
-    default: 1,
-  },
-  minTime: {
-    type: String,
-    default: null,
-  },
-  maxTime: {
-    type: String,
-    default: null,
-  },
+interface Props {
+  hour: number
+  minute: number
+  use12Hour?: boolean
+  hourStep?: number
+  minuteStep?: number
+  minTime?: string
+  maxTime?: string
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  use12Hour: false,
+  hourStep: 1,
+  minuteStep: 1,
+  minTime: undefined,
+  maxTime: undefined,
 });
 
 const minHour = computed<number | null>(() => (props.minTime ? parseInt(props.minTime.split(':')[0], 10) : null));
@@ -98,6 +85,7 @@ const hours = computed<TimeElement[]>(() => hoursGenerator(props.hourStep).filte
   }
   return hour >= 12;
 }).map((hour: number): TimeElement => ({
+  key: hour,
   number: hour,
   label: pad(hour),
   selected: hour === props.hour.valueOf(),
@@ -112,6 +100,7 @@ const maxMinute = computed<number | null>(
 );
 
 const minutes = computed<TimeElement[]>(() => minutesGenerator(props.minuteStep).map((minute: number): TimeElement => ({
+  key: minute,
   number: minute,
   label: pad(minute),
   selected: minute === props.minute.valueOf(),

@@ -23,7 +23,7 @@
       </div>
       <div
         v-for="dayElement in days"
-        :key="dayElement.number"
+        :key="dayElement.key"
         class="vdatetime-calendar__month__day"
         :class="{
           'vdatetime-calendar__month__day--selected': dayElement.selected,
@@ -45,7 +45,7 @@
 import { DateTime, WeekdayNumbers } from 'luxon';
 import { computed, ref } from 'vue';
 
-import type { TimeElement } from './namespace';
+import type { DateElement, TimeElement } from './namespace';
 import { dateIsDisabled, monthDays } from './utils/datetime';
 import { monthsGenerator, weekdaysGenerator } from './utils/generators';
 
@@ -79,11 +79,13 @@ const newYear = computed<number>(() => newDate.value.year);
 const newMonth = computed<number>(() => newDate.value.month);
 const monthName = computed<string>(() => months[newMonth.value - 1]);
 const days = computed<TimeElement[]>(() => monthDays(newYear.value, newMonth.value, props.weekStart)
-  .map((day: number | null): TimeElement => ({
-    number: day ?? undefined,
-    selected: !!day && props.year.valueOf() === newYear.value &&
-      props.month.valueOf() === newMonth.value && props.day?.valueOf() === day,
-    disabled: !day || dateIsDisabled(props.minDate, props.maxDate, newYear.value, newMonth.value, day),
+  .map((date: DateElement, index): TimeElement => ({
+    key: index,
+    number: date.day,
+    selected: props.year === date.year &&
+      props.month === date.month && props.day === date.day,
+    disabled: date.month !== newMonth.value ||
+      dateIsDisabled(props.minDate, props.maxDate, newYear.value, newMonth.value, date.day),
   })));
 
 const selectDay = (day: TimeElement) => {

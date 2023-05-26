@@ -1,6 +1,8 @@
 import { DateTime, Settings, WeekdayNumbers } from 'luxon';
 import { getWeekStartByLocale } from 'weekstart';
 
+import { DateElement } from '../namespace';
+
 export function datetimeFromISO(string: string): DateTime | null {
   const datetime = DateTime.fromISO(string).toUTC();
 
@@ -50,23 +52,42 @@ export function timeComponentIsDisabled(min: number | null, max: number | null, 
   return (!!min && component < min) || (!!max && component > max);
 }
 
-export function monthDays(year: number, month: number, weekStart: WeekdayNumbers): (null | number)[] {
+export function monthDays(year: number, month: number, weekStart: WeekdayNumbers): DateElement[] {
   const monthDate = DateTime.local(year, month, 1);
   if (!monthDate.isValid) {
-    return [null];
+    return [];
   }
   const calendarRows = 6;
   const calendarSize = 7 * (calendarRows - 1);
 
   const daysInFirstRow = (7 - monthDate.weekday + weekStart) % 7;
   const paddingFront = (7 - daysInFirstRow) % 7;
-  const daysInMonth = monthDate.daysInMonth ?? 31;
+  const daysInMonth = monthDate.daysInMonth!;
   const paddingBack = calendarSize - (daysInMonth - daysInFirstRow - (daysInFirstRow ? 0 : 7));
+
+  const daysInMonthPrevious = monthDate.minus({ month: 1 }).daysInMonth!;
+  const prevMonth = monthDate.minus({ month: 1 });
+  const nextMonth = monthDate.plus({ month: 1 });
 
   return [...Array(daysInMonth + paddingFront + paddingBack)]
     .map(
-      (value, index) => ((index + 1 <= paddingFront || index >= paddingFront + daysInMonth) ?
-        null : (index + 1 - paddingFront)),
+      (_, index) => {
+        if (index + 1 <= paddingFront) {
+          return {
+            year: prevMonth.year,
+            month: prevMonth.month,
+            day: daysInMonthPrevious + (index + 1 - paddingFront),
+          };
+        }
+        if (index >= paddingFront + daysInMonth) {
+          return {
+            year: nextMonth.year,
+            month: nextMonth.month,
+            day: index + 1 - (paddingFront + daysInMonth),
+          };
+        }
+        return { year, month, day: (index + 1 - paddingFront) };
+      },
     );
 }
 

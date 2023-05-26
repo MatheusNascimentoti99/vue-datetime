@@ -3,7 +3,7 @@
     <div ref="monthList" class="vdatetime-month-picker__list vdatetime-month-picker__list">
       <div
         v-for="monthElement in months"
-        :key="monthElement.number"
+        :key="monthElement.key"
         class="vdatetime-month-picker__item"
         :class="{
           'vdatetime-month-picker__item--selected': monthElement.selected,
@@ -19,39 +19,30 @@
 
 <script setup lang="ts">
 import { DateTime } from 'luxon';
-import { computed, PropType, ref } from 'vue';
+import { computed, ref } from 'vue';
 
 import useListScroller from './composables/ListScroller';
 import type { TimeElement } from './namespace';
 import { monthIsDisabled } from './utils/datetime';
 import { monthsGenerator } from './utils/generators';
 
-const props = defineProps({
-  year: {
-    type: Number,
-    required: true,
-  },
-  month: {
-    type: Number,
-    required: true,
-  },
-  minDate: {
-    type: Object as PropType<DateTime>,
-    default: null,
-  },
-  maxDate: {
-    type: Object as PropType<DateTime>,
-    default: null,
-  },
-});
+interface Props {
+  year: number
+  month: number
+  minDate?: DateTime
+  maxDate?: DateTime
+}
+
+const props = defineProps<Props>();
 
 const months = computed<TimeElement[]>(() => (
   monthsGenerator().map((month: string, index: number): TimeElement => ({
+    key: index,
     // eslint-disable-next-line no-param-reassign
     number: ++index,
     label: month,
-    selected: index === props.month.valueOf(),
-    disabled: !(index + 1) || monthIsDisabled(props.minDate, props.maxDate, props.year.valueOf(), index),
+    selected: index === props.month,
+    disabled: !(index + 1) || monthIsDisabled(props.minDate, props.maxDate, props.year, index),
   }))
 ));
 

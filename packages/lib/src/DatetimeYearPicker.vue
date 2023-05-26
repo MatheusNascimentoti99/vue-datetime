@@ -3,7 +3,7 @@
     <div ref="yearList" class="vdatetime-year-picker__list vdatetime-year-picker__list">
       <div
         v-for="yearElement in years"
-        :key="yearElement.number"
+        :key="yearElement.key"
         class="vdatetime-year-picker__item"
         :class="{
           'vdatetime-year-picker__item--selected': yearElement.selected,
@@ -42,6 +42,7 @@ const props = defineProps({
 });
 
 const years = computed<TimeElement[]>(() => (yearsGenerator(props.year.valueOf()).map((year: number): TimeElement => ({
+  key: year,
   number: year,
   selected: year === props.year.valueOf(),
   disabled: !year || yearIsDisabled(props.minDate, props.maxDate, year),
