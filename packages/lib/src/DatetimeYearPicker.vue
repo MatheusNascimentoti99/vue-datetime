@@ -19,27 +19,20 @@
 
 <script setup lang="ts">
 import { DateTime } from 'luxon';
-import { computed, PropType, ref } from 'vue';
+import { computed, ref } from 'vue';
 
 import useListScroller from './composables/ListScroller';
 import type { TimeElement } from './namespace';
 import { yearIsDisabled } from './utils/datetime';
 import { yearsGenerator } from './utils/generators';
 
-const props = defineProps({
-  year: {
-    type: Number,
-    required: true,
-  },
-  minDate: {
-    type: Object as PropType<DateTime>,
-    default: null,
-  },
-  maxDate: {
-    type: Object as PropType<DateTime>,
-    default: null,
-  },
-});
+interface Props {
+  year: number
+  minDate?: DateTime
+  maxDate?: DateTime
+}
+
+const props = defineProps<Props>();
 
 const years = computed<TimeElement[]>(() => (yearsGenerator(props.year.valueOf()).map((year: number): TimeElement => ({
   key: year,
