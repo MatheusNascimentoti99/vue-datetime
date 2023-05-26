@@ -41,22 +41,22 @@ describe('Datetime Utilities', () => {
     const datetimeBefore = datetime.minus({ day: 1 });
     const datetimeAfter = datetime.plus({ day: 1 });
 
-    expect(dateIsDisabled(null, null, year, month, day)).toBe(false);
-    expect(dateIsDisabled(datetimeBefore, null, year, month, day)).toBe(false);
-    expect(dateIsDisabled(null, datetimeAfter, year, month, day)).toBe(false);
+    expect(dateIsDisabled(undefined, undefined, year, month, day)).toBe(false);
+    expect(dateIsDisabled(datetimeBefore, undefined, year, month, day)).toBe(false);
+    expect(dateIsDisabled(undefined, datetimeAfter, year, month, day)).toBe(false);
     expect(dateIsDisabled(datetimeBefore, datetimeAfter, year, month, day)).toBe(false);
 
-    expect(dateIsDisabled(null, datetimeBefore, year, month, day)).toBe(true);
-    expect(dateIsDisabled(datetimeAfter, null, year, month, day)).toBe(true);
+    expect(dateIsDisabled(undefined, datetimeBefore, year, month, day)).toBe(true);
+    expect(dateIsDisabled(datetimeAfter, undefined, year, month, day)).toBe(true);
     expect(dateIsDisabled(datetimeAfter, datetimeBefore, year, month, day)).toBe(true);
     expect(dateIsDisabled(datetimeBefore, datetimeBefore, year, month, day)).toBe(true);
     expect(dateIsDisabled(datetimeAfter, datetimeAfter, year, month, day)).toBe(true);
 
-    expect(dateIsDisabled(datetime.minus({ year: 1 }), null, year, month, day)).toBe(false);
-    expect(dateIsDisabled(null, datetime.plus({ year: 1 }), year, month, day)).toBe(false);
+    expect(dateIsDisabled(datetime.minus({ year: 1 }), undefined, year, month, day)).toBe(false);
+    expect(dateIsDisabled(undefined, datetime.plus({ year: 1 }), year, month, day)).toBe(false);
 
-    expect(dateIsDisabled(datetime.minus({ month: 1 }), null, year, month, day)).toBe(false);
-    expect(dateIsDisabled(null, datetime.plus({ month: 1 }), year, month, day)).toBe(false);
+    expect(dateIsDisabled(datetime.minus({ month: 1 }), undefined, year, month, day)).toBe(false);
+    expect(dateIsDisabled(undefined, datetime.plus({ month: 1 }), year, month, day)).toBe(false);
   });
 
   it('Month Is Disabled', () => {
@@ -64,24 +64,24 @@ describe('Datetime Utilities', () => {
     const datetimeAfter = datetime.plus({ month: 1 });
 
     // obvious true statements
-    expect(monthIsDisabled(null, null, year, month)).toBe(false);
-    expect(monthIsDisabled(datetimeBefore, null, year, month)).toBe(false);
-    expect(monthIsDisabled(null, datetimeAfter, year, month)).toBe(false);
+    expect(monthIsDisabled(undefined, undefined, year, month)).toBe(false);
+    expect(monthIsDisabled(datetimeBefore, undefined, year, month)).toBe(false);
+    expect(monthIsDisabled(undefined, datetimeAfter, year, month)).toBe(false);
     expect(monthIsDisabled(datetimeBefore, datetimeAfter, year, month)).toBe(false);
 
     // obvious false
-    expect(monthIsDisabled(datetimeAfter, null, year, month)).toBe(true);
-    expect(monthIsDisabled(null, datetimeBefore, year, month)).toBe(true);
+    expect(monthIsDisabled(datetimeAfter, undefined, year, month)).toBe(true);
+    expect(monthIsDisabled(undefined, datetimeBefore, year, month)).toBe(true);
     expect(monthIsDisabled(datetimeAfter, datetimeBefore, year, month)).toBe(true);
 
     // date within the month
     const monthBegin = DateTime.fromObject({ ...datetimeObject, day: 1 });
     const monthEnd = DateTime.fromObject({ ...datetimeObject, day: DateTime.utc(year, month).daysInMonth ?? 31 });
 
-    expect(monthIsDisabled(monthBegin, null, year, month)).toBe(false);
-    expect(monthIsDisabled(null, monthBegin, year, month)).toBe(false);
-    expect(monthIsDisabled(monthEnd, null, year, month)).toBe(false);
-    expect(monthIsDisabled(null, monthEnd, year, month)).toBe(false);
+    expect(monthIsDisabled(monthBegin, undefined, year, month)).toBe(false);
+    expect(monthIsDisabled(undefined, monthBegin, year, month)).toBe(false);
+    expect(monthIsDisabled(monthEnd, undefined, year, month)).toBe(false);
+    expect(monthIsDisabled(undefined, monthEnd, year, month)).toBe(false);
     expect(monthIsDisabled(monthBegin, monthEnd, year, month)).toBe(false);
     expect(monthIsDisabled(monthEnd, monthBegin, year, month)).toBe(true);
   });
@@ -91,22 +91,22 @@ describe('Datetime Utilities', () => {
     const datetimeAfter = datetime.plus({ year: 1 });
 
     // obvious true statements
-    expect(yearIsDisabled(null, null, year)).toBe(false);
-    expect(yearIsDisabled(datetimeBefore, null, year)).toBe(false);
-    expect(yearIsDisabled(null, datetimeAfter, year)).toBe(false);
+    expect(yearIsDisabled(undefined, undefined, year)).toBe(false);
+    expect(yearIsDisabled(datetimeBefore, undefined, year)).toBe(false);
+    expect(yearIsDisabled(undefined, datetimeAfter, year)).toBe(false);
     expect(yearIsDisabled(datetimeBefore, datetimeAfter, year)).toBe(false);
 
     // obvious false
-    expect(yearIsDisabled(datetimeAfter, null, year)).toBe(true);
-    expect(yearIsDisabled(null, datetimeBefore, year)).toBe(true);
+    expect(yearIsDisabled(datetimeAfter, undefined, year)).toBe(true);
+    expect(yearIsDisabled(undefined, datetimeBefore, year)).toBe(true);
     expect(yearIsDisabled(datetimeAfter, datetimeBefore, year)).toBe(true);
 
     const yearBegin = DateTime.fromObject({ ...datetimeObject, month: 1, day: 1 });
     const yearEnd = DateTime.fromObject({ ...datetimeObject, month: 12, day: 31 });
-    expect(yearIsDisabled(yearBegin, null, year)).toBe(false);
-    expect(yearIsDisabled(null, yearBegin, year)).toBe(false);
-    expect(yearIsDisabled(yearEnd, null, year)).toBe(false);
-    expect(yearIsDisabled(null, yearEnd, year)).toBe(false);
+    expect(yearIsDisabled(yearBegin, undefined, year)).toBe(false);
+    expect(yearIsDisabled(undefined, yearBegin, year)).toBe(false);
+    expect(yearIsDisabled(yearEnd, undefined, year)).toBe(false);
+    expect(yearIsDisabled(undefined, yearEnd, year)).toBe(false);
     expect(yearIsDisabled(yearBegin, yearEnd, year)).toBe(false);
     expect(yearIsDisabled(yearEnd, yearBegin, year)).toBe(true);
   });
@@ -115,9 +115,9 @@ describe('Datetime Utilities', () => {
     const datetimeBefore = datetime.minus({ year: 1 });
     const datetimeAfter = datetime.plus({ year: 1 });
 
-    expect(validDatetimeRange(null, null)).toBe(true);
-    expect(validDatetimeRange(datetimeBefore, null)).toBe(true);
-    expect(validDatetimeRange(null, datetimeAfter)).toBe(true);
+    expect(validDatetimeRange(undefined, undefined)).toBe(true);
+    expect(validDatetimeRange(datetimeBefore, undefined)).toBe(true);
+    expect(validDatetimeRange(undefined, datetimeAfter)).toBe(true);
     expect(validDatetimeRange(datetimeBefore, datetimeAfter)).toBe(true);
     expect(validDatetimeRange(datetimeAfter, datetimeBefore)).toBe(false);
   });
