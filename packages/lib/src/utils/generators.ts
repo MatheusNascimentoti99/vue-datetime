@@ -1,13 +1,9 @@
-import { Info } from 'luxon';
+import { Info, WeekdayNumbers } from 'luxon';
 
 import { capitalize } from '.';
 
-export function weekdaysGenerator(weekStart: number): string[] {
-  let localWeekStart = weekStart;
-  if (--localWeekStart < 0) {
-    localWeekStart = 6;
-  }
-  // weekStart = (weekStart - 1) % 7;
+export function weekdaysGenerator(weekStart: WeekdayNumbers): string[] {
+  const localWeekStart = weekStart - 1;
 
   let weekDays = Info.weekdays('short').map((weekday) => capitalize(weekday));
 
@@ -21,13 +17,13 @@ export function monthsGenerator(): string[] {
 }
 
 export function hoursGenerator(step: number): number[] {
-  return [...Array(Math.ceil(24 / step))].map((item, index) => index * step);
+  return [...Array(Math.ceil(24 / step))].map((_, index) => index * step);
 }
 
 export function minutesGenerator(step: number): number[] {
-  return [...Array(Math.ceil(60 / step))].map((item, index) => index * step);
+  return [...Array(Math.ceil(60 / step))].map((_, index) => index * step);
 }
 
 export function yearsGenerator(current: number): number[] {
-  return [...Array(201)].map((item, index) => current - 100 + index);
+  return [...Array(201)].map((_, index) => current - 100 + index);
 }
