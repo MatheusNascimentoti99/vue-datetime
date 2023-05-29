@@ -66,32 +66,32 @@ app.use(createDatetime());
 
 ### Parameters
 
-Parameter | Type | Default | Description
---------- | ---- | ------- | -----------
-v-model (*required*) | ISO 8601 `String` | - | Datetime.
-type | `String` | `date` | Picker type: date, datetime or time.
-input-id | `String` | `''` | Id for the input.
-input-class | `String`, `Array` or `Object` | `''` | Class for the input.
-input-style | `String`, `Array` or `Object` | `''` | Style for the input.
-hidden-name | `String` | `null` | Name for hidden input with raw value. See #51.
-value-zone | `String` | `UTC` | Time zone for the value.
-zone | `String` | `local` | Time zone for the picker.
-format | `Object` or `String` | `DateTime.DATE_MED`, `DateTime.DATETIME_MED` or `DateTime.TIME_24_SIMPLE` | Input date format. Luxon [presets](https://moment.github.io/luxon/docs/manual/formatting.html#tolocalestring--strings-for-humans-) or [tokens](https://moment.github.io/luxon/docs/manual/formatting.html#formatting-with-tokens--strings-for-cthulhu-).
-phrases | `Object` | `{ok: 'Ok', cancel: 'Cancel'}` | Phrases.
-use12-hour | `Boolean` | `false` | Display 12 hour (AM/PM) mode
-hour-step | `Number` | `1` | Hour step.
-minute-step | `Number` | `1` | Minute step.
-min-datetime | ISO 8601 `String` | `null` | Minimum datetime.
-max-datetime | ISO 8601 `String` | `null` | Maximum datetime.
-auto | `Boolean` | `false` | Auto continue/close on select.
-week-start | `Number` | auto from locale if _weekstart_ is available or `1` | First day of the week. 1 is Monday and 7 is Sunday.
-flow | `Array` | Depends of *type* | Customize steps flow, steps available: time, date, month, year. Example: ['year', 'date', 'time']
-title | `String` | `''` | Popup title.
-hide-backdrop | `Boolean` | `false` | Show/Hide backdrop.
-backdrop-click | `Boolean` | `true` | Enable/Disable backdrop click to cancel (outside click).
-color | `String` | `#3f51b5` | Color theme of the component
-fixed-date | `Boolean` | `false` | Enables 'datetime' to have fixed date, input acts like a time picker, returns datetime value
-fixed-time | `Boolean` | `false` | Enables 'datetime' to have fixed time, input acts like a date picker, returns datetime value
+| Parameter            | Type                          | Default                                                                   | Description                                                                                                                                                                                                                                              |
+|----------------------|-------------------------------|---------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| v-model (*required*) | ISO 8601 `String`             | -                                                                         | Datetime.                                                                                                                                                                                                                                                |
+| type                 | `String`                      | `date`                                                                    | Picker type: date, datetime or time.                                                                                                                                                                                                                     |
+| input-id             | `String`                      | `''`                                                                      | Id for the input.                                                                                                                                                                                                                                        |
+| input-class          | `String`, `Array` or `Object` | `''`                                                                      | Class for the input.                                                                                                                                                                                                                                     |
+| input-style          | `String`, `Array` or `Object` | `''`                                                                      | Style for the input.                                                                                                                                                                                                                                     |
+| hidden-name          | `String`                      | `null`                                                                    | Name for hidden input with raw value. See #51.                                                                                                                                                                                                           |
+| value-zone           | `String`                      | `UTC`                                                                     | Time zone for the value.                                                                                                                                                                                                                                 |
+| zone                 | `String`                      | `local`                                                                   | Time zone for the picker.                                                                                                                                                                                                                                |
+| format               | `Object` or `String`          | `DateTime.DATE_MED`, `DateTime.DATETIME_MED` or `DateTime.TIME_24_SIMPLE` | Input date format. Luxon [presets](https://moment.github.io/luxon/docs/manual/formatting.html#tolocalestring--strings-for-humans-) or [tokens](https://moment.github.io/luxon/docs/manual/formatting.html#formatting-with-tokens--strings-for-cthulhu-). |
+| phrases              | `Object`                      | `{ok: 'Ok', cancel: 'Cancel'}`                                            | Phrases.                                                                                                                                                                                                                                                 |
+| use12-hour           | `Boolean`                     | `false`                                                                   | Display 12 hour (AM/PM) mode                                                                                                                                                                                                                             |
+| hour-step            | `Number`                      | `1`                                                                       | Hour step.                                                                                                                                                                                                                                               |
+| minute-step          | `Number`                      | `1`                                                                       | Minute step.                                                                                                                                                                                                                                             |
+| min-datetime         | ISO 8601 `String`             | `null`                                                                    | Minimum datetime.                                                                                                                                                                                                                                        |
+| max-datetime         | ISO 8601 `String`             | `null`                                                                    | Maximum datetime.                                                                                                                                                                                                                                        |
+| auto                 | `Boolean`                     | `false`                                                                   | Auto continue/close on select.                                                                                                                                                                                                                           |
+| week-start           | `Number`                      | auto from locale if _weekstart_ is available or `1`                       | First day of the week. 1 is Monday and 7 is Sunday.                                                                                                                                                                                                      |
+| flow                 | `Array`                       | Depends of *type*                                                         | Customize steps flow, steps available: time, date, month, year. Example: ['year', 'date', 'time']                                                                                                                                                        |
+| title                | `String`                      | `''`                                                                      | Popup title.                                                                                                                                                                                                                                             |
+| hide-backdrop        | `Boolean`                     | `false`                                                                   | Show/Hide backdrop.                                                                                                                                                                                                                                      |
+| backdrop-click       | `Boolean`                     | `true`                                                                    | Enable/Disable backdrop click to cancel (outside click).                                                                                                                                                                                                 |
+| color                | `String`                      | `#3f51b5`                                                                 | Color theme of the component                                                                                                                                                                                                                             |
+| fixed-date           | `Boolean`                     | `false`                                                                   | Enables 'datetime' to have fixed date, input acts like a time picker, returns datetime value                                                                                                                                                             |
+| fixed-time           | `Boolean`                     | `false`                                                                   | Enables 'datetime' to have fixed time, input acts like a date picker, returns datetime value                                                                                                                                                             |
 
 Input inherits all props not defined above but `style` and `class` will be inherited by root element. [See inheritAttrs option](https://vuejs.org/v2/api/#inheritAttrs)
 
@@ -149,7 +149,8 @@ You can also use `slot-scope` to determine which view is currently active:
 
 ## Theming
 
-Theming is supported by overwriting CSS classes.
+Theming is supported by defining a `color` in props. `color` should be a valid css 
+color option, it's default value is `#3f51b5`.
 
 ## Development
 
