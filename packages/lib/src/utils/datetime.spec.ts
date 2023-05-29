@@ -57,6 +57,15 @@ describe('Datetime Utilities', () => {
 
     expect(dateIsDisabled(datetime.minus({ month: 1 }), undefined, year, month, day)).toBe(false);
     expect(dateIsDisabled(undefined, datetime.plus({ month: 1 }), year, month, day)).toBe(false);
+
+    const dateBefore = DateTime.fromObject({ year: 2023, month: 9, day: 25 });
+    const dateAfter = DateTime.fromObject({ year: 2023, month: 10, day: 10 });
+
+    expect(dateIsDisabled(dateBefore, dateAfter, 2023, 9, 29)).toBe(false);
+    expect(dateIsDisabled(dateBefore, dateAfter, 2023, 10, 5)).toBe(false);
+
+    expect(dateIsDisabled(dateBefore, dateAfter, 2023, 9, 5)).toBe(true);
+    expect(dateIsDisabled(dateBefore, dateAfter, 2023, 10, 29)).toBe(true );
   });
 
   it('Month Is Disabled', () => {
@@ -84,6 +93,15 @@ describe('Datetime Utilities', () => {
     expect(monthIsDisabled(undefined, monthEnd, year, month)).toBe(false);
     expect(monthIsDisabled(monthBegin, monthEnd, year, month)).toBe(false);
     expect(monthIsDisabled(monthEnd, monthBegin, year, month)).toBe(true);
+
+    const monthPreviousYear = DateTime.fromObject({ year: 2022, month: 10 });
+    const monthNextYear = DateTime.fromObject({ year: 2023, month: 3 });
+
+    expect(monthIsDisabled(monthPreviousYear, monthNextYear, 2022, 11)).toBe(false);
+    expect(monthIsDisabled(monthPreviousYear, monthNextYear, 2023, 1)).toBe(false);
+
+    expect(monthIsDisabled(monthPreviousYear, monthNextYear, 2022, 1)).toBe(true);
+    expect(monthIsDisabled(monthPreviousYear, monthNextYear, 2023, 11)).toBe(true);
   });
 
   it('Year Is Disabled', () => {

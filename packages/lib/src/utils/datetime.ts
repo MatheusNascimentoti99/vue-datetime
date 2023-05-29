@@ -32,7 +32,9 @@ export function monthIsDisabled(
   const minMonth = minDate?.month;
   const maxMonth = maxDate?.month;
 
-  return yearIsDisabled(minDate, maxDate, year) || (!!minMonth && month < minMonth) || (!!maxMonth && month > maxMonth);
+  return yearIsDisabled(minDate, maxDate, year) ||
+    (!!minMonth && minDate.year === year && month < minDate.month) ||
+    (!!maxMonth && maxDate.year === year && month > maxDate.month);
 }
 
 export function dateIsDisabled(
@@ -45,7 +47,9 @@ export function dateIsDisabled(
   const minDay = minDate?.day;
   const maxDay = maxDate?.day;
 
-  return monthIsDisabled(minDate, maxDate, year, month) || (!!minDay && day < minDay) || (!!maxDay && day > maxDay);
+  return monthIsDisabled(minDate, maxDate, year, month) ||
+    (!!minDay && (minDate.month === month && minDate.year === year && day < minDate.day)) ||
+    (!!maxDay && (maxDate.month === month && maxDate.year === year && day > maxDate.day));
 }
 
 export function timeComponentIsDisabled(min: number | null, max: number | null, component: number): boolean {
