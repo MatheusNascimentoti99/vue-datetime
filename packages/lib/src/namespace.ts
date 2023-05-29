@@ -20,3 +20,12 @@ export interface DateElement {
   month: number
   day: number
 }
+
+export interface ChangeEvent {
+  year?: number,
+  month?: number,
+  day?: number,
+  hour?: number,
+  minute?: number,
+  suffixTouched?: boolean
+}

@@ -11,7 +11,7 @@ describe('DatetimeYearPicker', () => {
     const maxDate = DateTime.fromObject({ year: 2030 });
 
     wrapper = shallowMount(DatetimeYearPicker, {
-      propsData: {
+      props: {
         year: 2023,
         minDate,
         maxDate,

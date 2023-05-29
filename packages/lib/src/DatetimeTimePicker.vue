@@ -1,44 +1,44 @@
 <template>
-  <div :class="{ 'vdatetime-time-picker': true, 'vdatetime-time-picker__with-suffix': use12Hour }">
-    <div ref="hourList" class="vdatetime-time-picker__list vdatetime-time-picker__list--hours">
+  <div class="container" :class="{ 'with-suffix': use12Hour }">
+    <div ref="hourList" class="list list--hour">
       <div
         v-for="hourElement in hours"
         :key="hourElement.key"
-        class="vdatetime-time-picker__item"
+        class="item"
         :class="{
-          'vdatetime-time-picker__item--selected': hourElement.selected,
-          'vdatetime-time-picker__item--disabled': hourElement.disabled,
+          selected: hourElement.selected,
+          disabled: hourElement.disabled,
         }"
         @click="selectHour(hourElement)"
       >
-        {{ formatHour(hourElement.number ?? 0) }}
+        {{ pad(formatHour(hourElement.number)) }}
       </div>
     </div>
-    <div ref="minuteList" class="vdatetime-time-picker__list vdatetime-time-picker__list--minutes">
+    <div ref="minuteList" class="list list--minute">
       <div
         v-for="minuteElement in minutes"
         :key="minuteElement.key"
-        class="vdatetime-time-picker__item"
+        class="item"
         :class="{
-          'vdatetime-time-picker__item--selected': minuteElement.selected,
-          'vdatetime-time-picker__item--disabled': minuteElement.disabled,
+          selected: minuteElement.selected,
+          disabled: minuteElement.disabled,
         }"
         @click="selectMinute(minuteElement)"
       >
-        {{ minuteElement.number }}
+        {{ minuteElement.label }}
       </div>
     </div>
-    <div v-if="use12Hour" ref="suffixList" class="vdatetime-time-picker__list vdatetime-time-picker__list--suffix">
+    <div v-if="use12Hour" ref="suffixList" class="list list--suffix">
       <div
-        class="vdatetime-time-picker__item"
-        :class="{ 'vdatetime-time-picker__item--selected': hour < 12 }"
+        class="item"
+        :class="{ selected: hour < 12 }"
         @click="selectSuffix('am')"
       >
         am
       </div>
       <div
-        class="vdatetime-time-picker__item"
-        :class="{ 'vdatetime-time-picker__item--selected': hour >= 12 }"
+        class="item"
+        :class="{ selected: hour >= 12 }"
         @click="selectSuffix('pm')"
       >
         pm
@@ -51,7 +51,7 @@
 import { computed, ref } from 'vue';
 
 import useListScroller from './composables/ListScroller';
-import type { TimeElement } from './namespace';
+import type { ChangeEvent, TimeElement } from './namespace';
 import { pad } from './utils';
 import { timeComponentIsDisabled } from './utils/datetime';
 import { hoursGenerator, minutesGenerator } from './utils/generators';
@@ -88,32 +88,34 @@ const hours = computed<TimeElement[]>(() => hoursGenerator(props.hourStep).filte
   key: hour,
   number: hour,
   label: pad(hour),
-  selected: hour === props.hour.valueOf(),
+  selected: hour === props.hour,
   disabled: timeComponentIsDisabled(minHour.value, maxHour.value, hour),
 })));
 
 const minMinute = computed<number | null>(
-  () => (props.minTime && minHour.value === props.hour.valueOf() ? parseInt(props.minTime.split(':')[1], 10) : null),
+  () => (props.minTime && minHour.value === props.hour ? parseInt(props.minTime.split(':')[1], 10) : null),
 );
 const maxMinute = computed<number | null>(
-  () => (props.maxTime && maxHour.value === props.hour.valueOf() ? parseInt(props.maxTime.split(':')[1], 10) : null),
+  () => (props.maxTime && maxHour.value === props.hour ? parseInt(props.maxTime.split(':')[1], 10) : null),
 );
 
 const minutes = computed<TimeElement[]>(() => minutesGenerator(props.minuteStep).map((minute: number): TimeElement => ({
   key: minute,
   number: minute,
   label: pad(minute),
-  selected: minute === props.minute.valueOf(),
+  selected: minute === props.minute,
   disabled: timeComponentIsDisabled(minMinute.value, maxMinute.value, minute),
 })));
 
 const hourList = ref<HTMLInputElement | null>(null);
 const minuteList = ref<HTMLInputElement | null>(null);
 
-useListScroller(hourList, '.vdatetime-time-picker__item--selected');
-useListScroller(minuteList, '.vdatetime-time-picker__item--selected');
+useListScroller(hourList, '.selected');
+useListScroller(minuteList, '.selected');
 
-const emits = defineEmits(['change']);
+const emits = defineEmits<{
+  change: ChangeEvent[],
+}>();
 
 const selectHour = (hour: TimeElement) => {
   if (!hour.disabled) {
@@ -148,8 +150,8 @@ const formatHour = (hour: number) => {
 };
 </script>
 
-<style lang="scss">
-.vdatetime-time-picker {
+<style scoped lang="scss">
+.container {
   box-sizing: border-box;
 
   &::after {
@@ -163,7 +165,7 @@ const formatHour = (hour: number) => {
   }
 }
 
-.vdatetime-time-picker__list {
+.list {
   float: left;
   width: 50%;
   height: 305px;
@@ -183,11 +185,11 @@ const formatHour = (hour: number) => {
   }
 }
 
-.vdatetime-time-picker__with-suffix .vdatetime-time-picker__list {
+.with-suffix .list {
   width: 33.3%;
 }
 
-.vdatetime-time-picker__item {
+.item {
   padding: 10px 0;
   font-size: 20px;
   text-align: center;
@@ -195,16 +197,16 @@ const formatHour = (hour: number) => {
   transition: font-size .3s;
 }
 
-.vdatetime-time-picker__item:hover {
+.item:hover {
   font-size: 32px;
 }
 
-.vdatetime-time-picker__item--selected {
+.selected {
   color: var(--primary-color);
   font-size: 32px;
 }
 
-.vdatetime-time-picker__item--disabled {
+.disabled {
   opacity: 0.4;
   cursor: default;
   font-size: 20px !important;

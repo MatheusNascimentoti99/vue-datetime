@@ -8,7 +8,7 @@ describe('DatetimeMonthPicker', () => {
 
   beforeEach(() => {
     wrapper = shallowMount(DatetimeMonthPicker, {
-      propsData: {
+      props: {
         year: 2023,
         month: 2,
         minDate: DateTime.fromISO('2023-01-01'),
