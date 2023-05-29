@@ -1,13 +1,13 @@
 <template>
-  <div class="vdatetime-year-picker">
-    <div ref="yearList" class="vdatetime-year-picker__list vdatetime-year-picker__list">
+  <div class="container">
+    <div ref="yearList" class="list">
       <div
         v-for="yearElement in years"
         :key="yearElement.key"
-        class="vdatetime-year-picker__item"
+        class="item"
         :class="{
-          'vdatetime-year-picker__item--selected': yearElement.selected,
-          'vdatetime-year-picker__item--disabled': yearElement.disabled,
+          selected: yearElement.selected,
+          disabled: yearElement.disabled,
         }"
         @click="select(yearElement)"
       >
@@ -34,16 +34,16 @@ interface Props {
 
 const props = defineProps<Props>();
 
-const years = computed<TimeElement[]>(() => (yearsGenerator(props.year.valueOf()).map((year: number): TimeElement => ({
+const years = computed<TimeElement[]>(() => (yearsGenerator(props.year).map((year: number): TimeElement => ({
   key: year,
   number: year,
-  selected: year === props.year.valueOf(),
+  selected: year === props.year,
   disabled: !year || yearIsDisabled(props.minDate, props.maxDate, year),
 }))));
 
 const yearList = ref<HTMLElement | null>(null);
 
-useListScroller(yearList, '.vdatetime-year-picker__item--selected');
+useListScroller(yearList, '.selected');
 
 const emits = defineEmits(['change']);
 
@@ -54,8 +54,8 @@ const select = (year: TimeElement) => {
 };
 </script>
 
-<style lang="scss">
-.vdatetime-year-picker {
+<style scoped lang="scss">
+.container {
   box-sizing: border-box;
 
   &::after {
@@ -69,7 +69,7 @@ const select = (year: TimeElement) => {
   }
 }
 
-.vdatetime-year-picker__list {
+.list {
   float: left;
   width: 100%;
   height: 305px;
@@ -89,24 +89,25 @@ const select = (year: TimeElement) => {
   }
 }
 
-.vdatetime-year-picker__item {
+.item {
   padding: 10px 0;
   font-size: 20px;
   text-align: center;
   cursor: pointer;
   transition: font-size .3s;
+  user-select: none;
+
+  :hover {
+    font-size: 32px;
+  }
 }
 
-.vdatetime-year-picker__item:hover {
-  font-size: 32px;
-}
-
-.vdatetime-year-picker__item--selected {
+.selected {
   color: var(--primary-color);
   font-size: 32px;
 }
 
-.vdatetime-year-picker__item--disabled {
+.disabled {
   opacity: 0.4;
   cursor: default;
 
