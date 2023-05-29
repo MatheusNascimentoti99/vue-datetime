@@ -1,33 +1,33 @@
 <template>
-  <div class="vdatetime-calendar">
-    <div class="vdatetime-calendar__navigation">
-      <div class="vdatetime-calendar__navigation--previous" @click="previousMonth">
+  <div class="calendar">
+    <div class="navigation">
+      <div class="navigation--previous" @click="previousMonth">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 61.3 102.8">
           <path fill="none" stroke="#444" stroke-width="14" stroke-miterlimit="10" d="M56.3 97.8L9.9 51.4 56.3 5"/>
         </svg>
       </div>
-      <div class="vdatetime-calendar__current--month">{{ monthName }} {{ newYear }}</div>
-      <div class="vdatetime-calendar__navigation--next" @click="nextMonth">
+      <div class="current--month">{{ monthName }} {{ newYear }}</div>
+      <div class="navigation--next" @click="nextMonth">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 61.3 102.8">
           <path fill="none" stroke="#444" stroke-width="14" stroke-miterlimit="10" d="M56.3 97.8L9.9 51.4 56.3 5"/>
         </svg>
       </div>
     </div>
-    <div class="vdatetime-calendar__month">
+    <div class="month">
       <div
         v-for="weekday in weekdays"
         :key="weekday"
-        class="vdatetime-calendar__month__weekday"
+        class="month__weekday"
       >
         {{ weekday }}
       </div>
       <div
         v-for="dayElement in days"
         :key="dayElement.key"
-        class="vdatetime-calendar__month__day"
+        class="month__day"
         :class="{
-          'vdatetime-calendar__month__day--selected': dayElement.selected,
-          'vdatetime-calendar__month__day--disabled': dayElement.disabled,
+          selected: dayElement.selected,
+          disabled: dayElement.disabled,
         }"
         @click="selectDay(dayElement)"
       >
@@ -45,7 +45,7 @@
 import { DateTime, WeekdayNumbers } from 'luxon';
 import { computed, ref } from 'vue';
 
-import type { DateElement, TimeElement } from './namespace';
+import type { ChangeEvent, DateElement, TimeElement } from './namespace';
 import { dateIsDisabled, monthDays } from './utils/datetime';
 import { monthsGenerator, weekdaysGenerator } from './utils/generators';
 
@@ -67,7 +67,9 @@ const props = withDefaults(defineProps<Props>(), {
   weekStart: 1,
 });
 
-const emits = defineEmits(['change']);
+const emits = defineEmits<{
+  change: ChangeEvent[],
+}>();
 
 const newDate = ref<DateTime>(
   DateTime.fromObject({ year: props.year.valueOf(), month: props.month.valueOf() }, { zone: 'UTC' }),
@@ -84,13 +86,13 @@ const days = computed<TimeElement[]>(() => monthDays(newYear.value, newMonth.val
     number: date.day,
     selected: props.year === date.year &&
       props.month === date.month && props.day === date.day,
-    disabled: date.month !== newMonth.value ||
+    disabled: date.month !== newMonth.value || props.disabled.includes(date.day) ||
       dateIsDisabled(props.minDate, props.maxDate, newYear.value, newMonth.value, date.day),
   })));
 
 const selectDay = (day: TimeElement) => {
   if (!day.disabled) {
-    emits('change', newYear.value, newMonth.value, day.number);
+    emits('change', { year: newYear.value, month: newMonth.value, day: day.number });
   }
 };
 const previousMonth = () => {
@@ -101,21 +103,21 @@ const nextMonth = () => {
 };
 </script>
 
-<style lang="scss">
-.vdatetime-calendar__navigation,
-.vdatetime-calendar__navigation * {
-  box-sizing: border-box;
-}
-
-.vdatetime-calendar__navigation {
+<style scoped lang="scss">
+.navigation {
   position: relative;
   margin: 15px 0;
   padding: 0 30px;
   width: 100%;
+  box-sizing: border-box;
+
+  * {
+    box-sizing: border-box;
+  }
 }
 
-.vdatetime-calendar__navigation--previous,
-.vdatetime-calendar__navigation--next {
+.navigation--previous,
+.navigation--next {
   position: absolute;
   top: 0;
   padding: 0 5px;
@@ -136,27 +138,27 @@ const nextMonth = () => {
   }
 }
 
-.vdatetime-calendar__navigation--previous {
+.navigation--previous {
   left: 25px;
 }
 
-.vdatetime-calendar__navigation--next {
+.navigation--next {
   right: 25px;
   transform: scaleX(-1);
 }
 
-.vdatetime-calendar__current--month {
+.current--month {
   text-align: center;
   text-transform: capitalize;
 }
 
-.vdatetime-calendar__month {
+.month {
   padding: 0 20px;
   transition: height .2s;
 }
 
-.vdatetime-calendar__month__weekday,
-.vdatetime-calendar__month__day {
+.month__weekday,
+.month__day {
   display: inline-block;
   width: calc(100% / 7);
   line-height: 36px;
@@ -189,15 +191,15 @@ const nextMonth = () => {
   }
 }
 
-.vdatetime-calendar__month__weekday {
+.month__weekday {
   font-weight: bold;
 }
 
-.vdatetime-calendar__month__day:hover > span > span {
+.month__day:hover > span > span {
   background: #eee;
 }
 
-.vdatetime-calendar__month__day--selected {
+.selected {
   & > span > span,
   &:hover > span > span {
     color: #fff;
@@ -205,7 +207,7 @@ const nextMonth = () => {
   }
 }
 
-.vdatetime-calendar__month__day--disabled {
+.disabled {
   opacity: 0.4;
   cursor: default;
 

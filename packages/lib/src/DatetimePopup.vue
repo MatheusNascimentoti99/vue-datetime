@@ -65,7 +65,7 @@ import DatetimeTimePicker from './DatetimeTimePicker.vue';
 import DatetimeYearPicker from './DatetimeYearPicker.vue';
 import { createFlowManager, createFlowManagerFromType, flowEndStatus } from './flow';
 import { FlowStep, FlowType, StepType } from './flow/namespace';
-import type { Actions } from './namespace';
+import type { Actions, ChangeEvent } from './namespace';
 
 interface Props {
   datetime: DateTime
@@ -186,26 +186,30 @@ const onChangeMonth = (newValue: number) => {
   }
 };
 
-const onChangeDate = (year: number, month: number, day: number) => {
-  newDateTime.value = newDateTime.value.set({ year, month, day });
+const onChangeDate = (changeEvent: ChangeEvent) => {
+  newDateTime.value = newDateTime.value.set({
+    year: changeEvent?.year,
+    month: changeEvent?.month,
+    day: changeEvent?.day,
+  });
 
   if (props.auto) {
     nextStep();
   }
 };
 
-const onChangeTime = ({ hour, minute, suffixTouched }: { hour: number, minute: number, suffixTouched: boolean }) => {
-  if (suffixTouched) {
+const onChangeTime = (changeEvent: ChangeEvent) => {
+  if (changeEvent.suffixTouched) {
     timePartsTouched.suffix = true;
   }
 
   if (Number.isInteger(hour)) {
-    newDateTime.value = newDateTime.value.set({ hour });
+    newDateTime.value = newDateTime.value.set({ hour: changeEvent?.hour });
     timePartsTouched.hour = true;
   }
 
   if (Number.isInteger(minute)) {
-    newDateTime.value = newDateTime.value.set({ minute });
+    newDateTime.value = newDateTime.value.set({ minute: changeEvent?.minute });
     timePartsTouched.minutes = true;
   }
 };
