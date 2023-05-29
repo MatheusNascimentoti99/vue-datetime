@@ -47,4 +47,10 @@ describe('DatetimeYearPicker', () => {
     expect(wrapper.emitted('change')).toBeTruthy();
     expect(wrapper.emitted('change')?.[0]?.[0]).toBe(2000); // Assuming the first year is selected
   });
+
+  test('clicking disabled element should not emit', async () => {
+    const disabledOption = wrapper.find('.item.disabled');
+    await disabledOption.trigger('click');
+    expect(wrapper.emitted('change')).toBeUndefined();
+  });
 });
