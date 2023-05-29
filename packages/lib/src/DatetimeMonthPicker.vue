@@ -1,13 +1,13 @@
 <template>
-  <div class="vdatetime-month-picker">
-    <div ref="monthList" class="vdatetime-month-picker__list vdatetime-month-picker__list">
+  <div class="container">
+    <div ref="monthList" class="list">
       <div
         v-for="monthElement in months"
         :key="monthElement.key"
-        class="vdatetime-month-picker__item"
+        class="item"
         :class="{
-          'vdatetime-month-picker__item--selected': monthElement.selected,
-          'vdatetime-month-picker__item--disabled': monthElement.disabled,
+          selected: monthElement.selected,
+          disabled: monthElement.disabled,
         }"
         @click="select(monthElement)"
       >
@@ -48,7 +48,7 @@ const months = computed<TimeElement[]>(() => (
 
 const monthList = ref<HTMLElement | null>(null);
 
-useListScroller(monthList, '.vdatetime-month-picker__item--selected');
+useListScroller(monthList, '.selected');
 
 const emits = defineEmits(['change']);
 
@@ -59,8 +59,8 @@ const select = (month: TimeElement) => {
 };
 </script>
 
-<style lang="scss">
-.vdatetime-month-picker {
+<style scoped lang="scss">
+.container {
   box-sizing: border-box;
 
   &::after {
@@ -74,7 +74,7 @@ const select = (month: TimeElement) => {
   }
 }
 
-.vdatetime-month-picker__list {
+.list {
   float: left;
   width: 100%;
   height: 305px;
@@ -94,24 +94,24 @@ const select = (month: TimeElement) => {
   }
 }
 
-.vdatetime-month-picker__item {
+.item {
   padding: 10px 0;
   font-size: 20px;
   text-align: center;
   cursor: pointer;
   transition: font-size .3s;
+
+  :hover {
+    font-size: 32px;
+  }
 }
 
-.vdatetime-month-picker__item:hover {
-  font-size: 32px;
-}
-
-.vdatetime-month-picker__item--selected {
+.selected {
   color: var(--primary-color);
   font-size: 32px;
 }
 
-.vdatetime-month-picker__item--disabled {
+.disabled {
   opacity: 0.4;
   cursor: default;
 
