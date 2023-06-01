@@ -6,7 +6,7 @@ export default function useListScroller(list: Ref<HTMLElement | null>, pickedCla
   const scrollFunc = () => {
     if (list.value) {
       const selectedHour: ListElement | null = list.value?.querySelector(pickedClass);
-      list.value.scrollTo?.({ top: selectedHour ? selectedHour.offsetTop - 250 : 0, behavior: 'auto' });
+      list.value.scrollTo?.({ top: selectedHour ? selectedHour.offsetTop - 152 : 0, behavior: 'auto' });
     }
   };
 

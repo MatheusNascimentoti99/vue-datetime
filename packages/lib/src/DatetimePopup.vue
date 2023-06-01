@@ -1,9 +1,9 @@
 <template>
-  <div class="vdatetime-popup">
-    <div class="vdatetime-popup__header">
-      <div v-if="title" class="vdatetime-popup__title">{{ title }}</div>
-      <div v-if="type !== 'time'" class="vdatetime-popup__year" @click="showYear">{{ year }}</div>
-      <div v-if="type !== 'time'" class="vdatetime-popup__date" @click="showMonth">{{ dateFormatted }}</div>
+  <div class="popup">
+    <div class="header">
+      <div v-if="title" class="title">{{ title }}</div>
+      <div v-if="type !== 'time'" class="year" @click="showYear">{{ year }}</div>
+      <div v-if="type !== 'time'" class="month" @click="showMonth">{{ dateFormatted }}</div>
     </div>
     <div class="vdatetime-popup__body">
       <datetime-year-picker
@@ -43,11 +43,11 @@
         @change="onChangeTime"
       />
     </div>
-    <div class="vdatetime-popup__actions">
-      <div class="vdatetime-popup__actions__button vdatetime-popup__actions__button--cancel" @click="emits('cancel')">
+    <div class="actions">
+      <div class="actions__button cancel" @click="emits('cancel')">
         <slot name="button-cancel__internal" :step="step">{{ phrases.cancel }}</slot>
       </div>
-      <div class="vdatetime-popup__actions__button vdatetime-popup__actions__button--confirm" @click="nextStep()">
+      <div class="actions__button confirm" @click="nextStep()">
         <slot name="button-confirm__internal" :step="step">{{ phrases.ok }}</slot>
       </div>
     </div>
@@ -203,12 +203,12 @@ const onChangeTime = (changeEvent: ChangeEvent) => {
     timePartsTouched.suffix = true;
   }
 
-  if (Number.isInteger(hour)) {
+  if (Number.isInteger(changeEvent.hour)) {
     newDateTime.value = newDateTime.value.set({ hour: changeEvent?.hour });
     timePartsTouched.hour = true;
   }
 
-  if (Number.isInteger(minute)) {
+  if (Number.isInteger(changeEvent.minute)) {
     newDateTime.value = newDateTime.value.set({ minute: changeEvent?.minute });
     timePartsTouched.minutes = true;
   }
@@ -216,8 +216,8 @@ const onChangeTime = (changeEvent: ChangeEvent) => {
 
 </script>
 
-<style lang="scss">
-.vdatetime-popup {
+<style scoped lang="scss">
+.popup {
   box-sizing: border-box;
   z-index: 1000;
   position: fixed;
@@ -238,20 +238,20 @@ const onChangeTime = (changeEvent: ChangeEvent) => {
   }
 }
 
-.vdatetime-popup__header {
+.header {
   padding: 18px 30px;
   background: var(--primary-color);
   color: #fff;
   font-size: 32px;
 }
 
-.vdatetime-popup__title {
+.title {
   margin-bottom: 8px;
   font-size: 21px;
   font-weight: 300;
 }
 
-.vdatetime-popup__year {
+.year {
   font-weight: 300;
   font-size: 14px;
   opacity: 0.7;
@@ -263,17 +263,17 @@ const onChangeTime = (changeEvent: ChangeEvent) => {
   }
 }
 
-.vdatetime-popup__date {
+.month {
   line-height: 1;
   cursor: pointer;
 }
 
-.vdatetime-popup__actions {
+.actions {
   padding: 0 20px 10px 30px;
   text-align: right;
 }
 
-.vdatetime-popup__actions__button {
+.actions__button {
   display: inline-block;
   border: none;
   padding: 10px 20px;

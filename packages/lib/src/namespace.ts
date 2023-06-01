@@ -6,7 +6,7 @@ export interface TimeElement {
   disabled: boolean
 }
 
-export interface ListElement extends Element {
+export interface ListElement extends HTMLElement {
   offsetTop: number
 }
 
