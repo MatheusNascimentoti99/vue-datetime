@@ -12,7 +12,6 @@
       @click="open"
       @focus="open"
     >
-    <input v-if="hiddenName" type="hidden" :name="hiddenName" :value="modelValue" @input="setValue">
     <slot name="after"/>
     <transition-group name="vdatetime-fade" tag="div">
       <div v-if="isOpen && !hideBackdrop" key="overlay" class="vdatetime-overlay" @click.self="clickOutside"/>
@@ -45,7 +44,7 @@ import { computed, onMounted, ref, watch } from 'vue';
 import DatetimePopup from './DatetimePopup.vue';
 import { FlowStep, FlowType } from './flow/namespace';
 import type { Actions } from './namespace';
-import { datetimeFromISO, startOfDay, calculateWeekStart } from './utils/datetime';
+import { datetimeFromISO, calculateWeekStart } from './utils/datetime';
 
 interface Props {
   modelValue?: string
@@ -102,7 +101,11 @@ const props = withDefaults(defineProps<Props>(), {
 
 const theme = computed(() => ({ '--primary-color': props.color }));
 
-const emits = defineEmits(['input', 'close', 'update:modelValue']);
+const emits = defineEmits<{
+  (e: 'input', value: string): void,
+  (e: 'close'): void,
+  (e: 'update:modelValue', value: string | null): void,
+}>();
 
 const flowType = computed<FlowType>(() => {
   if (props.type === 'datetime') {
@@ -113,9 +116,9 @@ const flowType = computed<FlowType>(() => {
 });
 
 const isOpen = ref<boolean>(false);
-const datetime = computed<DateTime | null>({
+const datetime = computed<DateTime | undefined>({
   get() { return datetimeFromISO(props.modelValue); },
-  set(newValue: DateTime | null) {
+  set(newValue: DateTime | undefined) {
     if (newValue) {
       emits('update:modelValue', newValue.toISO());
     }
@@ -137,10 +140,9 @@ const inputValue = computed(() => {
       format = DateTime.DATETIME_MED;
       break;
     default:
-      break;
+      return '';
     }
   }
-
   if (typeof format === 'string') {
     return datetime.value ? DateTime.fromISO(props.modelValue).setZone(props.zone).toFormat(format) : '';
   }
@@ -182,13 +184,13 @@ const newPopupDatetime = () => {
 const popupDate = computed(() => (datetime.value ? datetime.value.setZone(props.zone) : newPopupDatetime()));
 
 const emitInput = () => {
-  let innerValue = datetime.value ? datetime.value.setZone(props.valueZone) : undefined;
+  let innerValue = datetime.value;
 
   if (innerValue && props.type === 'date') {
-    innerValue = startOfDay(innerValue);
+    innerValue = innerValue.startOf('day');
   }
 
-  emits('input', innerValue ? innerValue.toISO() : '');
+  emits('input', innerValue?.toISO() ?? '');
 };
 
 onMounted(() => {
@@ -215,11 +217,6 @@ const clickOutside = () => {
   if (props.backdropClick) { close(); }
 };
 
-const setValue = (event: any) => {
-  datetime.value = datetimeFromISO(event.target.value);
-  emitInput();
-};
-
 watch(() => props.modelValue, ((value: string) => {
   datetime.value = datetimeFromISO(value);
 }));
@@ -230,7 +227,7 @@ watch(() => props.modelValue, ((value: string) => {
 export default { inheritAttrs: false };
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 .vdatetime-fade-enter-active,
 .vdatetime-fade-leave-active {
   transition: opacity .4s;

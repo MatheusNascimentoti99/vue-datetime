@@ -18,11 +18,11 @@ describe('Datetime Utilities', () => {
   const weekstart = 1;
 
   it('Datetime From ISO', () => {
-    expect(datetimeFromISO('')).toBeNull();
+    expect(datetimeFromISO('')).toBeUndefined();
     // @ts-ignore
     expectTypeOf(datetimeFromISO('')).toEqualTypeOf<DateTime>();
-    expect(datetimeFromISO('2018-05-12T00:00:00.000Z')).not.toBeNull();
-    expect(datetimeFromISO('2018-05-12T')).toBeNull();
+    expect(datetimeFromISO('2018-05-12T00:00:00.000Z')).not.toBeUndefined();
+    expect(datetimeFromISO('2018-05-12T')).toBeUndefined();
   });
 
   it('Start Of Day', () => {
@@ -65,7 +65,7 @@ describe('Datetime Utilities', () => {
     expect(dateIsDisabled(dateBefore, dateAfter, 2023, 10, 5)).toBe(false);
 
     expect(dateIsDisabled(dateBefore, dateAfter, 2023, 9, 5)).toBe(true);
-    expect(dateIsDisabled(dateBefore, dateAfter, 2023, 10, 29)).toBe(true );
+    expect(dateIsDisabled(dateBefore, dateAfter, 2023, 10, 29)).toBe(true);
   });
 
   it('Month Is Disabled', () => {

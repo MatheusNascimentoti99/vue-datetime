@@ -5,7 +5,7 @@
       <div v-if="type !== 'time'" class="year" @click="showYear">{{ year }}</div>
       <div v-if="type !== 'time'" class="month" @click="showMonth">{{ dateFormatted }}</div>
     </div>
-    <div class="vdatetime-popup__body">
+    <div class="popup__body">
       <datetime-year-picker
         v-if="step === 'year'"
         :min-date="minDatetime"

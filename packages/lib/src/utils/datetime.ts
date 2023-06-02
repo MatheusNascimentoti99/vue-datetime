@@ -3,10 +3,10 @@ import { getWeekStartByLocale } from 'weekstart';
 
 import { DateElement } from '../namespace';
 
-export function datetimeFromISO(string: string): DateTime | null {
-  const datetime = DateTime.fromISO(string).toUTC();
+export function datetimeFromISO(string: string): DateTime | undefined {
+  const datetime = DateTime.fromISO(string);
 
-  return datetime.isValid ? datetime : null;
+  return datetime.isValid ? datetime : undefined;
 }
 
 export const startOfDay = (datetime: DateTime | undefined): DateTime | undefined => (datetime?.startOf('day'));
