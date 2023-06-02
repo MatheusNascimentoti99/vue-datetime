@@ -4,13 +4,14 @@ import { resolve } from 'path';
 
 import { defineConfig } from 'vite';
 
+// eslint-disable-next-line
 import getBaseViteConfig from '../../viteBaseConfig';
 
 export default defineConfig(getBaseViteConfig({
   build: {
     target: 'es2015',
     lib: {
-      entry: resolve(__dirname, 'src/vue-datetime.ts'),
+      entry: resolve(__dirname, 'src/index.ts'),
       fileName: 'vue-datetime',
       name: 'vue-datetime.[name]',
     },
@@ -30,6 +31,7 @@ export default defineConfig(getBaseViteConfig({
     alias: {
       // @ts-ignore
       '~': fileURLToPath(new URL('../../node_modules', import.meta.url)),
+      // @ts-ignore
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
     extensions: [

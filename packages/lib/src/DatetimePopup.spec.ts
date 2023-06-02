@@ -1,9 +1,7 @@
 import { shallowMount, VueWrapper, enableAutoUnmount, mount } from '@vue/test-utils';
 import { DateTime } from 'luxon';
 
-import { DatetimePopup } from './vue-datetime';
-import { expect } from 'vitest';
-import DatetimeYearPicker from './DatetimeYearPicker.vue';
+import { DatetimePopup } from './index';
 
 describe('Datetime Popup', () => {
   let wrapper: VueWrapper;

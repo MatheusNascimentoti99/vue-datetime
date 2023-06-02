@@ -13,5 +13,8 @@
     "luxon": "^3.3.0",
     "vue": "^3.3.4"
   },
+  "devDependencies": {
+    "vite": "^4.1.4"
+  },
   "license": "MIT"
 }
