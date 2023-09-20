@@ -243,6 +243,7 @@ const onChangeTime = (changeEvent: ChangeEvent) => {
   background: var(--primary-color);
   color: #fff;
   font-size: 32px;
+  overflow: hidden;
 }
 
 .title {
@@ -266,6 +267,7 @@ const onChangeTime = (changeEvent: ChangeEvent) => {
 .month {
   line-height: 1;
   cursor: pointer;
+  white-space: nowrap;
 }
 
 .actions {
