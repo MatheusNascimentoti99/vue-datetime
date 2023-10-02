@@ -20,3 +20,4 @@ dist
 # testing utils
 packages/lib/test/coverage
 reports
+packages/lib/README.md
