@@ -53,7 +53,7 @@ export function dateIsDisabled(
 }
 
 export function timeComponentIsDisabled(min: number | null, max: number | null, component: number): boolean {
-  return (!!min && component < min) || (!!max && component > max);
+  return (min !== null && component < min) || (max !== null && component > max);
 }
 
 export function monthDays(year: number, month: number, weekStart: WeekdayNumbers): DateElement[] {
